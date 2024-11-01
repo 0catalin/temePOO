@@ -69,6 +69,10 @@ public final class Main {
 
         ArrayNode output = objectMapper.createArrayNode();
 
+
+        Game game = Game.getInstance();
+        game.applyParams(inputData);
+        game.loopOver(objectMapper, output);
         /*
          * TODO Implement your function here
          *
