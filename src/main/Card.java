@@ -5,11 +5,13 @@ import fileio.CardInput;
 import java.util.ArrayList;
 
 public class Card {
-    int mana;
-    int health;
-    String description;
+    private int mana;
+    private int health;
+    private String description;
     private ArrayList<String> colors = new ArrayList<>();
-    String name;
+    private String name;
+    private int hasAttacked;
+
     public Card(CardInput input) {
         mana = input.getMana();
         if (input.getHealth() == 0) {health = 30;}
@@ -20,6 +22,7 @@ public class Card {
             colors.add(new String(input.getColors().get(i)));
         }
         name = input.getName();
+        hasAttacked = 0;
     }
     public Card(int mana, int health, String description, String colors, String name) {}
     public int getMana() {return mana;}
@@ -32,6 +35,7 @@ public class Card {
     public void setColors(ArrayList<String> colors) {this.colors = colors;}
     public String getName() {return name;}
     public void setName(String name) {this.name = name;}
-
+    public int getHasAttacked() {return hasAttacked;}
+    public void setHasAttacked(int hasAttacked) {this.hasAttacked = hasAttacked;}
 
 }

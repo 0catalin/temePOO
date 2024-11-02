@@ -3,6 +3,7 @@ package main;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import fileio.Coordinates;
 
 import java.util.ArrayList;
 
@@ -34,5 +35,74 @@ public class TableCards {
             }
             outputCorrespondent.add(separateRow);
         }
+    }
+
+    String cardAttack(Coordinates attacker, Coordinates attacked) {
+        Minion atacker = getMinion(attacker);
+        Minion atacked = getMinion(attacked);
+        if(!areDifferentTeams(attacker.getX(), attacked.getX())) {
+            return "Attacked card does not belong to the enemy.";
+        }
+        if(atacker.getHasAttacked() == 1) {
+            return "Attacker card has already attacked this turn.";
+        }
+        if(atacker.getIsFrozen() == 1) {
+            return "Attacker card is frozen.";
+        }
+        if(checkOpponentTank(attacker) && (!getMinion(attacked).isTank())) {
+            return "Attacked card is not of type 'Tank'.";
+        }
+        atacked.setHealth(atacked.getHealth() - atacker.getAttackDamage());
+        if(atacked.getHealth() <= 0) {
+            cardRows[attacked.getX()].remove(attacked.getY());
+        }
+        atacker.setHasAttacked(1);
+        return "";
+    }
+
+    public void clearCards(int player) {
+        if(player == 1) {
+            for (int i = 0; i < 2; i++) {
+                for (int j = 0; j < cardRows[i].size(); j++) {
+                    cardRows[i].get(j).setIsFrozen(0);
+                    cardRows[i].get(j).setHasAttacked(0);
+                }
+            }
+        }
+        else {
+            for (int i = 2; i < 4; i++) {
+                for (int j = 0; j < cardRows[i].size(); j++) {
+                    cardRows[i].get(j).setIsFrozen(0);
+                    cardRows[i].get(j).setHasAttacked(0);
+                }
+            }
+        }
+    }
+
+    Minion getMinion(Coordinates coordinates) {
+        return getRow(coordinates.getX()).get(coordinates.getY());
+    }
+    boolean checkOpponentTank(Coordinates coordinates) {
+        if(coordinates.getX() == 0 || coordinates.getX() == 1) {
+            for(int i = 0; i < getRow(2).size(); i++){
+                if(getRow(2).get(i).isTank()) {
+                    return true;
+                }
+            }
+            return false;
+        }
+        else {
+            for(int i = 0; i < getRow(1).size(); i++){
+                if(getRow(1).get(i).isTank()) {
+                    return true;
+                }
+            }
+            return false;
+        }
+    }
+    boolean areDifferentTeams(int x1, int x2) {
+        boolean t1 = (x1 == 0 || x1 == 1) && (x2 == 0 || x2 == 1);
+        boolean t2 = (x1 == 2 || x1 == 3) && (x2 == 2 || x2 == 3);
+        return !(t1 || t2);
     }
 }

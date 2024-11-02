@@ -8,17 +8,19 @@ import java.util.ArrayList;
 
 public class Minion extends Card {
     private int attackDamage;
-
+    private int isFrozen;
     public Minion(CardInput card) {
         super(card);
         attackDamage = card.getAttackDamage();
+        isFrozen = 0;
     }
 
 
     public int getMana() {return super.getMana();}
 
     public void setMana(int mana) {super.setMana(mana);}
-
+    public void setIsFrozen(int isFrozen) {this.isFrozen = isFrozen;}
+    int getIsFrozen() {return isFrozen;}
     public int getHealth() {return super.getHealth();}
 
     public void setHealth(int health) {super.setHealth(health);}
@@ -30,7 +32,8 @@ public class Minion extends Card {
     public String getDescription() {return super.getDescription();}
 
     public void setDescription(String description) {super.setDescription(description);}
-
+    public void setHasAttacked(int hasAttacked) {super.setHasAttacked(hasAttacked);}
+    public int getHasAttacked() {return super.getHasAttacked();}
     public ArrayList<String> getColors() {return super.getColors();}
 
     public void setColors(ArrayList<String> colors) {super.setColors(colors);}
@@ -40,6 +43,11 @@ public class Minion extends Card {
     public void setName(String name) {super.setName(name);}
     public void printMinion(ArrayNode outputCorrespondent, ObjectMapper objectMapper) {
         ObjectNode nodeInfo = objectMapper.createObjectNode();
+        addMinionToObjectNode(nodeInfo, objectMapper);
+        outputCorrespondent.add(nodeInfo);
+    }
+
+    public void addMinionToObjectNode(ObjectNode nodeInfo, ObjectMapper objectMapper) {
         nodeInfo.put("mana", getMana());
         nodeInfo.put("attackDamage", getAttackDamage());
         nodeInfo.put("health", getHealth());
@@ -50,7 +58,6 @@ public class Minion extends Card {
         }
         nodeInfo.set("colors", colors);
         nodeInfo.put("name", getName());
-        outputCorrespondent.add(nodeInfo);
     }
 
     public String getRow() {
@@ -59,5 +66,7 @@ public class Minion extends Card {
         }
         return "front";
     }
-
+    public boolean isTank() {
+        return (getName().equals("Goliath") || getName().equals("Warden"));
+    }
 }

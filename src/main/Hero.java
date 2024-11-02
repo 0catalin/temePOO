@@ -28,6 +28,10 @@ public class Hero extends Card{
     public String getName() {return super.getName();}
 
     public void setName(String name) {super.setName(name);}
+
+    public void setHasAttacked(int hasAttacked) {super.setHasAttacked(hasAttacked);}
+
+    public int getHasAttacked() {return super.getHasAttacked();}
 }
 
 
