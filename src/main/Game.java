@@ -31,6 +31,7 @@ public class Game {
         startGameInput = null;
         initialInput = input;
         gameInfo = new GameInfo();
+        tableCards = new TableCards();
     }
 
     public void loopOver(ObjectMapper objectMapper, ArrayNode output) {
@@ -47,7 +48,7 @@ public class Game {
             gameInfo.setHandPlayer1(new ArrayList<>());
             gameInfo.setHandPlayer2(new ArrayList<>());
             gameInfo.setPlayerTurn(startInput.getStartingPlayer());
-            gameInfo.setRoundNumber(0); // de luat in cons cand se face endround
+            gameInfo.setRoundNumber(1); // de luat in cons cand se face endround
             gameInfo.setIsANewTurn(1);
             for(ActionsInput actions: gameinput.getActions()) {
                 if (gameInfo.getIsANewTurn() == 1) {
@@ -69,11 +70,31 @@ public class Game {
                 if(actions.getCommand().equals("getPlayerMana")) {
                     getPlayerMana(objectMapper, output, actions.getPlayerIdx());
                 }
+                if(actions.getCommand().equals("getCardsInHand")) {
+                    if(actions.getPlayerIdx() == 1) {
+                        getCardsInHand(objectMapper, output, gameInfo.getHandPlayer1(), actions.getPlayerIdx());
+                    }
+                    else {getCardsInHand(objectMapper, output, gameInfo.getHandPlayer2(), actions.getPlayerIdx());}
+                }
+                if(actions.getCommand().equals("getCardsOnTable")) {
+                    getCardsOnTable(objectMapper, output, tableCards);
+                }
+                if(actions.getCommand().equals("placeCard")) {
+                    String outPut;
+                    if(gameInfo.getPlayerTurn() == 1)
+                    {outPut = gameInfo.addCardToTable(player1, tableCards, actions.getHandIdx());}
+                    else {outPut = gameInfo.addCardToTable(player2, tableCards, actions.getHandIdx());}
+                    if(!outPut.equals("")) {
+                        printPlaceError(outPut, actions.getHandIdx(), output, objectMapper);
+                    }
+                }
             }
             player1 = new Player(initialInput.getPlayerOneDecks());
             player2 = new Player(initialInput.getPlayerTwoDecks());
         }
     }
+
+
 
     void getPlayerDeck(ObjectMapper objectMapper, ArrayNode output, int playerIDx) {
         ObjectNode commandObject = objectMapper.createObjectNode();
@@ -87,18 +108,7 @@ public class Game {
         }
         ArrayNode outputCorrespondent = objectMapper.createArrayNode();
         for(Minion card: deck) {
-            ObjectNode nodeInfo = objectMapper.createObjectNode();
-            nodeInfo.put("mana", card.getMana());
-            nodeInfo.put("attackDamage", card.getAttackDamage());
-            nodeInfo.put("health", card.getHealth());
-            nodeInfo.put("description", card.getDescription());
-            ArrayNode colors = objectMapper.createArrayNode();
-            for(String s: card.getColors()) {
-                colors.add(s);
-            }
-            nodeInfo.set("colors", colors);
-            nodeInfo.put("name", card.getName());
-            outputCorrespondent.add(nodeInfo);
+            card.printMinion(outputCorrespondent, objectMapper);
         }
         commandObject.set("output", outputCorrespondent);
         output.add(commandObject);
@@ -133,6 +143,7 @@ public class Game {
         commandObject.put("output", gameInfo.getPlayerTurn());
         output.add(commandObject);
     }
+
     void endPlayerTurn() {
         if(gameInfo.getPlayerTurn() == 2) { gameInfo.setPlayerTurn(1); }
         else {gameInfo.setPlayerTurn(2);}
@@ -146,11 +157,38 @@ public class Game {
         ObjectNode commandObject = objectMapper.createObjectNode();
         commandObject.put("command", "getPlayerMana");
         commandObject.put("playerIdx", IDX);
-        if(IDX == 1) { commandObject.put("mana", player1.getMana()); }
+        if(IDX == 1) { commandObject.put("output", player1.getMana()); }
         else {commandObject.put("output", player2.getMana());}
         output.add(commandObject);
     }
 
+    private void getCardsInHand(ObjectMapper objectMapper, ArrayNode output, ArrayList<Minion> handPlayer, int IDX) {
+        ObjectNode commandObject = objectMapper.createObjectNode();
+        commandObject.put("command", "getCardsInHand");
+        commandObject.put("playerIdx", IDX);
+        ArrayNode outputCorrespondent = objectMapper.createArrayNode();
+        for(Minion card: handPlayer) {
+            card.printMinion(outputCorrespondent, objectMapper);
+        }
+        commandObject.set("output", outputCorrespondent);
+        output.add(commandObject);
+    }
+
+    private void getCardsOnTable(ObjectMapper objectMapper, ArrayNode output, TableCards tableCards) {
+        ObjectNode commandObject = objectMapper.createObjectNode();
+        commandObject.put("command", "getCardsOnTable");
+        ArrayNode outputCorrespondent = objectMapper.createArrayNode();
+        tableCards.printTable(objectMapper, outputCorrespondent);
+        commandObject.set("output", outputCorrespondent);
+        output.add(commandObject);
+    }
+    private void printPlaceError(String errorMessage, int handIDX, ArrayNode output, ObjectMapper objectMapper) {
+        ObjectNode commandObject = objectMapper.createObjectNode();
+        commandObject.put("command", "placeCard");
+        commandObject.put("handIdx", handIDX);
+        commandObject.put("error", errorMessage);
+        output.add(commandObject);
+    }
     public static Game getInstance() {return instance;}
 
     Player getPlayer1() {return player1;}

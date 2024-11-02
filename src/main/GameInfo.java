@@ -16,10 +16,66 @@ public class GameInfo {
     void setupStartRound(Player player1, Player player2) {
         player1.setMana(player1.getMana() + receiveMana());
         player2.setMana(player2.getMana() + receiveMana());
-        handPlayer1.add(deckPlayer1.get(0));
-        handPlayer2.add(deckPlayer2.get(0));
-        deckPlayer1.remove(0);
-        deckPlayer2.remove(0);
+        if(deckPlayer1.size() >= 1) {
+            handPlayer1.add(deckPlayer1.get(0));
+            deckPlayer1.remove(0);
+        }
+        if(deckPlayer2.size() >= 1) {
+            handPlayer2.add(deckPlayer2.get(0));
+            deckPlayer2.remove(0);
+        }
+    }
+
+    String addCardToTable(Player player, TableCards tableCards, int CardIDx) {
+
+        Minion cardToMove = null;
+        if(playerTurn == 2) {
+            if(handPlayer2.size() > CardIDx) {
+                cardToMove = handPlayer2.get(CardIDx);
+            }
+            else {return "Not enough cards in hand";}
+            if(player.getMana() < cardToMove.getMana()) {
+                return "Not enough mana to place card on table.";
+            }
+            if(cardToMove.getRow().equals("back")) {
+                if (tableCards.getRow(0).size() == 5) {
+                    return "Cannot place card on table since row is full.";
+                }
+                tableCards.getRow(0).add(cardToMove);
+            }
+            if(cardToMove.getRow().equals("front")) {
+                if (tableCards.getRow(1).size() == 5) {
+                    return "Cannot place card on table since row is full.";
+                }
+                tableCards.getRow(1).add(cardToMove);
+            }
+            handPlayer2.remove(CardIDx);
+            player.setMana(player.getMana() - cardToMove.getMana());
+        }
+        else {
+            if(handPlayer1.size() > CardIDx) {
+                cardToMove = handPlayer1.get(CardIDx);
+            }
+            else {return "Not enough cards in hand";}
+            if (player.getMana() < cardToMove.getMana()) {
+                return "Not enough mana to place card on table.";
+            }
+            if (cardToMove.getRow().equals("back")) {
+                if (tableCards.getRow(3).size() == 5) {
+                    return "Cannot place card on table since row is full.";
+                }
+                tableCards.getRow(3).add(cardToMove);
+            }
+            if(cardToMove.getRow().equals("front")) {
+                if (tableCards.getRow(2).size() == 5) {
+                    return "Cannot place card on table since row is full.";
+                }
+                tableCards.getRow(2).add(cardToMove);
+            }
+            handPlayer1.remove(CardIDx);
+            player.setMana(player.getMana() - cardToMove.getMana());
+        }
+        return "";
     }
 
     int receiveMana() {

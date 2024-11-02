@@ -1,7 +1,9 @@
 package main;
 
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import fileio.CardInput;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 
 public class Minion extends Card {
@@ -36,4 +38,26 @@ public class Minion extends Card {
     public String getName() {return super.getName();}
 
     public void setName(String name) {super.setName(name);}
+    public void printMinion(ArrayNode outputCorrespondent, ObjectMapper objectMapper) {
+        ObjectNode nodeInfo = objectMapper.createObjectNode();
+        nodeInfo.put("mana", getMana());
+        nodeInfo.put("attackDamage", getAttackDamage());
+        nodeInfo.put("health", getHealth());
+        nodeInfo.put("description", getDescription());
+        ArrayNode colors = objectMapper.createArrayNode();
+        for(String s: getColors()) {
+            colors.add(s);
+        }
+        nodeInfo.set("colors", colors);
+        nodeInfo.put("name", getName());
+        outputCorrespondent.add(nodeInfo);
+    }
+
+    public String getRow() {
+        if(getName().equals("Sentinel") || getName().equals("Berserker") || getName().equals("The Cursed One") || getName().equals("Disciple")) {
+            return "back";
+        }
+        return "front";
+    }
+
 }
