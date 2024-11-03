@@ -34,11 +34,14 @@ public class Game {
     }
 
     public void loopOver(ObjectMapper objectMapper, ArrayNode output) {
-        gameInfo = new GameInfo();
+        gameInfo = new GameInfo(); //// DE CE???
         for(GameInput gameinput: inputOfGame) {
             StartGameInput startInput = gameinput.getStartGame();
             player1.setHero(new Hero(startInput.getPlayerOneHero()));
+            player1.setMana(0); //////
             player2.setHero(new Hero(startInput.getPlayerTwoHero()));
+            player2.setMana(0); //////
+            tableCards = new TableCards(); ////cred????
             setStartGameInput(startInput);
             player1.getDecks().shuffleDeck(startInput.getPlayerOneDeckIdx(), startInput.getShuffleSeed());
             player2.getDecks().shuffleDeck(startInput.getPlayerTwoDeckIdx(), startInput.getShuffleSeed());
@@ -145,6 +148,31 @@ public class Game {
                     output.add(commandObject);
                 }
 
+                if(actions.getCommand().equals("getFrozenCardsOnTable")) {
+                    ObjectNode commandObject = objectMapper.createObjectNode();
+                    commandObject.put("command", "getFrozenCardsOnTable");
+                    ArrayNode outputCorrespondent = tableCards.printFrozenTable(objectMapper);
+                    commandObject.set("output", outputCorrespondent);
+                    output.add(commandObject);
+                }
+                if(actions.getCommand().equals("useHeroAbility")) {
+                    String s4;
+                    if(gameInfo.getPlayerTurn() == 1) {
+                        s4 = tableCards.heroAbility(player1, 1, actions.getAffectedRow());
+                    }
+                    else {
+                        s4 = tableCards.heroAbility(player2, 2, actions.getAffectedRow());
+                    }
+                    if(!s4.isEmpty()) {
+                        ObjectNode commandObject = objectMapper.createObjectNode();
+                        commandObject.put("command", "useHeroAbility");
+                        commandObject.put("affectedRow", actions.getAffectedRow());
+                        commandObject.put("error", s4);
+                        output.add(commandObject);
+                    }
+                }
+
+
             }
             player1 = new Player(initialInput.getPlayerOneDecks());
             player2 = new Player(initialInput.getPlayerTwoDecks());
@@ -204,9 +232,13 @@ public class Game {
 
     void endPlayerTurn() {
         if(gameInfo.getPlayerTurn() == 2) { tableCards.clearCards(2);
-            gameInfo.setPlayerTurn(1); }
+            player2.getHero().setHasAttacked(0);
+            gameInfo.setPlayerTurn(1);
+        }
         else { tableCards.clearCards(1);
-            gameInfo.setPlayerTurn(2);}
+            player1.getHero().setHasAttacked(0);
+            gameInfo.setPlayerTurn(2);
+        }
         if(gameInfo.getPlayerTurn() == startGameInput.getStartingPlayer()) {
             gameInfo.setRoundNumber(gameInfo.getRoundNumber() + 1);
             gameInfo.setIsANewTurn(1);

@@ -80,7 +80,7 @@ public class GameInfo {
 
     int receiveMana() {
         if(roundNumber < 11) { return roundNumber;}
-        return 0;
+        return 10;
     }
     ArrayList<Minion> getDeckPlayer1() {return deckPlayer1;}
     ArrayList<Minion> getHandPlayer1() {return handPlayer1;}

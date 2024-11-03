@@ -9,6 +9,7 @@ public class Hero extends Card{
         super(card);
     }
 
+
     public int getMana() {return super.getMana();}
 
     public void setMana(int mana) {super.setMana(mana);}

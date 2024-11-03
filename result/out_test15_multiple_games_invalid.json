@@ -2,6 +2,9 @@
   "command" : "getPlayerTurn",
   "output" : 2
 }, {
+  "command" : "getFrozenCardsOnTable",
+  "output" : [ ]
+}, {
   "command" : "getPlayerMana",
   "playerIdx" : 2,
   "output" : 1
@@ -12,30 +15,15 @@
   "command" : "getPlayerTurn",
   "output" : 2
 }, {
+  "command" : "getFrozenCardsOnTable",
+  "output" : [ ]
+}, {
   "command" : "getPlayerMana",
   "playerIdx" : 1,
   "output" : 2
 }, {
-  "command" : "useAttackHero",
-  "cardAttacker" : {
-    "x" : 0,
-    "y" : 0
-  },
-  "error" : "Attacked card is not of type 'Tank'."
-}, {
-  "command" : "useAttackHero",
-  "cardAttacker" : {
-    "x" : 1,
-    "y" : 0
-  },
-  "error" : "Attacked card is not of type 'Tank'."
-}, {
-  "command" : "useAttackHero",
-  "cardAttacker" : {
-    "x" : 0,
-    "y" : 2
-  },
-  "error" : "Attacked card is not of type 'Tank'."
+  "command" : "getFrozenCardsOnTable",
+  "output" : [ ]
 }, {
   "command" : "getCardAtPosition",
   "x" : 0,
@@ -49,19 +37,7 @@
     "name" : "Sentinel"
   }
 }, {
-  "command" : "useAttackHero",
-  "cardAttacker" : {
-    "x" : 0,
-    "y" : 0
-  },
-  "error" : "Attacked card is not of type 'Tank'."
-}, {
-  "command" : "useAttackHero",
-  "cardAttacker" : {
-    "x" : 0,
-    "y" : 1
-  },
-  "error" : "Attacked card is not of type 'Tank'."
+  "gameEnded" : "Player two killed the enemy hero."
 }, {
   "command" : "getCardsOnTable",
   "output" : [ [ {
@@ -93,13 +69,6 @@
     "colors" : [ "Red", "Blue", "Pink" ],
     "name" : "Berserker"
   } ], [ ], [ {
-    "mana" : 2,
-    "attackDamage" : 4,
-    "health" : 8,
-    "description" : "Standard card: A warrior who is never afraid of battle, no matter the costs",
-    "colors" : [ "Brown", "Black", "Grey" ],
-    "name" : "Goliath"
-  }, {
     "mana" : 2,
     "attackDamage" : 6,
     "health" : 3,
@@ -138,10 +107,10 @@
   } ]
 }, {
   "command" : "getTotalGamesPlayed",
-  "output" : 0
+  "output" : 1
 }, {
   "command" : "getPlayerTwoWins",
-  "output" : 0
+  "output" : 1
 }, {
   "command" : "getPlayerOneWins",
   "output" : 0
@@ -153,33 +122,12 @@
   "playerIdx" : 2,
   "output" : 0
 }, {
-  "command" : "useAttackHero",
-  "cardAttacker" : {
-    "x" : 0,
-    "y" : 0
-  },
-  "error" : "Attacked card is not of type 'Tank'."
-}, {
   "command" : "getPlayerMana",
   "playerIdx" : 1,
   "output" : 1
 }, {
   "command" : "getPlayerTurn",
   "output" : 2
-}, {
-  "command" : "useAttackHero",
-  "cardAttacker" : {
-    "x" : 0,
-    "y" : 0
-  },
-  "error" : "Attacked card is not of type 'Tank'."
-}, {
-  "command" : "useAttackHero",
-  "cardAttacker" : {
-    "x" : 1,
-    "y" : 0
-  },
-  "error" : "Attacked card is not of type 'Tank'."
 }, {
   "command" : "getPlayerMana",
   "playerIdx" : 1,
@@ -192,46 +140,27 @@
   },
   "error" : "Attacked card is not of type 'Tank'."
 }, {
-  "command" : "placeCard",
-  "handIdx" : 0,
-  "error" : "Cannot place card on table since row is full."
+  "command" : "getFrozenCardsOnTable",
+  "output" : [ ]
 }, {
   "command" : "getCardAtPosition",
   "x" : 0,
   "y" : 0,
   "output" : {
-    "mana" : 2,
+    "mana" : 1,
     "attackDamage" : 5,
-    "health" : 3,
-    "description" : "Standard card: Trained by the best, nothing will catch him off-guard.",
-    "colors" : [ "Black", "White" ],
-    "name" : "Sentinel"
+    "health" : 2,
+    "description" : "Standard card: A drink can always be served, with the blood of his enemies.",
+    "colors" : [ "Purple", "Yellow" ],
+    "name" : "Berserker"
   }
 }, {
-  "command" : "useAttackHero",
-  "cardAttacker" : {
-    "x" : 1,
-    "y" : 0
-  },
-  "error" : "Attacked card is not of type 'Tank'."
-}, {
-  "command" : "useAttackHero",
-  "cardAttacker" : {
-    "x" : 0,
-    "y" : 0
-  },
-  "error" : "Attacked card is not of type 'Tank'."
-}, {
-  "command" : "useAttackHero",
-  "cardAttacker" : {
-    "x" : 0,
-    "y" : 1
-  },
-  "error" : "Attacked card is not of type 'Tank'."
+  "command" : "getFrozenCardsOnTable",
+  "output" : [ ]
 }, {
   "command" : "getPlayerMana",
   "playerIdx" : 2,
-  "output" : 3
+  "output" : 1
 }, {
   "command" : "getPlayerTurn",
   "output" : 2
@@ -241,49 +170,37 @@
   "y" : 0,
   "output" : {
     "mana" : 2,
-    "attackDamage" : 5,
-    "health" : 3,
-    "description" : "Standard card: Trained by the best, nothing will catch him off-guard.",
-    "colors" : [ "Black", "White" ],
-    "name" : "Sentinel"
+    "attackDamage" : 0,
+    "health" : 2,
+    "description" : "Premium card: The will of Gods has been spoken, obey and you shall be saved...or not.",
+    "colors" : [ "Yellow", "White" ],
+    "name" : "Disciple"
   }
 }, {
   "command" : "getPlayerTurn",
   "output" : 1
 }, {
-  "command" : "placeCard",
-  "handIdx" : 0,
-  "error" : "Cannot place card on table since row is full."
+  "command" : "useHeroAbility",
+  "affectedRow" : 1,
+  "error" : "Selected row does not belong to the current player."
 }, {
   "command" : "getPlayerTurn",
   "output" : 2
 }, {
   "command" : "getPlayerMana",
   "playerIdx" : 2,
-  "output" : 7
+  "output" : 3
 }, {
-  "command" : "useAttackHero",
-  "cardAttacker" : {
-    "x" : 1,
-    "y" : 0
-  },
-  "error" : "Attacked card is not of type 'Tank'."
+  "gameEnded" : "Player two killed the enemy hero."
 }, {
   "command" : "getCardsOnTable",
   "output" : [ [ {
-    "mana" : 2,
-    "attackDamage" : 5,
-    "health" : 3,
-    "description" : "Standard card: Trained by the best, nothing will catch him off-guard.",
-    "colors" : [ "Black", "White" ],
-    "name" : "Sentinel"
-  }, {
-    "mana" : 2,
+    "mana" : 1,
     "attackDamage" : 5,
     "health" : 2,
-    "description" : "Premium card: His presence is not known even by ghosts, success at all costs.",
-    "colors" : [ "Black", "White" ],
-    "name" : "Sentinel"
+    "description" : "Standard card: A drink can always be served, with the blood of his enemies.",
+    "colors" : [ "Purple", "Yellow" ],
+    "name" : "Berserker"
   }, {
     "mana" : 2,
     "attackDamage" : 0,
@@ -291,20 +208,6 @@
     "description" : "Standard card: Everything is sacred to him, all is but a gift from the saints.",
     "colors" : [ "Yellow", "White" ],
     "name" : "Disciple"
-  }, {
-    "mana" : 1,
-    "attackDamage" : 5,
-    "health" : 2,
-    "description" : "Premium card: Fear him. Your last breath is now.",
-    "colors" : [ "Red", "Blue", "Pink" ],
-    "name" : "Berserker"
-  }, {
-    "mana" : 1,
-    "attackDamage" : 5,
-    "health" : 2,
-    "description" : "Standard card: A drink can always be served, with the blood of his enemies.",
-    "colors" : [ "Purple", "Yellow" ],
-    "name" : "Berserker"
   } ], [ {
     "mana" : 2,
     "attackDamage" : 5,
@@ -312,28 +215,14 @@
     "description" : "Premium card: No matter how many, his body will fight. Save your breath for the Mountain is strong.",
     "colors" : [ "Red", "Purple" ],
     "name" : "Goliath"
-  } ], [ {
-    "mana" : 2,
-    "attackDamage" : 4,
-    "health" : 8,
-    "description" : "Standard card: A warrior who is never afraid of battle, no matter the costs",
-    "colors" : [ "Brown", "Black", "Grey" ],
-    "name" : "Goliath"
   }, {
     "mana" : 2,
-    "attackDamage" : 6,
-    "health" : 3,
-    "description" : "Standard card: Death incarnate. No better time to die than now.",
-    "colors" : [ "Orange", "Red", "Black" ],
-    "name" : "The Ripper"
-  } ], [ {
-    "mana" : 2,
-    "attackDamage" : 5,
-    "health" : 3,
-    "description" : "Standard card: Trained by the best, nothing will catch him off-guard.",
-    "colors" : [ "Black", "White" ],
-    "name" : "Sentinel"
-  }, {
+    "attackDamage" : 8,
+    "health" : 6,
+    "description" : "Standard card: He has seen everything, his mind has never been asleep since the making of the realm.",
+    "colors" : [ "Brown", "Blue" ],
+    "name" : "Warden"
+  } ], [ ], [ {
     "mana" : 2,
     "attackDamage" : 0,
     "health" : 2,
@@ -351,21 +240,7 @@
 }, {
   "command" : "getCardsInHand",
   "playerIdx" : 2,
-  "output" : [ {
-    "mana" : 2,
-    "attackDamage" : 0,
-    "health" : 4,
-    "description" : "Standard card: Everything is sacred to him, all is but a gift from the saints.",
-    "colors" : [ "Yellow", "White" ],
-    "name" : "Disciple"
-  }, {
-    "mana" : 2,
-    "attackDamage" : 8,
-    "health" : 6,
-    "description" : "Standard card: He has seen everything, his mind has never been asleep since the making of the realm.",
-    "colors" : [ "Brown", "Blue" ],
-    "name" : "Warden"
-  } ]
+  "output" : [ ]
 }, {
   "command" : "getCardsInHand",
   "playerIdx" : 1,
@@ -386,10 +261,10 @@
   } ]
 }, {
   "command" : "getTotalGamesPlayed",
-  "output" : 0
+  "output" : 2
 }, {
   "command" : "getPlayerTwoWins",
-  "output" : 0
+  "output" : 2
 }, {
   "command" : "getPlayerOneWins",
   "output" : 0

@@ -24,6 +24,7 @@ public class Card {
         name = input.getName();
         hasAttacked = 0;
     }
+    public Card() {health = 0;}
     public Card(int mana, int health, String description, String colors, String name) {}
     public int getMana() {return mana;}
     public void setMana(int mana) {this.mana = mana;}

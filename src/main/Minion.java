@@ -14,6 +14,9 @@ public class Minion extends Card {
         attackDamage = card.getAttackDamage();
         isFrozen = 0;
     }
+    public Minion() {
+        super();
+    }
 
 
     public int getMana() {return super.getMana();}
@@ -59,6 +62,7 @@ public class Minion extends Card {
         nodeInfo.set("colors", colors);
         nodeInfo.put("name", getName());
     }
+
 
     public void specialAttack(Minion attacked) {
         if(getName().equals("The Ripper")) {
