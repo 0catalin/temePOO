@@ -60,6 +60,28 @@ public class Minion extends Card {
         nodeInfo.put("name", getName());
     }
 
+    public void specialAttack(Minion attacked) {
+        if(getName().equals("The Ripper")) {
+            attacked.setAttackDamage(attacked.getAttackDamage() - 2);
+            if(attacked.getAttackDamage() < 0)
+                attacked.setAttackDamage(0);
+        }
+        else if(getName().equals("Miraj")) {
+            int swap = attacked.getHealth();
+            attacked.setHealth(getHealth());
+            setHealth(swap);
+        }
+        else if(getName().equals("The Cursed One")) {
+            int swap = attacked.getHealth();
+            attacked.setHealth(attacked.getAttackDamage());
+            attacked.setAttackDamage(swap);
+        }
+        else if(getName().equals("Disciple")) {
+            attacked.setHealth(attacked.getHealth() + 2);
+        }
+        else {System.out.println("testul ma pune sa atac cu alt minion sau bug");}
+    }
+
     public String getRow() {
         if(getName().equals("Sentinel") || getName().equals("Berserker") || getName().equals("The Cursed One") || getName().equals("Disciple")) {
             return "back";

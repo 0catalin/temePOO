@@ -16,6 +16,27 @@
   "playerIdx" : 1,
   "output" : 2
 }, {
+  "command" : "useAttackHero",
+  "cardAttacker" : {
+    "x" : 0,
+    "y" : 0
+  },
+  "error" : "Attacked card is not of type 'Tank'."
+}, {
+  "command" : "useAttackHero",
+  "cardAttacker" : {
+    "x" : 1,
+    "y" : 0
+  },
+  "error" : "Attacked card is not of type 'Tank'."
+}, {
+  "command" : "useAttackHero",
+  "cardAttacker" : {
+    "x" : 0,
+    "y" : 2
+  },
+  "error" : "Attacked card is not of type 'Tank'."
+}, {
   "command" : "getCardAtPosition",
   "x" : 0,
   "y" : 0,
@@ -27,6 +48,20 @@
     "colors" : [ "Black", "White" ],
     "name" : "Sentinel"
   }
+}, {
+  "command" : "useAttackHero",
+  "cardAttacker" : {
+    "x" : 0,
+    "y" : 0
+  },
+  "error" : "Attacked card is not of type 'Tank'."
+}, {
+  "command" : "useAttackHero",
+  "cardAttacker" : {
+    "x" : 0,
+    "y" : 1
+  },
+  "error" : "Attacked card is not of type 'Tank'."
 }, {
   "command" : "getCardsOnTable",
   "output" : [ [ {
@@ -102,6 +137,15 @@
     "name" : "The Ripper"
   } ]
 }, {
+  "command" : "getTotalGamesPlayed",
+  "output" : 0
+}, {
+  "command" : "getPlayerTwoWins",
+  "output" : 0
+}, {
+  "command" : "getPlayerOneWins",
+  "output" : 0
+}, {
   "command" : "getPlayerTurn",
   "output" : 2
 }, {
@@ -109,6 +153,13 @@
   "playerIdx" : 2,
   "output" : 0
 }, {
+  "command" : "useAttackHero",
+  "cardAttacker" : {
+    "x" : 0,
+    "y" : 0
+  },
+  "error" : "Attacked card is not of type 'Tank'."
+}, {
   "command" : "getPlayerMana",
   "playerIdx" : 1,
   "output" : 1
@@ -116,9 +167,30 @@
   "command" : "getPlayerTurn",
   "output" : 2
 }, {
+  "command" : "useAttackHero",
+  "cardAttacker" : {
+    "x" : 0,
+    "y" : 0
+  },
+  "error" : "Attacked card is not of type 'Tank'."
+}, {
+  "command" : "useAttackHero",
+  "cardAttacker" : {
+    "x" : 1,
+    "y" : 0
+  },
+  "error" : "Attacked card is not of type 'Tank'."
+}, {
   "command" : "getPlayerMana",
   "playerIdx" : 1,
   "output" : 1
+}, {
+  "command" : "useAttackHero",
+  "cardAttacker" : {
+    "x" : 3,
+    "y" : 0
+  },
+  "error" : "Attacked card is not of type 'Tank'."
 }, {
   "command" : "placeCard",
   "handIdx" : 0,
@@ -135,6 +207,27 @@
     "colors" : [ "Black", "White" ],
     "name" : "Sentinel"
   }
+}, {
+  "command" : "useAttackHero",
+  "cardAttacker" : {
+    "x" : 1,
+    "y" : 0
+  },
+  "error" : "Attacked card is not of type 'Tank'."
+}, {
+  "command" : "useAttackHero",
+  "cardAttacker" : {
+    "x" : 0,
+    "y" : 0
+  },
+  "error" : "Attacked card is not of type 'Tank'."
+}, {
+  "command" : "useAttackHero",
+  "cardAttacker" : {
+    "x" : 0,
+    "y" : 1
+  },
+  "error" : "Attacked card is not of type 'Tank'."
 }, {
   "command" : "getPlayerMana",
   "playerIdx" : 2,
@@ -168,6 +261,13 @@
   "command" : "getPlayerMana",
   "playerIdx" : 2,
   "output" : 7
+}, {
+  "command" : "useAttackHero",
+  "cardAttacker" : {
+    "x" : 1,
+    "y" : 0
+  },
+  "error" : "Attacked card is not of type 'Tank'."
 }, {
   "command" : "getCardsOnTable",
   "output" : [ [ {
@@ -284,4 +384,13 @@
     "colors" : [ "Brown", "Blue" ],
     "name" : "Warden"
   } ]
+}, {
+  "command" : "getTotalGamesPlayed",
+  "output" : 0
+}, {
+  "command" : "getPlayerTwoWins",
+  "output" : 0
+}, {
+  "command" : "getPlayerOneWins",
+  "output" : 0
 } ]

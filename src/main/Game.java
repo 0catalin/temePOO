@@ -19,6 +19,7 @@ public class Game {
     private StartGameInput startGameInput;
     private Input initialInput;
     private GameInfo gameInfo;
+    private Statistics statistics;
     private Game() {}
 
     public void applyParams(Input input) {
@@ -29,6 +30,7 @@ public class Game {
         initialInput = input;
         gameInfo = new GameInfo();
         tableCards = new TableCards();
+        statistics = new Statistics();
     }
 
     public void loopOver(ObjectMapper objectMapper, ArrayNode output) {
@@ -91,9 +93,58 @@ public class Game {
                         cardUsesAttackError(objectMapper, output, actions.getCardAttacker(), actions.getCardAttacked(), s);
                     }
                 }
+
                 if(actions.getCommand().equals("getCardAtPosition")) {
                     getCardAtPosition(objectMapper, output, actions.getX(), actions.getY());
                 }
+
+                if(actions.getCommand().equals("cardUsesAbility")) {
+                    String s1 = tableCards.cardUsesAbility(actions.getCardAttacker(), actions.getCardAttacked());
+                    if(!s1.isEmpty()) {
+                        cardUsesSpecialAttackError(objectMapper, output, actions.getCardAttacker(), actions.getCardAttacked(), s1);
+                    }
+                }
+                if(actions.getCommand().equals("useAttackHero")) {
+                    String s2 = tableCards.cardAttackHero(actions.getCardAttacker());
+                    if(!s2.isEmpty()) {
+                        cardUsesAttackHeroError(objectMapper, output, actions.getCardAttacker(), s2);
+                    }
+                    else{
+                        if(gameInfo.getPlayerTurn() == 1) {
+                            s2 = player2.getHero().attackTheHero(1, tableCards.getMinion(actions.getCardAttacker()), statistics);
+                        }
+                        else {
+                            s2 = player1.getHero().attackTheHero(2, tableCards.getMinion(actions.getCardAttacker()), statistics);
+                        }
+                        if(!s2.isEmpty()) {
+                            ObjectNode commandObject = objectMapper.createObjectNode();
+                            commandObject.put("gameEnded", s2);
+                            output.add(commandObject);
+                        }
+                    }
+                }
+
+                if(actions.getCommand().equals("getPlayerOneWins")) {
+                    ObjectNode commandObject = objectMapper.createObjectNode();
+                    commandObject.put("command", "getPlayerOneWins");
+                    commandObject.put("output", statistics.getPlayer1Wins());
+                    output.add(commandObject);
+                }
+
+                if(actions.getCommand().equals("getPlayerTwoWins")) {
+                    ObjectNode commandObject = objectMapper.createObjectNode();
+                    commandObject.put("command", "getPlayerTwoWins");
+                    commandObject.put("output", statistics.getPlayer2Wins());
+                    output.add(commandObject);
+                }
+
+                if(actions.getCommand().equals("getTotalGamesPlayed")) {
+                    ObjectNode commandObject = objectMapper.createObjectNode();
+                    commandObject.put("command", "getTotalGamesPlayed");
+                    commandObject.put("output", statistics.getTotalGamesPlayed());
+                    output.add(commandObject);
+                }
+
             }
             player1 = new Player(initialInput.getPlayerOneDecks());
             player2 = new Player(initialInput.getPlayerTwoDecks());
@@ -211,6 +262,31 @@ public class Game {
         attackNode.put("y", cardAttacker.getY());
         commandObject.set("cardAttacker", attackNode);
         commandObject.set("cardAttacked", attackedNode);
+        commandObject.put("error", s);
+        output.add(commandObject);
+    }
+    private void cardUsesSpecialAttackError(ObjectMapper objectMapper, ArrayNode output, Coordinates cardAttacker, Coordinates cardAttacked, String s) {
+        ObjectNode commandObject = objectMapper.createObjectNode();
+        commandObject.put("command", "cardUsesAbility");
+        ObjectNode attackNode = objectMapper.createObjectNode();
+        ObjectNode attackedNode = objectMapper.createObjectNode();
+        attackedNode.put("x", cardAttacked.getX());
+        attackedNode.put("y", cardAttacked.getY());
+        attackNode.put("x", cardAttacker.getX());
+        attackNode.put("y", cardAttacker.getY());
+        commandObject.set("cardAttacker", attackNode);
+        commandObject.set("cardAttacked", attackedNode);
+        commandObject.put("error", s);
+        output.add(commandObject);
+    }
+
+    private void cardUsesAttackHeroError(ObjectMapper objectMapper, ArrayNode output, Coordinates cardAttacker, String s) {
+        ObjectNode commandObject = objectMapper.createObjectNode();
+        commandObject.put("command", "useAttackHero");
+        ObjectNode attackNode = objectMapper.createObjectNode();
+        attackNode.put("x", cardAttacker.getX());
+        attackNode.put("y", cardAttacker.getY());
+        commandObject.set("cardAttacker", attackNode);
         commandObject.put("error", s);
         output.add(commandObject);
     }

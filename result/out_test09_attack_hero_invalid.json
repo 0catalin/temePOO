@@ -18,7 +18,7 @@
     "description" : "Premium card: Time to show who we are, the low-class was never scared of you.",
     "colors" : [ "Brown", "Pink", "Purple" ],
     "name" : "King Mudface",
-    "health" : 30
+    "health" : 21
   }
 }, {
   "command" : "getPlayerHero",
@@ -68,7 +68,7 @@
     "description" : "Premium card: Time to show who we are, the low-class was never scared of you.",
     "colors" : [ "Brown", "Pink", "Purple" ],
     "name" : "King Mudface",
-    "health" : 30
+    "health" : 21
   }
 }, {
   "command" : "getPlayerHero",
@@ -80,6 +80,8 @@
     "name" : "General Kocioraw",
     "health" : 30
   }
+}, {
+  "gameEnded" : "Player two killed the enemy hero."
 }, {
   "command" : "getPlayerMana",
   "playerIdx" : 2,
