@@ -1,192 +1,187 @@
 package main;
-
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import fileio.Coordinates;
-
 import java.util.ArrayList;
 
-public class TableCards {
+public final class TableCards {
     private ArrayList<Minion>[] cardRows;
-    //private ArrayList<Minion> front1 = new ArrayList<>();
-    //private ArrayList<Minion> back1 = new ArrayList<>();
-    //private ArrayList<Minion> front2 = new ArrayList<>();
-    //private ArrayList<Minion> back2 = new ArrayList<>();
+    private static final int NUMBER_OF_ARRAYS = 4;
+    private static final int LAST_ROW = 3;
     public TableCards() {
-        cardRows = new ArrayList[4];
+        cardRows = new ArrayList[NUMBER_OF_ARRAYS];
         for (int i = 0; i < cardRows.length; i++) {
             cardRows[i] = new ArrayList<>();
         }
     }
 
-    public ArrayList<Minion> getRow(int IDX){
-            return cardRows[IDX];
+    public ArrayList<Minion> getRow(final int idx) {
+            return cardRows[idx];
     }
-    public void setRow(int IDX, ArrayList<Minion> row){cardRows[IDX] = row;}
 
-    public void printTable(ObjectMapper objectMapper, ArrayNode outputCorrespondent) {
+    public void setRow(final int idx, final ArrayList<Minion> row) {
+        cardRows[idx] = row;
+    }
 
-        for(int i = 0; i < cardRows.length; i++){
-            ArrayNode separateRow = objectMapper.createArrayNode();
+    public void printTable(final ObjectMapper mapper, final ArrayNode outputCorrespondent) {
+        for (int i = 0; i < cardRows.length; i++) {
+            ArrayNode separateRow = mapper.createArrayNode();
             ArrayList<Minion> row = cardRows[i];
             for (Minion minion: row) {
-                minion.printMinion(separateRow, objectMapper);
+                minion.printMinion(separateRow, mapper);
             }
             outputCorrespondent.add(separateRow);
         }
     }
 
-    public ArrayNode printFrozenTable(ObjectMapper objectMapper) {
-        ArrayNode output = objectMapper.createArrayNode();
-        for(int i = 0; i < cardRows.length; i++){
+    public ArrayNode printFrozenTable(final ObjectMapper mapper) {
+        ArrayNode output = mapper.createArrayNode();
+        for (int i = 0; i < cardRows.length; i++) {
             ArrayList<Minion> row = cardRows[i];
             for (Minion minion: row) {
-                if(minion.getIsFrozen() == 1) {
-                    minion.printMinion(output, objectMapper);
+                if (minion.getIsFrozen()) {
+                    minion.printMinion(output, mapper);
                 }
             }
         }
         return output;
     }
 
-    String cardAttack(Coordinates attacker, Coordinates attacked) {
+    public String cardAttack(final Coordinates attacker, final Coordinates attacked) {
         Minion atacker = getMinion(attacker);
         Minion atacked = getMinion(attacked);
-        if(!areDifferentTeams(attacker.getX(), attacked.getX())) {
+        if (!areDifferentTeams(attacker.getX(), attacked.getX())) {
             return "Attacked card does not belong to the enemy.";
         }
-        if(atacker.getHasAttacked() == 1) {
+        if (atacker.getHasAttacked()) {
             return "Attacker card has already attacked this turn.";
         }
-        if(atacker.getIsFrozen() == 1) {
+        if (atacker.getIsFrozen()) {
             return "Attacker card is frozen.";
         }
-        if(checkOpponentTank(attacker) && (!getMinion(attacked).isTank())) {
+        if (checkOpponentTank(attacker) && (!getMinion(attacked).isTank())) {
             return "Attacked card is not of type 'Tank'.";
         }
         atacked.setHealth(atacked.getHealth() - atacker.getAttackDamage());
-        if(atacked.getHealth() <= 0) {
+        if (atacked.getHealth() <= 0) {
             cardRows[attacked.getX()].remove(attacked.getY());
         }
-        atacker.setHasAttacked(1);
+        atacker.setHasAttacked(true);
         return "";
     }
 
-    public String cardUsesAbility(Coordinates attacker, Coordinates attacked) {
+    public String cardUsesAbility(final Coordinates attacker, final Coordinates attacked) {
         Minion atacker = getMinion(attacker);
         Minion atacked = getMinion(attacked);
-        if(atacker.getIsFrozen() == 1) {
+        if (atacker.getIsFrozen()) {
             return "Attacker card is Frozen.";
         }
-        if(atacker.getHasAttacked() == 1) {
+        if (atacker.getHasAttacked()) {
             return "Attacker card has already attacked this turn.";
         }
         String name = atacker.getName();
-        if(name.equals("Disciple") && areDifferentTeams(attacker.getX(), attacked.getX())) {
+        if (name.equals("Disciple") && areDifferentTeams(attacker.getX(), attacked.getX())) {
             return "Attacked card does not belong to the current player.";
         }
-        if((name.equals("The Ripper") || name.equals("Miraj") || name.equals("The Cursed One"))) {
-            if((!areDifferentTeams(attacker.getX(), attacked.getX()))) {
+        if ((name.equals("The Ripper") || name.equals("Miraj") || name.equals("The Cursed One"))) {
+            if ((!areDifferentTeams(attacker.getX(), attacked.getX()))) {
                 return "Attacked card does not belong to the enemy.";
             }
-            if(checkOpponentTank(attacker) && (!getMinion(attacked).isTank())) {
+            if (checkOpponentTank(attacker) && (!getMinion(attacked).isTank())) {
                 return "Attacked card is not of type 'Tank'.";
             }
         }
         atacker.specialAttack(atacked);
-        if(atacked.getHealth() <= 0) {
+        if (atacked.getHealth() <= 0) {
             cardRows[attacked.getX()].remove(attacked.getY());
         }
-        atacker.setHasAttacked(1);
+        atacker.setHasAttacked(true);
         return "";
     }
 
-    String cardAttackHero(Coordinates attacker) {
+    public String cardAttackHero(final Coordinates attacker) {
         Minion atacker = getMinion(attacker);
-        if(atacker.getIsFrozen() == 1) {
-            return "Attacker card is Frozen.";
+        if (atacker.getIsFrozen()) {
+            return "Attacker card is frozen.";
         }
-        if(atacker.getHasAttacked() == 1) {
+        if (atacker.getHasAttacked()) {
             return "Attacker card has already attacked this turn.";
         }
-        if(checkOpponentTank(attacker)) {
+        if (checkOpponentTank(attacker)) {
             return "Attacked card is not of type 'Tank'.";
         }
 
         return "";
     }
 
-    public String heroAbility(Player player, int playerIDX, int affectedRow) {
+    public String heroAbility(final Player player, final int playerIDX, final int affectedRow) {
         Hero hero = player.getHero();
         String name = hero.getName();
-        if(player.getMana() < hero.getMana()) {  /// nu uita sa schimbi mana, hasattacked
+        if (player.getMana() < hero.getMana()) {  /// nu uita sa schimbi mana, hasattacked
             return "Not enough mana to use hero's ability.";
         }
-        if(hero.getHasAttacked() == 1) {
+        if (hero.getHasAttacked()) {
             return "Hero has already attacked this turn.";
         }
-        if(name.equals("Lord Royce") || name.equals("Empress Thorina")) {
-            if(isRowSameTeam(playerIDX, affectedRow)) {
+        if (name.equals("Lord Royce") || name.equals("Empress Thorina")) {
+            if (isRowSameTeam(playerIDX, affectedRow)) {
                 return "Selected row does not belong to the enemy.";
             }
         }
-        if(name.equals("General Kocioraw") || name.equals("King Mudface")) {
-            if(!isRowSameTeam(playerIDX, affectedRow)) {
+        if (name.equals("General Kocioraw") || name.equals("King Mudface")) {
+            if (!isRowSameTeam(playerIDX, affectedRow)) {
                 return "Selected row does not belong to the current player.";
             }
         }
-        if(name.equals("Lord Royce")) {
+        if (name.equals("Lord Royce")) {
             subZero(affectedRow);
         }
-        if(name.equals("Empress Thorina")) {
+        if (name.equals("Empress Thorina")) {
            lowBlow(affectedRow);
         }
-        if(name.equals("General Kocioraw")) {
+        if (name.equals("General Kocioraw")) {
             bloodThirst(affectedRow);
         }
-        if(name.equals("King Mudface")) {
+        if (name.equals("King Mudface")) {
             earthBorn(affectedRow);
         }
         player.setMana(player.getMana() - hero.getMana());
-        hero.setHasAttacked(1);
+        hero.setHasAttacked(true);
         return "";
     }
 
-    public void clearCards(int player) {
-        if(player == 2) {
+    public void clearCards(final int player) {
+        if (player == 2) {
             for (int i = 0; i < 2; i++) {
                 for (int j = 0; j < cardRows[i].size(); j++) {
-                    cardRows[i].get(j).setIsFrozen(0);
-                    cardRows[i].get(j).setHasAttacked(0);
+                    cardRows[i].get(j).setIsFrozen(false);
+                    cardRows[i].get(j).setHasAttacked(false);
                 }
             }
-        }
-        else {
-            for (int i = 2; i < 4; i++) {
+        } else {
+            for (int i = 2; i < NUMBER_OF_ARRAYS; i++) {
                 for (int j = 0; j < cardRows[i].size(); j++) {
-                    cardRows[i].get(j).setIsFrozen(0);
-                    cardRows[i].get(j).setHasAttacked(0);
+                    cardRows[i].get(j).setIsFrozen(false);
+                    cardRows[i].get(j).setHasAttacked(false);
                 }
             }
         }
     }
 
-    Minion getMinion(Coordinates coordinates) {
+    public Minion getMinion(final Coordinates coordinates) {
         return getRow(coordinates.getX()).get(coordinates.getY());
     }
-    boolean checkOpponentTank(Coordinates coordinates) {
-        if(coordinates.getX() == 0 || coordinates.getX() == 1) {
-            for(int i = 0; i < getRow(2).size(); i++){
-                if(getRow(2).get(i).isTank()) {
+    private boolean checkOpponentTank(final Coordinates coordinates) {
+        if (coordinates.getX() == 0 || coordinates.getX() == 1) {
+            for (int i = 0; i < getRow(2).size(); i++) {
+                if (getRow(2).get(i).isTank()) {
                     return true;
                 }
             }
             return false;
-        }
-        else {
-            for(int i = 0; i < getRow(1).size(); i++){
-                if(getRow(1).get(i).isTank()) {
+        } else {
+            for (int i = 0; i < getRow(1).size(); i++) {
+                if (getRow(1).get(i).isTank()) {
                     return true;
                 }
             }
@@ -194,19 +189,19 @@ public class TableCards {
         }
     }
 
-    private void subZero(int affectedRow){
+    private void subZero(final int affectedRow) {
         ArrayList<Minion> row = getRow(affectedRow);
-        for(int i = 0; i < row.size(); i++){
-            row.get(i).setIsFrozen(1);
+        for (int i = 0; i < row.size(); i++) {
+            row.get(i).setIsFrozen(true);
         }
     }
 
-    private void lowBlow(int affectedRow){
+    private void lowBlow(final int affectedRow) {
         ArrayList<Minion> row = getRow(affectedRow);
         Minion maxHealthMinion = new Minion();
         int maxHealthIndex = 0;
-        for(int i = 0; i < row.size(); i++){
-            if(row.get(i).getHealth() > maxHealthMinion.getHealth()) {
+        for (int i = 0; i < row.size(); i++) {
+            if (row.get(i).getHealth() > maxHealthMinion.getHealth()) {
                 maxHealthMinion = row.get(i);
                 maxHealthIndex = i;
             }
@@ -214,29 +209,29 @@ public class TableCards {
         row.remove(maxHealthIndex);
     }
 
-    private void earthBorn(int affectedRow){
+    private void earthBorn(final int affectedRow) {
         ArrayList<Minion> row = getRow(affectedRow);
-        for(int i = 0; i < row.size(); i++){
+        for (int i = 0; i < row.size(); i++) {
             row.get(i).setHealth(row.get(i).getHealth() + 1);
         }
     }
 
-    private void bloodThirst(int affectedRow){
+    private void bloodThirst(final int affectedRow) {
         ArrayList<Minion> row = getRow(affectedRow);
-        for(int i = 0; i < row.size(); i++){
+        for (int i = 0; i < row.size(); i++) {
             row.get(i).setAttackDamage(row.get(i).getAttackDamage() + 1);
         }
     }
 
-    boolean areDifferentTeams(int x1, int x2) {
-        boolean t1 = (x1 == 0 || x1 == 1) && (x2 == 0 || x2 == 1);
-        boolean t2 = (x1 == 2 || x1 == 3) && (x2 == 2 || x2 == 3);
-        return !(t1 || t2);
+    private boolean areDifferentTeams(final int x1, final int x2) {
+        boolean team1 = (x1 == 0 || x1 == 1) && (x2 == 0 || x2 == 1);
+        boolean team2 = (x1 == 2 || x1 == LAST_ROW) && (x2 == 2 || x2 == LAST_ROW);
+        return !(team1 || team2);
     }
 
-    boolean isRowSameTeam(int player, int row) {
-        boolean t1 = (player == 1 && row == 2) || (player == 1 && row == 3);
-        boolean t2 = (player == 2 && row == 0) || (player == 2 && row == 1);
-        return (t1 || t2);
+    private boolean isRowSameTeam(final int player, final int row) {
+        boolean team1 = (player == 1 && row == 2) || (player == 1 && row == LAST_ROW);
+        boolean team2 = (player == 2 && row == 0) || (player == 2 && row == 1);
+        return (team1 || team2);
     }
 }

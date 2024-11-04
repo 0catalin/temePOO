@@ -2,50 +2,24 @@ package main;
 
 import fileio.CardInput;
 
-import java.util.ArrayList;
-
-public class Hero extends Card{
-    public Hero(CardInput card) {
+public final class Hero extends Card {
+    public Hero(final CardInput card) {
         super(card);
     }
 
-
-    public int getMana() {return super.getMana();}
-
-    public void setMana(int mana) {super.setMana(mana);}
-
-    public int getHealth() {return super.getHealth();}
-
-    public void setHealth(int health) {super.setHealth(health);}
-
-    public String getDescription() {return super.getDescription();}
-
-    public void setDescription(String description) {super.setDescription(description);}
-
-    public ArrayList<String> getColors() {return super.getColors();}
-
-    public void setColors(ArrayList<String> colors) {super.setColors(colors);}
-
-    public String getName() {return super.getName();}
-
-    public void setName(String name) {super.setName(name);}
-
-    public void setHasAttacked(int hasAttacked) {super.setHasAttacked(hasAttacked);}
-
-    public int getHasAttacked() {return super.getHasAttacked();}
-
-    public String attackTheHero(int attackingPlayer, Minion attackingCard, Statistics statistics) {
-        setHealth(getHealth() - attackingCard.getAttackDamage());
-        if(getHealth() > 0) {
+    public String attackTheHero(final int player, final Minion attackCard, final Statistics stats) {
+        setHealth(getHealth() - attackCard.getAttackDamage());
+        attackCard.setHasAttacked(true);
+        if (getHealth() > 0) {
             return "";
         }
-        if(attackingPlayer == 1) {
-            statistics.setPlayer1Wins(statistics.getPlayer1Wins() + 1);
-            statistics.setTotalGamesPlayed(statistics.getTotalGamesPlayed() + 1);
+        if (player == 1) {
+            stats.setPlayer1Wins(stats.getPlayer1Wins() + 1);
+            stats.setTotalGamesPlayed(stats.getTotalGamesPlayed() + 1);
             return "Player one killed the enemy hero.";
         }
-        statistics.setPlayer2Wins(statistics.getPlayer2Wins() + 1);
-        statistics.setTotalGamesPlayed(statistics.getTotalGamesPlayed() + 1);
+        stats.setPlayer2Wins(stats.getPlayer2Wins() + 1);
+        stats.setTotalGamesPlayed(stats.getTotalGamesPlayed() + 1);
         return "Player two killed the enemy hero.";
     }
 }
