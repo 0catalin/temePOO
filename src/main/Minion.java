@@ -23,7 +23,7 @@ public final class Minion extends Card {
         this.isFrozen = isFrozen;
     }
 
-    boolean getIsFrozen() {
+    public boolean getIsFrozen() {
         return isFrozen;
     }
 
@@ -34,7 +34,6 @@ public final class Minion extends Card {
     public void setAttackDamage(final int attackDamage) {
         this.attackDamage = attackDamage;
     }
-
 
     public void printMinion(final ArrayNode outputCorrespondent, final ObjectMapper mapper) {
         ObjectNode nodeInfo = mapper.createObjectNode();
@@ -55,7 +54,6 @@ public final class Minion extends Card {
         nodeInfo.put("name", getName());
     }
 
-
     public void specialAttack(final Minion attacked) {
         if (getName().equals("The Ripper")) {
             attacked.setAttackDamage(attacked.getAttackDamage() - 2);
@@ -72,8 +70,6 @@ public final class Minion extends Card {
             attacked.setAttackDamage(swap);
         } else if (getName().equals("Disciple")) {
             attacked.setHealth(attacked.getHealth() + 2);
-        } else {
-            System.out.println("testul ma pune sa atac cu alt minion sau bug");
         }
     }
 

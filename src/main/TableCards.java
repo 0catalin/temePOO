@@ -11,7 +11,7 @@ public final class TableCards {
     public TableCards() {
         cardRows = new ArrayList[NUMBER_OF_ARRAYS];
         for (int i = 0; i < cardRows.length; i++) {
-            cardRows[i] = new ArrayList<>();
+            cardRows[i] = new ArrayList<Minion>();
         }
     }
 
@@ -117,7 +117,7 @@ public final class TableCards {
     public String heroAbility(final Player player, final int playerIDX, final int affectedRow) {
         Hero hero = player.getHero();
         String name = hero.getName();
-        if (player.getMana() < hero.getMana()) {  /// nu uita sa schimbi mana, hasattacked
+        if (player.getMana() < hero.getMana()) {
             return "Not enough mana to use hero's ability.";
         }
         if (hero.getHasAttacked()) {

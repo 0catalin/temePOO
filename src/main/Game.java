@@ -7,8 +7,6 @@ import fileio.GameInput;
 import fileio.Input;
 import fileio.StartGameInput;
 import fileio.Coordinates;
-
-
 import java.util.ArrayList;
 
 public final class Game {
@@ -17,6 +15,7 @@ public final class Game {
     static {
         instance = new Game();
     }
+
     private TableCards tableCards = new TableCards();
     private Player player1;
     private Player player2;
@@ -54,8 +53,8 @@ public final class Game {
             player2.getDecks().shuffleDeck(deckIdx2, startInput.getShuffleSeed());
             gameInfo.setDeckPlayer1(player1.getDecks().getDecks().get(deckIdx1));
             gameInfo.setDeckPlayer2(player2.getDecks().getDecks().get(deckIdx2));
-            gameInfo.setHandPlayer1(new ArrayList<>());
-            gameInfo.setHandPlayer2(new ArrayList<>());
+            gameInfo.setHandPlayer1(new ArrayList<Minion>());
+            gameInfo.setHandPlayer2(new ArrayList<Minion>());
             gameInfo.setPlayerTurn(startInput.getStartingPlayer());
             gameInfo.setRoundNumber(1);
             gameInfo.setIsANewTurn(true);
@@ -107,7 +106,8 @@ public final class Game {
                     Coordinates attacked = actions.getCardAttacked();
                     String error = tableCards.cardAttack(attacker, attacked);
                     if (!error.isEmpty()) {
-                        cardUsesAttackError(mapper, output, attacker, attacked, error);
+                        cardUsesAttackError(mapper, output, attacker, attacked,
+                                error, "cardUsesAttack");
                     }
                 }
 
@@ -119,7 +119,8 @@ public final class Game {
                     Coordinates attacked = actions.getCardAttacked();
                     String error = tableCards.cardUsesAbility(attacker, attacked);
                     if (!error.isEmpty()) {
-                        cardUsesSpecialAttackError(mapper, output, attacker, attacked, error);
+                        cardUsesAttackError(mapper, output, attacker, attacked,
+                                error, "cardUsesAbility");
                     }
                 }
                 if (actions.getCommand().equals("useAttackHero")) {
@@ -186,8 +187,6 @@ public final class Game {
             player2 = new Player(initialInput.getPlayerTwoDecks());
         }
     }
-
-
 
 
     private void getPlayerDeck(final ObjectMapper mapper, final ArrayNode output, final int idx) {
@@ -267,7 +266,8 @@ public final class Game {
         output.add(commandObject);
     }
 
-    private void getCardsInHand(final ObjectMapper mapper, final ArrayNode output, final ArrayList<Minion> handPlayer, final int idx) {
+    private void getCardsInHand(final ObjectMapper mapper, final ArrayNode output,
+                                final ArrayList<Minion> handPlayer, final int idx) {
         ObjectNode commandObject = mapper.createObjectNode();
         commandObject.put("command", "getCardsInHand");
         commandObject.put("playerIdx", idx);
@@ -288,7 +288,8 @@ public final class Game {
         output.add(commandObject);
     }
 
-    private void printPlaceError(final String errorMessage, final int handIDX, final ArrayNode output, final ObjectMapper mapper) {
+    private void printPlaceError(final String errorMessage, final int handIDX,
+                                 final ArrayNode output, final ObjectMapper mapper) {
         ObjectNode commandObject = mapper.createObjectNode();
         commandObject.put("command", "placeCard");
         commandObject.put("handIdx", handIDX);
@@ -296,23 +297,11 @@ public final class Game {
         output.add(commandObject);
     }
 
-    private void cardUsesAttackError(final ObjectMapper mapper, final ArrayNode output, final Coordinates cardAttacker, final Coordinates cardAttacked, final String error) {
+    private void cardUsesAttackError(final ObjectMapper mapper, final ArrayNode output,
+                                     final Coordinates cardAttacker, final Coordinates cardAttacked,
+                                     final String error, final String command) {
         ObjectNode commandObject = mapper.createObjectNode();
-        commandObject.put("command", "cardUsesAttack");
-        ObjectNode attackNode = mapper.createObjectNode();
-        ObjectNode attackedNode = mapper.createObjectNode();
-        attackedNode.put("x", cardAttacked.getX());
-        attackedNode.put("y", cardAttacked.getY());
-        attackNode.put("x", cardAttacker.getX());
-        attackNode.put("y", cardAttacker.getY());
-        commandObject.set("cardAttacker", attackNode);
-        commandObject.set("cardAttacked", attackedNode);
-        commandObject.put("error", error);
-        output.add(commandObject);
-    }
-    private void cardUsesSpecialAttackError(final ObjectMapper mapper, final ArrayNode output, final Coordinates cardAttacker, final Coordinates cardAttacked, final String error) {
-        ObjectNode commandObject = mapper.createObjectNode();
-        commandObject.put("command", "cardUsesAbility");
+        commandObject.put("command", command);
         ObjectNode attackNode = mapper.createObjectNode();
         ObjectNode attackedNode = mapper.createObjectNode();
         attackedNode.put("x", cardAttacked.getX());
@@ -325,7 +314,8 @@ public final class Game {
         output.add(commandObject);
     }
 
-    private void cardUsesAttackHeroError(final ObjectMapper mapper, final ArrayNode output, final Coordinates cardAttacker, final String error) {
+    private void cardUsesAttackHeroError(final ObjectMapper mapper, final ArrayNode output,
+                                         final Coordinates cardAttacker, final String error) {
         ObjectNode commandObject = mapper.createObjectNode();
         commandObject.put("command", "useAttackHero");
         ObjectNode attackNode = mapper.createObjectNode();
@@ -336,7 +326,8 @@ public final class Game {
         output.add(commandObject);
     }
 
-    private void getCardAtPosition(final ObjectMapper mapper, final ArrayNode output, final int x, final int y) {
+    private void getCardAtPosition(final ObjectMapper mapper,
+                                   final ArrayNode output, final int x, final int y) {
         ObjectNode commandObject = mapper.createObjectNode();
         commandObject.put("command", "getCardAtPosition");
         commandObject.put("x", x);
@@ -355,23 +346,9 @@ public final class Game {
         return instance;
     }
 
-    Player getPlayer1() {
-        return player1;
-    }
-    Player getPlayer2() {
-        return player2;
-    }
-    StartGameInput getStartGameInput() {
-        return startGameInput;
-    }
-    private void setStartGameInput(final StartGameInput startGameInput) {
+    public void setStartGameInput(final StartGameInput startGameInput) {
         this.startGameInput = startGameInput;
     }
-    void setInitialInput(final Input initialInput) {
-        this.initialInput = initialInput;
-    }
-    Input getInitialInput() {
-        return initialInput;
-    }
+
 }
 

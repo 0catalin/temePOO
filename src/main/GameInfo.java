@@ -29,7 +29,8 @@ public final class GameInfo {
         }
     }
 
-    String addCardToTable(final Player player, final TableCards tableCards, final int cardIdx) {
+    public String addCardToTable(final Player player, final TableCards tableCards,
+                                 final int cardIdx) {
         Minion cardToMove = null;
         if (playerTurn == 2) {
             if (handPlayer2.size() > cardIdx) {
@@ -87,46 +88,46 @@ public final class GameInfo {
         }
         return MAXIMUM_RECEIVED_MANA;
     }
-    ArrayList<Minion> getDeckPlayer1() {
+    public ArrayList<Minion> getDeckPlayer1() {
         return deckPlayer1;
     }
-    ArrayList<Minion> getHandPlayer1() {
+    public ArrayList<Minion> getHandPlayer1() {
         return handPlayer1;
     }
-    ArrayList<Minion> getHandPlayer2() {
+    public ArrayList<Minion> getHandPlayer2() {
         return handPlayer2;
     }
-    ArrayList<Minion> getDeckPlayer2() {
+    public ArrayList<Minion> getDeckPlayer2() {
         return deckPlayer2;
     }
-    int getPlayerTurn() {
+    public int getPlayerTurn() {
         return playerTurn;
     }
-    int getRoundNumber() {
+    public int getRoundNumber() {
         return roundNumber;
     }
-    boolean getIsANewTurn() {
+    public boolean getIsANewTurn() {
         return isANewTurn;
     }
-    void setPlayerTurn(final int playerTurn) {
+    public void setPlayerTurn(final int playerTurn) {
         this.playerTurn = playerTurn;
     }
-    void setDeckPlayer1(final ArrayList<Minion> deckPlayer1) {
+    public void setDeckPlayer1(final ArrayList<Minion> deckPlayer1) {
         this.deckPlayer1 = deckPlayer1;
     }
-    void setRoundNumber(final int roundNumber) {
+    public void setRoundNumber(final int roundNumber) {
         this.roundNumber = roundNumber;
     }
-    void setHandPlayer1(final ArrayList<Minion> handPlayer1) {
+    public void setHandPlayer1(final ArrayList<Minion> handPlayer1) {
         this.handPlayer1 = handPlayer1;
     }
-    void setHandPlayer2(final ArrayList<Minion> handPlayer2) {
+    public void setHandPlayer2(final ArrayList<Minion> handPlayer2) {
         this.handPlayer2 = handPlayer2;
     }
-    void setDeckPlayer2(final ArrayList<Minion> deckPlayer2) {
+    public void setDeckPlayer2(final ArrayList<Minion> deckPlayer2) {
         this.deckPlayer2 = deckPlayer2;
     }
-    void setIsANewTurn(final boolean isANewTurn) {
+    public void setIsANewTurn(final boolean isANewTurn) {
         this.isANewTurn = isANewTurn;
     }
 }

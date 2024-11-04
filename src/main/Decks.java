@@ -8,38 +8,38 @@ import java.util.Random;
 public final class Decks {
     private int numberOfCards;
     private int numberOfDecks;
-    private ArrayList<ArrayList<Minion>> decks = new ArrayList<>();
+    private ArrayList<ArrayList<Minion>> decks = new ArrayList<ArrayList<Minion>>();
     public Decks(final DecksInput decksInput) {
         this.numberOfCards = decksInput.getNrCardsInDeck();
         this.numberOfDecks = decksInput.getNrDecks();
         for (int i = 0; i < numberOfDecks; i++) {
-            ArrayList<Minion> deck = new ArrayList<>();
+            ArrayList<Minion> deck = new ArrayList<Minion>();
             for (int j = 0; j < numberOfCards; j++) {
                 deck.add(new Minion(decksInput.getDecks().get(i).get(j)));
             }
             decks.add(deck);
         }
     }
-    int getNumberOfCards() {
+    public int getNumberOfCards() {
         return numberOfCards;
     }
-    int getNumberOfDecks() {
+    public int getNumberOfDecks() {
         return numberOfDecks;
     }
-    void setNumberOfCards(final int numberOfCards) {
+    public void setNumberOfCards(final int numberOfCards) {
         this.numberOfCards = numberOfCards;
     }
-    void setNumberOfDecks(final int numberOfDecks) {
+    public void setNumberOfDecks(final int numberOfDecks) {
         this.numberOfDecks = numberOfDecks;
     }
-    void setDecks(final ArrayList<ArrayList<Minion>> decks) {
+    public void setDecks(final ArrayList<ArrayList<Minion>> decks) {
         this.decks = decks;
     }
-    ArrayList<ArrayList<Minion>> getDecks() {
+    public ArrayList<ArrayList<Minion>> getDecks() {
         return decks;
     }
 
-    void shuffleDeck(final int deckID, final int seed) {
+    public void shuffleDeck(final int deckID, final int seed) {
         ArrayList<Minion> deck = decks.get(deckID);
         Random random = new Random(seed);
         Collections.shuffle(deck, random);

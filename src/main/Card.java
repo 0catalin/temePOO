@@ -8,7 +8,7 @@ public class Card {
     private int mana;
     private int health;
     private String description;
-    private ArrayList<String> colors = new ArrayList<>();
+    private ArrayList<String> colors = new ArrayList<String>();
     private String name;
     private boolean hasAttacked;
     private static final int HERO_HEALTH = 30;
