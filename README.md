@@ -33,8 +33,8 @@ The main game logic resides within the `Game` class, which coordinates each roun
 
 ## Potential Improvements
 
-- **Player Class Enhancements**: Move the current player’s hand into the `Player` class for better encapsulation.
-- **Control Structures**: Consider replacing multiple `if` statements with `switch` statements to improve readability and elegance.
+- **Player Class Enhancements**: Moving the current player’s hand into the `Player` class for better encapsulation.
+- **Control Structures**: Consideing to replace multiple `if` statements with `switch` statements to improve readability and elegance.
 
 ## Difficulties and Challenges
 
