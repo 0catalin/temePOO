@@ -4,6 +4,10 @@ import fileio.CardInput;
 
 import java.util.ArrayList;
 
+/**
+ * This class represents a generic card and is designed to be extended by Minion and Hero cards.
+ * It serves as a base card for any card.
+ */
 public class Card {
     private int mana;
     private int health;

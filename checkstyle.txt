@@ -1,23 +1,2 @@
 Starting audit...
-[ERROR] C:\Users\andre\Desktop\Tema0POO\.\src\main\Decks.java:42:5: Missing a Javadoc comment. [MissingJavadocMethod]
-[ERROR] C:\Users\andre\Desktop\Tema0POO\.\src\main\Game.java:29:5: Missing a Javadoc comment. [MissingJavadocMethod]
-[ERROR] C:\Users\andre\Desktop\Tema0POO\.\src\main\Game.java:40:5: Missing a Javadoc comment. [MissingJavadocMethod]
-[ERROR] C:\Users\andre\Desktop\Tema0POO\.\src\main\GameInfo.java:19:5: Missing a Javadoc comment. [MissingJavadocMethod]
-[ERROR] C:\Users\andre\Desktop\Tema0POO\.\src\main\GameInfo.java:32:5: Missing a Javadoc comment. [MissingJavadocMethod]
-[ERROR] C:\Users\andre\Desktop\Tema0POO\.\src\main\Hero.java:10:5: Missing a Javadoc comment. [MissingJavadocMethod]
-[ERROR] C:\Users\andre\Desktop\Tema0POO\.\src\main\Minion.java:38:5: Missing a Javadoc comment. [MissingJavadocMethod]
-[ERROR] C:\Users\andre\Desktop\Tema0POO\.\src\main\Minion.java:44:5: Missing a Javadoc comment. [MissingJavadocMethod]
-[ERROR] C:\Users\andre\Desktop\Tema0POO\.\src\main\Minion.java:57:5: Missing a Javadoc comment. [MissingJavadocMethod]
-[ERROR] C:\Users\andre\Desktop\Tema0POO\.\src\main\Minion.java:76:5: Missing a Javadoc comment. [MissingJavadocMethod]
-[ERROR] C:\Users\andre\Desktop\Tema0POO\.\src\main\TableCards.java:18:5: Missing a Javadoc comment. [MissingJavadocMethod]
-[ERROR] C:\Users\andre\Desktop\Tema0POO\.\src\main\TableCards.java:22:5: Missing a Javadoc comment. [MissingJavadocMethod]
-[ERROR] C:\Users\andre\Desktop\Tema0POO\.\src\main\TableCards.java:26:5: Missing a Javadoc comment. [MissingJavadocMethod]
-[ERROR] C:\Users\andre\Desktop\Tema0POO\.\src\main\TableCards.java:37:5: Missing a Javadoc comment. [MissingJavadocMethod]
-[ERROR] C:\Users\andre\Desktop\Tema0POO\.\src\main\TableCards.java:50:5: Missing a Javadoc comment. [MissingJavadocMethod]
-[ERROR] C:\Users\andre\Desktop\Tema0POO\.\src\main\TableCards.java:73:5: Missing a Javadoc comment. [MissingJavadocMethod]
-[ERROR] C:\Users\andre\Desktop\Tema0POO\.\src\main\TableCards.java:102:5: Missing a Javadoc comment. [MissingJavadocMethod]
-[ERROR] C:\Users\andre\Desktop\Tema0POO\.\src\main\TableCards.java:117:5: Missing a Javadoc comment. [MissingJavadocMethod]
-[ERROR] C:\Users\andre\Desktop\Tema0POO\.\src\main\TableCards.java:153:5: Missing a Javadoc comment. [MissingJavadocMethod]
-[ERROR] C:\Users\andre\Desktop\Tema0POO\.\src\main\TableCards.java:171:5: Missing a Javadoc comment. [MissingJavadocMethod]
 Audit done.
-Checkstyle ends with 20 errors.

@@ -1,5 +1,8 @@
 package main;
 
+/**
+ * the Statistics class stores the game statistics
+ */
 public final class Statistics {
     private int totalGamesPlayed;
     private int player1Wins;

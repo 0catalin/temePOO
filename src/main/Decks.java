@@ -5,6 +5,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Random;
 
+/**
+ * The Decks class is designed for constructing the decks
+ * from scratch with the JSON Input and storing them
+ */
 public final class Decks {
     private int numberOfCards;
     private int numberOfDecks;
@@ -39,6 +43,11 @@ public final class Decks {
         return decks;
     }
 
+    /**
+     * Shuffles the deck corresponding to the specified deck ID, using a seed for reproducibility.
+     * @param deckID the index for the deck
+     * @param seed the seed used to randomize
+     */
     public void shuffleDeck(final int deckID, final int seed) {
         ArrayList<Minion> deck = decks.get(deckID);
         Random random = new Random(seed);

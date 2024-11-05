@@ -9,6 +9,10 @@ import fileio.StartGameInput;
 import fileio.Coordinates;
 import java.util.ArrayList;
 
+/**
+ * the Game singleton, stores and does everything needed for the game to work
+ * it also contains the function looping through the commands
+ */
 public final class Game {
     private static Game instance = null;
 
@@ -26,6 +30,10 @@ public final class Game {
     private Statistics statistics;
     private Game() { }
 
+    /**
+     * applies parameters, it is a Singleton specific constructor
+     * @param input the input used to construct it
+     */
     public void applyParams(final Input input) {
         player1 = new Player(input.getPlayerOneDecks());
         player2 = new Player(input.getPlayerTwoDecks());
@@ -37,6 +45,11 @@ public final class Game {
         statistics = new Statistics();
     }
 
+    /**
+     * Loops through all the commands and assures that the game works properly
+     * @param mapper the ObjectMapper object
+     * @param output contains the arrayNode printed in the .out files
+     */
     public void loopOver(final ObjectMapper mapper, final ArrayNode output) {
         gameInfo = new GameInfo();
         for (GameInput gameinput: inputOfGame) {

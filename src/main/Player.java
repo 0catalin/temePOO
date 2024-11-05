@@ -2,6 +2,10 @@ package main;
 
 import fileio.DecksInput;
 
+/**
+ * the Player class is designed to store the decks given at input,
+ * the mana and the hero of a player
+ */
 public final class Player {
     private int mana;
     private Decks decks;

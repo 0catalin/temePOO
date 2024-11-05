@@ -4,6 +4,9 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import fileio.Coordinates;
 import java.util.ArrayList;
 
+/**
+ * class designed to store only the cards on the table
+ */
 public final class TableCards {
     private ArrayList<Minion>[] cardRows;
     private static final int NUMBER_OF_ARRAYS = 4;
@@ -15,14 +18,19 @@ public final class TableCards {
         }
     }
 
+    /**
+     * @param idx the index of the row
+     * @return the row corresponding to the index
+     */
     public ArrayList<Minion> getRow(final int idx) {
             return cardRows[idx];
     }
 
-    public void setRow(final int idx, final ArrayList<Minion> row) {
-        cardRows[idx] = row;
-    }
-
+    /**
+     * creates an arraynode for each card and adds them into the given ArrayNode
+     * @param mapper the ObjectMapper
+     * @param outputCorrespondent the given ArrayNode
+     */
     public void printTable(final ObjectMapper mapper, final ArrayNode outputCorrespondent) {
         for (int i = 0; i < cardRows.length; i++) {
             ArrayNode separateRow = mapper.createArrayNode();
@@ -34,6 +42,11 @@ public final class TableCards {
         }
     }
 
+    /**
+     * adds all the frozen table cards to an ArrayNode and returns it
+     * @param mapper the ObjectMapper
+     * @return ArrayNode with all the frozen cards
+     */
     public ArrayNode printFrozenTable(final ObjectMapper mapper) {
         ArrayNode output = mapper.createArrayNode();
         for (int i = 0; i < cardRows.length; i++) {
@@ -47,6 +60,12 @@ public final class TableCards {
         return output;
     }
 
+    /**
+     * simulates an attack of a card on another card
+     * @param attacker the coordinates of the attacker
+     * @param attacked the coordinates of the attacked
+     * @return an empty string on success and an error on failure
+     */
     public String cardAttack(final Coordinates attacker, final Coordinates attacked) {
         Minion atacker = getMinion(attacker);
         Minion atacked = getMinion(attacked);
@@ -70,6 +89,12 @@ public final class TableCards {
         return "";
     }
 
+    /**
+     * simulates an ability of a card on another card
+     * @param attacker the coordinates of the attacker
+     * @param attacked the coordinates of the attacked
+     * @return an empty string on success and an error on failure
+     */
     public String cardUsesAbility(final Coordinates attacker, final Coordinates attacked) {
         Minion atacker = getMinion(attacker);
         Minion atacked = getMinion(attacked);
@@ -99,6 +124,11 @@ public final class TableCards {
         return "";
     }
 
+    /**
+     * simulates an attack of a card on the hero
+     * @param attacker the coordinates of the card attacker
+     * @return an empty string on success and an error on failure
+     */
     public String cardAttackHero(final Coordinates attacker) {
         Minion atacker = getMinion(attacker);
         if (atacker.getIsFrozen()) {
@@ -110,11 +140,17 @@ public final class TableCards {
         if (checkOpponentTank(attacker)) {
             return "Attacked card is not of type 'Tank'.";
         }
-
         return "";
     }
 
-    public String heroAbility(final Player player, final int playerIDX, final int affectedRow) {
+    /**
+     * simulates the hero ability on a given row
+     * @param player the current player
+     * @param playerIdx the player index
+     * @param affectedRow the index of the attacked row
+     * @return an empty string on success and an error on failure
+     */
+    public String heroAbility(final Player player, final int playerIdx, final int affectedRow) {
         Hero hero = player.getHero();
         String name = hero.getName();
         if (player.getMana() < hero.getMana()) {
@@ -124,12 +160,12 @@ public final class TableCards {
             return "Hero has already attacked this turn.";
         }
         if (name.equals("Lord Royce") || name.equals("Empress Thorina")) {
-            if (isRowSameTeam(playerIDX, affectedRow)) {
+            if (isRowSameTeam(playerIdx, affectedRow)) {
                 return "Selected row does not belong to the enemy.";
             }
         }
         if (name.equals("General Kocioraw") || name.equals("King Mudface")) {
-            if (!isRowSameTeam(playerIDX, affectedRow)) {
+            if (!isRowSameTeam(playerIdx, affectedRow)) {
                 return "Selected row does not belong to the current player.";
             }
         }
@@ -150,6 +186,11 @@ public final class TableCards {
         return "";
     }
 
+    /**
+     * clears all the frozen and sets the hasAttacked
+     * flag to false when a player's round ends
+     * @param player the player id
+     */
     public void clearCards(final int player) {
         if (player == 2) {
             for (int i = 0; i < 2; i++) {
@@ -168,6 +209,11 @@ public final class TableCards {
         }
     }
 
+    /**
+     * gets minion based on its coordinates
+     * @param coordinates the coordinates of the minion
+     * @return the Minion situated at the given table coordinates
+     */
     public Minion getMinion(final Coordinates coordinates) {
         return getRow(coordinates.getX()).get(coordinates.getY());
     }
@@ -234,4 +280,5 @@ public final class TableCards {
         boolean team2 = (player == 2 && row == 0) || (player == 2 && row == 1);
         return (team1 || team2);
     }
+
 }

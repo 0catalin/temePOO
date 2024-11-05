@@ -2,6 +2,10 @@ package main;
 
 import java.util.ArrayList;
 
+/**
+ * the Game info contains the decks, hands of the players and some
+ * other relevant information for the game to function properly
+ */
 public final class GameInfo {
     private ArrayList<Minion> deckPlayer1;
     private ArrayList<Minion> deckPlayer2;
@@ -16,6 +20,13 @@ public final class GameInfo {
     public GameInfo() {
     }
 
+    /**
+     * sets up the start of a new round :
+     * gives the players the mana,
+     * simulates the players taking a card from their deck
+     * @param player1 the first player
+     * @param player2 the second player
+     */
     public void setupStartRound(final Player player1, final Player player2) {
         player1.setMana(player1.getMana() + receiveMana());
         player2.setMana(player2.getMana() + receiveMana());
@@ -29,6 +40,14 @@ public final class GameInfo {
         }
     }
 
+    /**
+     * the function simulates adding a card from the hand
+     * of a player to the table
+     * @param player the player adding the card
+     * @param tableCards the table where the card is added
+     * @param cardIdx the index of the card in a player's hand
+     * @return an empty string on success and an error string on failure
+     */
     public String addCardToTable(final Player player, final TableCards tableCards,
                                  final int cardIdx) {
         Minion cardToMove = null;
