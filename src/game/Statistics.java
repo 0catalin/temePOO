@@ -1,4 +1,4 @@
-package main;
+package game;
 
 /**
  * the Statistics class stores the game statistics

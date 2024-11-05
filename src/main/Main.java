@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import checker.CheckerConstants;
 import fileio.Input;
+import game.Game;
 
 import java.io.File;
 import java.io.IOException;
@@ -67,12 +68,12 @@ public final class Main {
         Input inputData = objectMapper.readValue(new File(CheckerConstants.TESTS_PATH + filePath1),
                 Input.class);
 
-        ArrayNode output = objectMapper.createArrayNode();
+        ArrayNode output = objectMapper.createArrayNode(); // creates output node
 
 
-        Game game = Game.getInstance();
-        game.applyParams(inputData);
-        game.loopOver(objectMapper, output);
+        Game game = Game.getInstance(); // makes a singleton instance
+        game.applyParams(inputData); // applies the parameters
+        game.loopOver(objectMapper, output); // loops through the commands
         ObjectWriter objectWriter = objectMapper.writerWithDefaultPrettyPrinter();
         objectWriter.writeValue(new File(filePath2), output);
     }

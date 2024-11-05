@@ -1,7 +1,11 @@
-package main;
+package game;
+import characters.Hero;
+import characters.Minion;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import fileio.Coordinates;
+import players.Player;
+
 import java.util.ArrayList;
 
 /**

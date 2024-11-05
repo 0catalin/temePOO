@@ -1,4 +1,7 @@
-package main;
+package game;
+
+import characters.Minion;
+import players.Player;
 
 import java.util.ArrayList;
 

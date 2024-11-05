@@ -1,6 +1,7 @@
-package main;
+package characters;
 
 import fileio.CardInput;
+import game.Statistics;
 
 /**
  * The hero class is simply a subclass of the Card class

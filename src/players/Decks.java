@@ -1,4 +1,5 @@
-package main;
+package players;
+import characters.Minion;
 import fileio.DecksInput;
 
 import java.util.ArrayList;

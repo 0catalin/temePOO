@@ -1,5 +1,6 @@
-package main;
+package players;
 
+import characters.Hero;
 import fileio.DecksInput;
 
 /**
