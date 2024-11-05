@@ -52,27 +52,25 @@ public final class Game {
      */
     public void loopOver(final ObjectMapper mapper, final ArrayNode output) {
         gameInfo = new GameInfo();
-        for (GameInput gameinput: inputOfGame) {
-            StartGameInput startInput = gameinput.getStartGame();
+        for (GameInput gameinput: inputOfGame) {  // iterates over the game inputs
+            StartGameInput startInput = gameinput.getStartGame(); // initializes startInput
             player1.setHero(new Hero(startInput.getPlayerOneHero()));
-            player1.setMana(0);
             player2.setHero(new Hero(startInput.getPlayerTwoHero()));
-            player2.setMana(0);
             tableCards = new TableCards();
             setStartGameInput(startInput);
             int deckIdx1 = startInput.getPlayerOneDeckIdx();
-            int deckIdx2 = startInput.getPlayerTwoDeckIdx();
+            int deckIdx2 = startInput.getPlayerTwoDeckIdx(); // sets the chosen player decks
             player1.getDecks().shuffleDeck(deckIdx1, startInput.getShuffleSeed());
             player2.getDecks().shuffleDeck(deckIdx2, startInput.getShuffleSeed());
             gameInfo.setDeckPlayer1(player1.getDecks().getDecks().get(deckIdx1));
             gameInfo.setDeckPlayer2(player2.getDecks().getDecks().get(deckIdx2));
-            gameInfo.setHandPlayer1(new ArrayList<Minion>());
+            gameInfo.setHandPlayer1(new ArrayList<Minion>()); // sets new player hands
             gameInfo.setHandPlayer2(new ArrayList<Minion>());
             gameInfo.setPlayerTurn(startInput.getStartingPlayer());
             gameInfo.setRoundNumber(1);
             gameInfo.setIsANewTurn(true);
-            for (ActionsInput actions: gameinput.getActions()) {
-                if (gameInfo.getIsANewTurn()) {
+            for (ActionsInput actions: gameinput.getActions()) { // iterates over actions
+                if (gameInfo.getIsANewTurn()) { // sets up the start of a round
                     gameInfo.setupStartRound(player1, player2);
                     gameInfo.setIsANewTurn(false);
                 }
@@ -188,11 +186,7 @@ public final class Game {
                         error = tableCards.heroAbility(player2, 2, actions.getAffectedRow());
                     }
                     if (!error.isEmpty()) {
-                        ObjectNode commandObject = mapper.createObjectNode();
-                        commandObject.put("command", "useHeroAbility");
-                        commandObject.put("affectedRow", actions.getAffectedRow());
-                        commandObject.put("error", error);
-                        output.add(commandObject);
+                        heroUsesAbilityError(mapper, output, error, actions.getAffectedRow());
                     }
                 }
             }
@@ -201,7 +195,10 @@ public final class Game {
         }
     }
 
-
+    /*
+        adds the player deck into the ArrayNode which will be outputted
+        at the end of the main function
+    */
     private void getPlayerDeck(final ObjectMapper mapper, final ArrayNode output, final int idx) {
         ObjectNode commandObject = mapper.createObjectNode();
         commandObject.put("command", "getPlayerDeck");
@@ -219,7 +216,10 @@ public final class Game {
         commandObject.set("output", outputCorrespondent);
         output.add(commandObject);
     }
-
+    /*
+        adds the player hero into the ArrayNode which will be outputted
+        at the end of the main function
+    */
     private void getPlayerHero(final ObjectMapper mapper, final ArrayNode output, final int idx) {
         Hero hero;
         ObjectNode commandObject = mapper.createObjectNode();
@@ -243,14 +243,22 @@ public final class Game {
         commandObject.set("output", outputCorrespondent);
         output.add(commandObject);
     }
-
+    /*
+        adds the current player turn into the ArrayNode which will be outputted
+        at the end of the main function
+    */
     private void getPlayerTurn(final ObjectMapper mapper, final ArrayNode output) {
         ObjectNode commandObject = mapper.createObjectNode();
         commandObject.put("command", "getPlayerTurn");
         commandObject.put("output", gameInfo.getPlayerTurn());
         output.add(commandObject);
     }
-
+    /*
+        Ends a player's turn by changing the current player turn and setting the
+        hasAttacked and frozen fields to false
+        Checks whether a new round will start and if so changes the round number and sets
+        the isANewTurn variable accordingly
+    */
     private void endPlayerTurn() {
         if (gameInfo.getPlayerTurn() == 2) {
             tableCards.clearCards(2);
@@ -266,7 +274,10 @@ public final class Game {
             gameInfo.setIsANewTurn(true);
         }
     }
-
+    /*
+        adds the player mana into the ArrayNode which will be outputted
+        at the end of the main function
+    */
     private void getPlayerMana(final ObjectMapper mapper, final ArrayNode output, final int idx) {
         ObjectNode commandObject = mapper.createObjectNode();
         commandObject.put("command", "getPlayerMana");
@@ -278,7 +289,10 @@ public final class Game {
         }
         output.add(commandObject);
     }
-
+    /*
+        adds the cards in hand of the current player into the ArrayNode
+        which will be outputted at the end of the main function
+    */
     private void getCardsInHand(final ObjectMapper mapper, final ArrayNode output,
                                 final ArrayList<Minion> handPlayer, final int idx) {
         ObjectNode commandObject = mapper.createObjectNode();
@@ -291,7 +305,10 @@ public final class Game {
         commandObject.set("output", outputCorrespondent);
         output.add(commandObject);
     }
-
+    /*
+        adds the cards on table into the ArrayNode which will be outputted
+        at the end of the main function
+    */
     private void getCardsOnTable(final ObjectMapper mapper, final ArrayNode output) {
         ObjectNode commandObject = mapper.createObjectNode();
         commandObject.put("command", "getCardsOnTable");
@@ -300,7 +317,10 @@ public final class Game {
         commandObject.set("output", outputCorrespondent);
         output.add(commandObject);
     }
-
+    /*
+        adds the card placing error into the ArrayNode which will be outputted
+        at the end of the main function
+    */
     private void printPlaceError(final String errorMessage, final int handIDX,
                                  final ArrayNode output, final ObjectMapper mapper) {
         ObjectNode commandObject = mapper.createObjectNode();
@@ -309,7 +329,10 @@ public final class Game {
         commandObject.put("error", errorMessage);
         output.add(commandObject);
     }
-
+    /*
+        adds the card using attack error into the ArrayNode which will be outputted
+        at the end of the main function
+    */
     private void cardUsesAttackError(final ObjectMapper mapper, final ArrayNode output,
                                      final Coordinates cardAttacker, final Coordinates cardAttacked,
                                      final String error, final String command) {
@@ -326,7 +349,10 @@ public final class Game {
         commandObject.put("error", error);
         output.add(commandObject);
     }
-
+    /*
+        adds the card using attack on hero error into the ArrayNode which will be outputted
+        at the end of the main function
+    */
     private void cardUsesAttackHeroError(final ObjectMapper mapper, final ArrayNode output,
                                          final Coordinates cardAttacker, final String error) {
         ObjectNode commandObject = mapper.createObjectNode();
@@ -338,7 +364,23 @@ public final class Game {
         commandObject.put("error", error);
         output.add(commandObject);
     }
-
+    /*
+        adds the hero using ability error into the ArrayNode which will be outputted
+        at the end of the main function
+    */
+    private void heroUsesAbilityError(final ObjectMapper mapper,
+                                      final ArrayNode output, final String error,
+                                      final int affectedRow) {
+        ObjectNode commandObject = mapper.createObjectNode();
+        commandObject.put("command", "useHeroAbility");
+        commandObject.put("affectedRow", affectedRow);
+        commandObject.put("error", error);
+        output.add(commandObject);
+    }
+    /*
+        adds the card at a certain position given in input into the
+        ArrayNode which will be outputted at the end of the main function
+    */
     private void getCardAtPosition(final ObjectMapper mapper,
                                    final ArrayNode output, final int x, final int y) {
         ObjectNode commandObject = mapper.createObjectNode();

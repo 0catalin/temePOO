@@ -106,6 +106,9 @@ public final class Minion extends Card {
         }
         return "front";
     }
+    /*
+    checks whether the current minion is a tank or not
+    */
     public boolean isTank() {
         return (getName().equals("Goliath") || getName().equals("Warden"));
     }

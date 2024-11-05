@@ -100,7 +100,9 @@ public final class GameInfo {
         }
         return "";
     }
-
+    /*
+    returns the amount of mana that a player gets at the start of a round
+    */
     private int receiveMana() {
         if (roundNumber <= MAXIMUM_RECEIVED_MANA) {
             return roundNumber;

@@ -217,6 +217,9 @@ public final class TableCards {
     public Minion getMinion(final Coordinates coordinates) {
         return getRow(coordinates.getX()).get(coordinates.getY());
     }
+    /*
+    checks whether the opponent has any tank in the lines and returns true if found
+    */
     private boolean checkOpponentTank(final Coordinates coordinates) {
         if (coordinates.getX() == 0 || coordinates.getX() == 1) {
             for (int i = 0; i < getRow(2).size(); i++) {
@@ -234,14 +237,18 @@ public final class TableCards {
             return false;
         }
     }
-
+    /*
+    implements subZero attack, iterates over a row and freezes everything
+    */
     private void subZero(final int affectedRow) {
         ArrayList<Minion> row = getRow(affectedRow);
         for (int i = 0; i < row.size(); i++) {
             row.get(i).setIsFrozen(true);
         }
     }
-
+    /*
+    implements lowBlow attack, eliminates the minion with the maximum health
+    */
     private void lowBlow(final int affectedRow) {
         ArrayList<Minion> row = getRow(affectedRow);
         Minion maxHealthMinion = new Minion();
@@ -254,27 +261,35 @@ public final class TableCards {
         }
         row.remove(maxHealthIndex);
     }
-
+    /*
+    implements EarthBorn attack, iterates over a row and increases health
+    */
     private void earthBorn(final int affectedRow) {
         ArrayList<Minion> row = getRow(affectedRow);
         for (int i = 0; i < row.size(); i++) {
             row.get(i).setHealth(row.get(i).getHealth() + 1);
         }
     }
-
+    /*
+    implements BloodThirst attack, iterates over a row and increases attackDamage
+    */
     private void bloodThirst(final int affectedRow) {
         ArrayList<Minion> row = getRow(affectedRow);
         for (int i = 0; i < row.size(); i++) {
             row.get(i).setAttackDamage(row.get(i).getAttackDamage() + 1);
         }
     }
-
+    /*
+    checks whether 2 cards from 2 rows, x1 and x2, are in different teams
+    */
     private boolean areDifferentTeams(final int x1, final int x2) {
         boolean team1 = (x1 == 0 || x1 == 1) && (x2 == 0 || x2 == 1);
         boolean team2 = (x1 == 2 || x1 == LAST_ROW) && (x2 == 2 || x2 == LAST_ROW);
         return !(team1 || team2);
     }
-
+    /*
+    checks whether a player and a row are in same team
+     */
     private boolean isRowSameTeam(final int player, final int row) {
         boolean team1 = (player == 1 && row == 2) || (player == 1 && row == LAST_ROW);
         boolean team2 = (player == 2 && row == 0) || (player == 2 && row == 1);
