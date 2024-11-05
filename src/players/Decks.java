@@ -8,7 +8,8 @@ import java.util.Random;
 
 /**
  * The Decks class is designed for constructing the decks
- * from scratch with the JSON Input and storing them
+ * from scratch with the JSON Input and storing them. Its fields are the
+ * number of cards, decks and an arraylist of an arraylist with Minions
  */
 public final class Decks {
     private int numberOfCards;

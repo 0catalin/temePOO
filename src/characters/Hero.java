@@ -4,7 +4,7 @@ import fileio.CardInput;
 import game.Statistics;
 
 /**
- * The hero class is simply a subclass of the Card class
+ * The hero class is simply a subclass of the Card class without extra fields
  */
 public final class Hero extends Card {
     public Hero(final CardInput card) {

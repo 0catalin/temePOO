@@ -1,42 +1,42 @@
+# GwentStone Lite
 
+## Description
+GwentStone Lite is a strategic card game where two players compete by deploying cards on a battleground. Each player has a hero, and when a hero’s health reaches zero, the respective player loses the game. The gameplay includes the following stages:
 
-# Tema POO  - GwentStone
+1. **Deck Selection**: Each player begins with multiple card decks and selects one deck.
+2. **Deck Shuffling**: The chosen decks are shuffled at the start of the game.
+3. **Round Progression**: In each round, players gain mana and draw a card from their deck. They use this mana to place cards on the table or to activate hero abilities.
+4. **Actions and Attacks**: Each card can attack once per round, allowing players to strategically weaken or defeat the opposing hero.
 
-<div align="center"><img src="https://tenor.com/view/witcher3-gif-9340436.gif" width="500px"></div>
+## Inheritance Structure
 
-#### Assignment Link: [https://ocw.cs.pub.ro/courses/poo-ca-cd/teme/tema](https://ocw.cs.pub.ro/courses/poo-ca-cd/teme/tema)
+The project’s object-oriented structure is centered on inheritance:
 
+- **`Card` Class**: Serves as the base class, representing a generic card.
+- **`Minion` and `Hero` Classes**: These are subclasses that extend `Card` with specific functionalities:
+  - **Minion**: Represents typical cards that can be deployed on the battleground with unique abilities.
+  - **Hero**: Represents each player's main character. When a hero is defeated, the game is lost for that player.
 
-## Skel Structure
+## Design Pattern - Singleton
 
-* src/
-  * checker/ - checker files
-  * fileio/ - contains classes used to read data from the json files
-  * main/
-      * Main - the Main class runs the checker on your implementation. Add the entry point to your implementation in it. Run Main to test your implementation from the IDE or from command line.
-      * Test - run the main method from Test class with the name of the input file from the command line and the result will be written
-        to the out.txt file. Thus, you can compare this result with ref.
-* input/ - contains the tests in JSON format
-* ref/ - contains all reference output for the tests in JSON format
+The `Game` class uses the **Singleton pattern** to ensure that only one instance of the game exists at a time. This instance tracks the game’s progress and updates fields accordingly for each test case.
 
-## Tests
+- **Implementation**: The `applyParams` function in `main` sets up the game by updating relevant fields and restarting the flow as needed.
+- **Game Statistics**: The `Game` class also maintains a `statistics` field, which is updated only once, providing cumulative data across tests.
 
-1. test01_game_start - 4p
-2. test02_place_card - 5p
-3. test03_place_card_invalid - 5p
-4. test04_attack_card - 5p
-5. test05_attack_card_invalid - 5p
-6. test06_use_card_ability - 5p
-7. test07_use_card_ability_invalid - 5p
-8. test08_attack_hero - 5p
-9. test09_attack_hero_invalid - 5p
-10. test10_use_hero_ability_1 - 4p
-11. test11_use_hero_ability_2 - 4p
-12. test12_use_hero_ability_invalid_1 - 4p
-13. test13_use_hero_ability_invalid_2 - 4p
-14. test14_multiple_games_valid - 5p
-15. test15_multiple_games_invalid - 5p
-16. test16_big_game - 10p
+## Game Logic Flow
 
+The main game logic resides within the `Game` class, which coordinates each round and manages actions. The logic includes:
 
-<div align="center"><img src="https://tenor.com/view/homework-time-gif-24854817.gif" width="500px"></div>
+1. **Setup Phase**: Initializes fields such as players, decks, and heroes.
+2. **Action Loop**: Iterates over all actions, ensuring each action produces the correct output based on the game state.
+
+## Potential Improvements
+
+- **Player Class Enhancements**: Move the current player’s hand into the `Player` class for better encapsulation.
+- **Control Structures**: Consider replacing multiple `if` statements with `switch` statements to improve readability and elegance.
+
+## Difficulties and Challenges
+
+- **Understanding Main Logic**: The integration of main game logic with input handling was initially challenging. However, once this flow was understood, it clarified the structure and made implementation smoother.
+- **Organizing Classes**: As a first OOP project, organizing classes in an efficient and logical structure was challenging but also rewarding as it improved understanding of OOP principles.

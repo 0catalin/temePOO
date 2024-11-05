@@ -1,7 +1,8 @@
 package game;
 
 /**
- * the Statistics class stores the game statistics
+ * the Statistics class stores the game statistics :
+ * the total games played, player 1 wins and player 2 wins
  */
 public final class Statistics {
     private int totalGamesPlayed;

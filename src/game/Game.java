@@ -16,6 +16,10 @@ import java.util.ArrayList;
 /**
  * the Game singleton, stores and does everything needed for the game to work
  * it also contains the function looping through the commands
+ * it has the tableCards field with the cards from the table,
+ * the 2 players, the startGameInput field with the start game information,
+ * intitialInput with the whole input, gameInfo with information about the game,
+ * statistics with statistical information about the game
  */
 public final class Game {
     private static Game instance = null;

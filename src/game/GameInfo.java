@@ -7,7 +7,10 @@ import java.util.ArrayList;
 
 /**
  * the Game info contains the decks, hands of the players and some
- * other relevant information for the game to function properly
+ * other relevant information for the game to function properly :
+ * the current player turn playerTurn, the number of the current
+ * round roundNumber and a boolean isANewTurn which helps with the
+ * game resetting logic
  */
 public final class GameInfo {
     private ArrayList<Minion> deckPlayer1;

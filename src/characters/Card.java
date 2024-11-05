@@ -6,7 +6,8 @@ import java.util.ArrayList;
 
 /**
  * This class represents a generic card and is designed to be extended by Minion and Hero cards.
- * It serves as a base card for any card.
+ * It serves as a base card for any card : has the fields mana, health, description,
+ * colors, name and hasAttacked (which is true if it has attacked the current round before)
  */
 public class Card {
     private int mana;
