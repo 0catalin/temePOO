@@ -16,7 +16,7 @@ public final class Hero extends Card {
      * @param player the id of the player
      * @param attackCard the minion who attacks the hero
      * @param stats the object storing the game statistics
-     * @return
+     * @return an empty string if the hero hasn't died and a message if it has
      */
     public String attackTheHero(final int player, final Minion attackCard, final Statistics stats) {
         setHealth(getHealth() - attackCard.getAttackDamage());
