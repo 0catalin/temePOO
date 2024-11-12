@@ -1,5 +1,5 @@
 # GwentStone Lite
-
+Disclaimer! This README was initially created by the author and later enhanced by AI to improve clarity and structure.
 ## Description
 GwentStone Lite is a strategic card game where two players compete by deploying cards on a battleground. Each player has a hero, and when a hero’s health reaches zero, the respective player loses the game. The gameplay includes the following stages:
 

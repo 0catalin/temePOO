@@ -62,14 +62,18 @@ public final class Game {
         gameInfo = new GameInfo();
         for (GameInput gameinput: inputOfGame) {  // iterates over the game inputs
             StartGameInput startInput = gameinput.getStartGame(); // initializes startInput
+
             player1.setHero(new Hero(startInput.getPlayerOneHero()));
             player2.setHero(new Hero(startInput.getPlayerTwoHero()));
+
             tableCards = new TableCards();
             setStartGameInput(startInput);
             int deckIdx1 = startInput.getPlayerOneDeckIdx();
             int deckIdx2 = startInput.getPlayerTwoDeckIdx(); // sets the chosen player decks
+
             player1.getDecks().shuffleDeck(deckIdx1, startInput.getShuffleSeed());
             player2.getDecks().shuffleDeck(deckIdx2, startInput.getShuffleSeed());
+
             gameInfo.setDeckPlayer1(player1.getDecks().getDecks().get(deckIdx1));
             gameInfo.setDeckPlayer2(player2.getDecks().getDecks().get(deckIdx2));
             gameInfo.setHandPlayer1(new ArrayList<Minion>()); // sets new player hands
@@ -77,6 +81,7 @@ public final class Game {
             gameInfo.setPlayerTurn(startInput.getStartingPlayer());
             gameInfo.setRoundNumber(1);
             gameInfo.setIsANewTurn(true);
+
             for (ActionsInput actions: gameinput.getActions()) { // iterates over actions
                 if (gameInfo.getIsANewTurn()) { // sets up the start of a round
                     gameInfo.setupStartRound(player1, player2);
