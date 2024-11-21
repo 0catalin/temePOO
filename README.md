@@ -22,7 +22,7 @@ GwentStone Lite is a strategic card game where two players compete by deploying 
     - Extends the `Card` class, representing the player's primary character.
     - The defeat of a `Hero` results in the loss of the game for that player.
     - Acts as a base class for specific hero types created by the **HeroFactory**.
-    - 
+
 ## Design Patterns
 
 1. **Singleton Pattern (Game Class)**:
