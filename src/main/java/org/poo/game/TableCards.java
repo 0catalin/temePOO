@@ -173,20 +173,9 @@ public final class TableCards {
                 return "Selected row does not belong to the current player.";
             }
         }
-        if (name.equals("Lord Royce")) {
-            subZero(affectedRow);
-        }
-        if (name.equals("Empress Thorina")) {
-           lowBlow(affectedRow);
-        }
-        if (name.equals("General Kocioraw")) {
-            bloodThirst(affectedRow);
-        }
-        if (name.equals("King Mudface")) {
-            earthBorn(affectedRow);
-        }
         player.setMana(player.getMana() - hero.getMana());
         hero.setHasAttacked(true);
+        hero.specialAttack(affectedRow, this);
         return "";
     }
 
@@ -239,48 +228,6 @@ public final class TableCards {
                 }
             }
             return false;
-        }
-    }
-    /*
-    implements subZero attack, iterates over a row and freezes everything
-    */
-    private void subZero(final int affectedRow) {
-        ArrayList<Minion> row = getRow(affectedRow);
-        for (int i = 0; i < row.size(); i++) {
-            row.get(i).setIsFrozen(true);
-        }
-    }
-    /*
-    implements lowBlow attack, eliminates the minion with the maximum health
-    */
-    private void lowBlow(final int affectedRow) {
-        ArrayList<Minion> row = getRow(affectedRow);
-        Minion maxHealthMinion = new Minion();
-        int maxHealthIndex = 0;
-        for (int i = 0; i < row.size(); i++) {
-            if (row.get(i).getHealth() > maxHealthMinion.getHealth()) {
-                maxHealthMinion = row.get(i);
-                maxHealthIndex = i;
-            }
-        }
-        row.remove(maxHealthIndex);
-    }
-    /*
-    implements EarthBorn attack, iterates over a row and increases health
-    */
-    private void earthBorn(final int affectedRow) {
-        ArrayList<Minion> row = getRow(affectedRow);
-        for (int i = 0; i < row.size(); i++) {
-            row.get(i).setHealth(row.get(i).getHealth() + 1);
-        }
-    }
-    /*
-    implements BloodThirst attack, iterates over a row and increases attackDamage
-    */
-    private void bloodThirst(final int affectedRow) {
-        ArrayList<Minion> row = getRow(affectedRow);
-        for (int i = 0; i < row.size(); i++) {
-            row.get(i).setAttackDamage(row.get(i).getAttackDamage() + 1);
         }
     }
     /*

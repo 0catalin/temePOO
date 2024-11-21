@@ -4,6 +4,7 @@ import org.poo.characters.Minion;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.poo.characters.heroes.HeroFactory;
 import org.poo.fileio.ActionsInput;
 import org.poo.fileio.GameInput;
 import org.poo.fileio.Input;
@@ -60,9 +61,9 @@ public final class Game {
         gameInfo = new GameInfo();
         for (GameInput gameinput: inputOfGame) {  // iterates over the game inputs
             StartGameInput startInput = gameinput.getStartGame(); // initializes startInput
-
-            player1.setHero(new Hero(startInput.getPlayerOneHero()));
-            player2.setHero(new Hero(startInput.getPlayerTwoHero()));
+            HeroFactory factory = new HeroFactory();
+            player1.setHero(factory.createHero(new Hero(startInput.getPlayerOneHero())));
+            player2.setHero(factory.createHero(new Hero(startInput.getPlayerTwoHero())));
 
             tableCards = new TableCards();
             setStartGameInput(startInput);

@@ -10,19 +10,32 @@ GwentStone Lite is a strategic card game where two players compete by deploying 
 
 ## Inheritance Structure
 
-The project’s object-oriented structure is centered on inheritance:
+1. **`Card` Class**:
+  - Serves as the foundational base class for all cards in the game.
+  - Represents a generic card, encapsulating shared attributes and behaviors.
 
-- **`Card` Class**: Serves as the base class, representing a generic card.
-- **`Minion` and `Hero` Classes**: These are subclasses that extend `Card` with specific functionalities:
-  - **Minion**: Represents typical cards that can be deployed on the battleground with unique abilities.
-  - **Hero**: Represents each player's main character. When a hero is defeated, the game is lost for that player.
+2. **`Minion` and `Hero` Classes**:
+  - **`Minion` Class**:
+    - Extends the `Card` class, representing cards deployable on the battleground.
+    - Includes specialized abilities and attributes tailored for gameplay interactions.
+  - **`Hero` Class**:
+    - Extends the `Card` class, representing the player's primary character.
+    - The defeat of a `Hero` results in the loss of the game for that player.
+    - Acts as a base class for specific hero types created by the **HeroFactory**.
+    - 
+## Design Patterns
 
-## Design Pattern - Singleton
+1. **Singleton Pattern (Game Class)**:
+  - Ensures that only one instance of the `Game` class exists throughout the application.
+  - Tracks the game’s progress, including fields updated dynamically during gameplay.
+  - **Key Implementation**:
+    - The `applyParams` function is responsible for initializing and resetting the `Game` instance with new configurations and restarting the game flow as necessary.
+  - **Statistics Management**:
+    - Maintains a cumulative `statistics` field updated across all test cases, providing valuable insights into the game's performance and outcomes.
 
-The `Game` class uses the **Singleton pattern** to ensure that only one instance of the game exists at a time. This instance tracks the game’s progress and updates fields accordingly for each test case.
-
-- **Implementation**: The `applyParams` function in `main` sets up the game by updating relevant fields and restarting the flow as needed.
-- **Game Statistics**: The `Game` class also maintains a `statistics` field, which is updated only once, providing cumulative data across tests.
+2. **Factory Pattern (Hero Creation)**:
+  - Utilized through the `HeroFactory` class.
+  - Dynamically creates specific hero instances based on parameters, simplifying the management of different hero types while promoting extensibility.
 
 ## Game Logic Flow
 
@@ -33,6 +46,7 @@ The main game logic resides within the `Game` class, which coordinates each roun
 
 ## Potential Improvements
 
+- **Minion Class Inheritance**: Introduce subclasses and a dedicated factory for the `Minion` class, similar to the `Hero` class. This would allow for a more modular and extensible design, enabling the creation of specialized minion types with unique abilities, attributes, and behaviors.
 - **Player Class Enhancements**: Moving the current player’s hand into the `Player` class for better encapsulation.
 - **Control Structures**: Consideing to replace multiple `if` statements with `switch` statements to improve readability and elegance.
 
