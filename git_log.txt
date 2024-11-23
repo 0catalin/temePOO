@@ -1,0 +1,107 @@
+commit c3617b53b63e03fda986a932a2cb90e70eb5bbbb
+Author: 0catalin <andrewcatalyno@gmail.com>
+Date:   Thu Nov 21 13:12:57 2024 +0200
+
+    removed a character from README
+
+commit 9f938090d32150445e9e0aaf6ca2656f6b90420c
+Author: 0catalin <andrewcatalyno@gmail.com>
+Date:   Thu Nov 21 13:10:44 2024 +0200
+
+    added HeroFactory
+
+commit 46a298d7ad4c527abac7d179e8d298a6f80fb34a
+Author: 0catalin <andrewcatalyno@gmail.com>
+Date:   Sat Nov 16 01:26:42 2024 +0200
+
+    changed to Maven
+
+commit f14f9d51a793c362ba5b638daac7c8b59a0d3f36
+Author: 0catalin <andrewcatalyno@gmail.com>
+Date:   Wed Nov 13 00:31:23 2024 +0200
+
+    some other final changes
+
+commit 00ed217e0cc428288f63b2aa0554254c3021aa24
+Author: 0catalin <andrewcatalyno@gmail.com>
+Date:   Wed Nov 6 11:58:38 2024 +0200
+
+    minor javadoc change
+
+commit e5dc02a1f0250ed1184d6003fc2a2027fb05e3ac
+Author: 0catalin <andrewcatalyno@gmail.com>
+Date:   Wed Nov 6 01:27:40 2024 +0200
+
+    minor README mistake
+
+commit 7ce0c4ec909c4465fb7a963fe17cfd92d9907f26
+Author: 0catalin <andrewcatalyno@gmail.com>
+Date:   Wed Nov 6 01:24:48 2024 +0200
+
+    finished everything (I think)
+
+commit 0ad72b70eb2e12e99ce1fe23db39494d2054c731
+Author: 0catalin <andrewcatalyno@gmail.com>
+Date:   Tue Nov 5 19:13:28 2024 +0200
+
+    organizat structura package
+
+commit 1676aaaa3273f930f41c64abbb74869ed3924fc4
+Author: 0catalin <andrewcatalyno@gmail.com>
+Date:   Tue Nov 5 18:46:37 2024 +0200
+
+    added comments
+
+commit ade733b4353c7c07f855e4a7995f064e50e3ce2d
+Author: 0catalin <andrewcatalyno@gmail.com>
+Date:   Tue Nov 5 12:33:08 2024 +0200
+
+    done javadocs and got 0 checkstyle errors
+
+commit 231c5e3fd0bb37a2b404868d390ac583ee7d5f7d
+Author: 0catalin <andrewcatalyno@gmail.com>
+Date:   Tue Nov 5 01:21:26 2024 +0200
+
+    alte mici modificari de tip OOP
+
+commit 679bcc98f4ed34ccd047038c5f648b4290fedfdc
+Author: 0catalin <andrewcatalyno@gmail.com>
+Date:   Mon Nov 4 22:39:26 2024 +0200
+
+    reparat coding style, luat testele noi si debugging, mici alte modificari de implementare
+
+commit 6b94db14e7bb40e0a6b049aa92151d4d3399c6ec
+Author: 0catalin <andrewcatalyno@gmail.com>
+Date:   Sun Nov 3 18:45:00 2024 +0200
+
+    terminat de scris codul, punctaj maxim
+
+commit 8ef0164bd6f2c822e67d0995c5ee04b5d76be7f5
+Author: 0catalin <andrewcatalyno@gmail.com>
+Date:   Sun Nov 3 16:05:31 2024 +0200
+
+    am adaugat majoritatea functiilor, mai am o afisare si abilitatea de erou
+
+commit 0bcf872597537aba72f5b94ced731daa1f9b3526
+Author: 0catalin <andrewcatalyno@gmail.com>
+Date:   Sun Nov 3 00:40:14 2024 +0200
+
+    testele 4 si 5 merg
+
+commit 67348ea9f55396070d096aee3146c2ac3a7b0748
+Author: 0catalin <andrewcatalyno@gmail.com>
+Date:   Sat Nov 2 21:49:22 2024 +0200
+
+    facut primele 8 functii, 8 ramase
+
+commit 79af88af7cd3c59a21dc007b02f40073f94668d6
+Author: 0catalin <andrewcatalyno@gmail.com>
+Date:   Fri Nov 1 23:22:45 2024 +0200
+
+    se dau puncte pe testul 1
+
+commit eadc4cb65fd82e01ed38eebe679adc645f413ea9
+Author: 0catalin <andrewcatalyno@gmail.com>
+Date:   Tue Oct 29 17:59:33 2024 +0200
+
+    repo initial pus pe github

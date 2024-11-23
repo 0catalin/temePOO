@@ -61,9 +61,8 @@ public final class Game {
         gameInfo = new GameInfo();
         for (GameInput gameinput: inputOfGame) {  // iterates over the game inputs
             StartGameInput startInput = gameinput.getStartGame(); // initializes startInput
-            HeroFactory factory = new HeroFactory();
-            player1.setHero(factory.createHero(new Hero(startInput.getPlayerOneHero())));
-            player2.setHero(factory.createHero(new Hero(startInput.getPlayerTwoHero())));
+            player1.setHero(HeroFactory.createHero(new Hero(startInput.getPlayerOneHero())));
+            player2.setHero(HeroFactory.createHero(new Hero(startInput.getPlayerTwoHero())));
 
             tableCards = new TableCards();
             setStartGameInput(startInput);

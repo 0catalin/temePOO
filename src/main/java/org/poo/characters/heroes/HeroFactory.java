@@ -5,9 +5,7 @@ import org.poo.characters.Hero;
 /**
  * The HeroFactory class is a class used for creating specific Hero inheriting classes
  */
-public final class HeroFactory {
-    public HeroFactory() {
-    }
+public abstract class HeroFactory {
 
     /**
      * takes hero as param, creates another hero based on name and copies all the fields
@@ -15,7 +13,7 @@ public final class HeroFactory {
      * @param hero the hero based on which the factory will create the specific hero
      * @return the specific hero
      */
-    public Hero createHero(final Hero hero) {
+    public static Hero createHero(final Hero hero) {
         if (hero.getName().equals("Empress Thorina")) {
             return new EmpressThorina(hero);
         }
