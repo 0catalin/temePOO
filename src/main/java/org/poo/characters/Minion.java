@@ -10,7 +10,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
  * the attack damage or the isFrozen boolean which tells
  * whether the card is frozen or not
  */
-public final class Minion extends Card {
+public class Minion extends Card {
     private int attackDamage;
     private boolean isFrozen;
     public Minion(final CardInput card) {
@@ -23,19 +23,19 @@ public final class Minion extends Card {
         super();
     }
 
-    public void setIsFrozen(final boolean isFrozen) {
+    public final void setIsFrozen(final boolean isFrozen) {
         this.isFrozen = isFrozen;
     }
 
-    public boolean getIsFrozen() {
+    public final boolean getIsFrozen() {
         return isFrozen;
     }
 
-    public int getAttackDamage() {
+    public final int getAttackDamage() {
         return attackDamage;
     }
 
-    public void setAttackDamage(final int attackDamage) {
+    public final void setAttackDamage(final int attackDamage) {
         this.attackDamage = attackDamage;
     }
 
@@ -70,28 +70,10 @@ public final class Minion extends Card {
     }
 
     /**
-     * uses the special attack of the current Minion on
-     * another Minion received as parameter
-     * @param attacked the Minion who will be attacked
+     * method used for card's special attacks, overwritten by each minion subclass
+     * @param attacked the attacked minion
      */
-    public void specialAttack(final Minion attacked) {
-        if (getName().equals("The Ripper")) {
-            attacked.setAttackDamage(attacked.getAttackDamage() - 2);
-            if (attacked.getAttackDamage() < 0) {
-                attacked.setAttackDamage(0);
-            }
-        } else if (getName().equals("Miraj")) {
-            int swap = attacked.getHealth();
-            attacked.setHealth(getHealth());
-            setHealth(swap);
-        } else if (getName().equals("The Cursed One")) {
-            int swap = attacked.getHealth();
-            attacked.setHealth(attacked.getAttackDamage());
-            attacked.setAttackDamage(swap);
-        } else if (getName().equals("Disciple")) {
-            attacked.setHealth(attacked.getHealth() + 2);
-        }
-    }
+    public void specialAttack(final Minion attacked) { }
 
     /**
      * tells which row a Minion should be placed on based on its name
@@ -109,7 +91,7 @@ public final class Minion extends Card {
     /*
     checks whether the current minion is a tank or not
     */
-    public boolean isTank() {
+    public final boolean isTank() {
         return (getName().equals("Goliath") || getName().equals("Warden"));
     }
 }

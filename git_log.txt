@@ -1,3 +1,9 @@
+commit 2e2348e24e4e94e924f1e06b8f74c4fccac3a689
+Author: 0catalin <andrewcatalyno@gmail.com>
+Date:   Sat Nov 23 17:09:13 2024 +0200
+
+    changed the Hero Factory
+
 commit c3617b53b63e03fda986a932a2cb90e70eb5bbbb
 Author: 0catalin <andrewcatalyno@gmail.com>
 Date:   Thu Nov 21 13:12:57 2024 +0200

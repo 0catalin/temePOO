@@ -37,6 +37,10 @@ GwentStone Lite is a strategic card game where two players compete by deploying 
   - Utilized through the `HeroFactory` class.
   - Dynamically creates specific hero instances based on parameters, simplifying the management of different hero types while promoting extensibility.
 
+3. **Factory Pattern (Minion Creation)**:
+  - Utilized through the `MinionFactory` class.
+  - Dynamically creates specific minion instances based on parameters, simplifying the management of different minion types while promoting extensibility.
+
 ## Game Logic Flow
 
 The main game logic resides within the `Game` class, which coordinates each round and manages actions. The logic includes:
@@ -46,9 +50,8 @@ The main game logic resides within the `Game` class, which coordinates each roun
 
 ## Potential Improvements
 
-- **Minion Class Inheritance**: Introduce subclasses and a dedicated factory for the `Minion` class, similar to the `Hero` class. This would allow for a more modular and extensible design, enabling the creation of specialized minion types with unique abilities, attributes, and behaviors.
 - **Player Class Enhancements**: Moving the current player’s hand into the `Player` class for better encapsulation.
-- **Control Structures**: Consideing to replace multiple `if` statements with `switch` statements to improve readability and elegance.
+- **Control Structures**: Considering to replace multiple `if` statements with `switch` statements to improve readability and elegance.
 
 ## Difficulties and Challenges
 

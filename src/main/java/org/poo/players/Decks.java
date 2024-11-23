@@ -1,5 +1,6 @@
 package org.poo.players;
 import org.poo.characters.Minion;
+import org.poo.characters.cards.MinionFactory;
 import org.poo.fileio.DecksInput;
 
 import java.util.ArrayList;
@@ -21,7 +22,8 @@ public final class Decks {
         for (int i = 0; i < numberOfDecks; i++) {
             ArrayList<Minion> deck = new ArrayList<Minion>();
             for (int j = 0; j < numberOfCards; j++) {
-                deck.add(new Minion(decksInput.getDecks().get(i).get(j)));
+                deck.add(MinionFactory.createMinion(new Minion(
+                        decksInput.getDecks().get(i).get(j))));
             }
             decks.add(deck);
         }
