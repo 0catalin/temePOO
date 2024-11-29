@@ -3,9 +3,12 @@ package org.poo.main;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import org.poo.Bank;
+import org.poo.parsers.CommandParser;
 import org.poo.checker.Checker;
 import org.poo.checker.CheckerConstants;
 import org.poo.fileio.ObjectInput;
+import org.poo.parsers.InputParser;
 
 import java.io.File;
 import java.io.IOException;
@@ -73,6 +76,15 @@ public final class Main {
         ObjectInput inputData = objectMapper.readValue(file, ObjectInput.class);
 
         ArrayNode output = objectMapper.createArrayNode();
+
+
+
+        Bank bank = Bank.getInstance();
+        InputParser inputParser = new InputParser(inputData);
+        // de creat clasele si aplicat parametrii din input
+        bank.applyParams(inputParser);
+        CommandParser commandParser = new CommandParser(bank);
+        commandParser.parse(inputParser.getCommands(), output);
 
         /*
          * TODO Implement your function here

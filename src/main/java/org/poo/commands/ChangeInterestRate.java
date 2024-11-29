@@ -1,0 +1,19 @@
+package org.poo.commands;
+
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import org.poo.Bank;
+import org.poo.fileio.CommandInput;
+
+public class ChangeInterestRate implements Command{
+    private String account;
+    private int timestamp;
+
+    public ChangeInterestRate(CommandInput commandInput) {
+        timestamp = commandInput.getTimestamp();
+        account = commandInput.getAccount();
+    }
+
+    public void execute(Bank bank, ArrayNode output) {
+
+    }
+}
