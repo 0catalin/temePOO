@@ -1,5 +1,7 @@
 package org.poo.parsers;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.Getter;
 import lombok.Setter;
 import org.poo.Bank;
@@ -18,10 +20,10 @@ public final class CommandParser {
         this.bank = bank;
     }
 
-    public void parse(ArrayList <Command> commands, ArrayNode output) {
+    public void parse(ArrayList <Command> commands, ArrayNode output, ObjectMapper mapper) {
 
         for (Command command : commands) {
-            command.execute(bank, output);
+            command.execute(bank, output, mapper);
         }
     }
 }

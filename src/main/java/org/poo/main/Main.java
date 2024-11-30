@@ -9,6 +9,7 @@ import org.poo.checker.Checker;
 import org.poo.checker.CheckerConstants;
 import org.poo.fileio.ObjectInput;
 import org.poo.parsers.InputParser;
+import org.poo.utils.Utils;
 
 import java.io.File;
 import java.io.IOException;
@@ -84,7 +85,8 @@ public final class Main {
         // de creat clasele si aplicat parametrii din input
         bank.applyParams(inputParser);
         CommandParser commandParser = new CommandParser(bank);
-        commandParser.parse(inputParser.getCommands(), output);
+        commandParser.parse(inputParser.getCommands(), output, objectMapper);
+        Utils.resetRandom();
 
         /*
          * TODO Implement your function here

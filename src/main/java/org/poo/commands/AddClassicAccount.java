@@ -1,7 +1,10 @@
 package org.poo.commands;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.poo.Bank;
+import org.poo.accounts.ClassicAccount;
 import org.poo.fileio.CommandInput;
 
 public class AddClassicAccount implements Command{
@@ -13,7 +16,14 @@ public class AddClassicAccount implements Command{
         currency = commandInput.getCurrency();
         timestamp = commandInput.getTimestamp();
     }
-    public void execute(Bank bank, ArrayNode output) {
+
+    public void execute(Bank bank, ArrayNode output, ObjectMapper mapper) {
+        ClassicAccount classicAccount = new ClassicAccount(currency);
+        if(bank.getUserByEmail(email) != null) {
+            bank.getUserByEmail(email).getAccounts().add(classicAccount);
+        } else {
+            System.out.println("User Not found"); // de modificat daca nu e vreo problema
+        }
 
     }
 }

@@ -1,7 +1,7 @@
 package org.poo.baseinput;
 import lombok.Getter;
 import lombok.Setter;
-import org.poo.Account;
+import org.poo.accounts.Account;
 import org.poo.fileio.UserInput;
 import org.poo.tranzactions.Tranzaction;
 
@@ -24,5 +24,7 @@ public class User {
         tranzactions = new ArrayList<>();
         accounts = new ArrayList<>();
     }
+
+
 
 }

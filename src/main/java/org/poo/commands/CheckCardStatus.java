@@ -1,5 +1,6 @@
 package org.poo.commands;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import org.poo.Bank;
 import org.poo.fileio.CommandInput;
@@ -13,7 +14,7 @@ public class CheckCardStatus implements Command{
         cardNumber = commandInput.getCardNumber();
     }
 
-    public void execute(Bank bank, ArrayNode output) {
+    public void execute(Bank bank, ArrayNode output, ObjectMapper mapper) {
 
     }
 }
