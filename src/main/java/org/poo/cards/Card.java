@@ -1,6 +1,7 @@
 package org.poo.cards;
 import lombok.Getter;
 import lombok.Setter;
+import org.poo.PayOnlineVisitor;
 
 @Getter
 @Setter
@@ -8,4 +9,8 @@ import lombok.Setter;
 public abstract class Card {
     private String cardNumber;
     private String status;
+
+    public void accept(PayOnlineVisitor visitor) {
+
+    }
 }

@@ -3,7 +3,7 @@ package org.poo.main;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import org.poo.Bank;
+import org.poo.bankGraph.Bank;
 import org.poo.parsers.CommandParser;
 import org.poo.checker.Checker;
 import org.poo.checker.CheckerConstants;

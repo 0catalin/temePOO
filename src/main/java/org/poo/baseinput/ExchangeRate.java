@@ -22,4 +22,15 @@ public class ExchangeRate {
         to = exchangeRate.getFrom();
         rate = 1 / exchangeRate.getRate();
     }
+    public ExchangeRate(String from, double rate, String to) {
+        this.from = from;
+        this.to = to;
+        this.rate = rate;
+    }
+
+    public ExchangeRate(ExchangeRate exchangeRate, ExchangeRate exchangeRate2) {
+        this.from = exchangeRate.getFrom();
+        this.to = exchangeRate2.getTo();
+        this.rate = exchangeRate.getRate() * exchangeRate2.getRate();
+    }
 }

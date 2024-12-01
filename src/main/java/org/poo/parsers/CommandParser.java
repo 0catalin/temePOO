@@ -1,10 +1,9 @@
 package org.poo.parsers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.Getter;
 import lombok.Setter;
-import org.poo.Bank;
+import org.poo.bankGraph.Bank;
 import org.poo.commands.Command;
 
 import java.util.ArrayList;

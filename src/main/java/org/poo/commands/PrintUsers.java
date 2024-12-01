@@ -3,7 +3,7 @@ package org.poo.commands;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.poo.Bank;
+import org.poo.bankGraph.Bank;
 import org.poo.accounts.Account;
 import org.poo.baseinput.User;
 import org.poo.cards.Card;

@@ -2,21 +2,49 @@ package org.poo.commands;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import org.poo.Bank;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.poo.bankGraph.Bank;
+import org.poo.accounts.Account;
+import org.poo.baseinput.User;
 import org.poo.fileio.CommandInput;
 
 public class DeleteAccount implements Command{
-    private String account;
+    private String IBAN;
     private String email;
     private int timestamp;
 
     public DeleteAccount(CommandInput commandInput) {
         timestamp = commandInput.getTimestamp();
         email = commandInput.getEmail();
-        account = commandInput.getAccount();
+        IBAN = commandInput.getAccount();
     }
 
     public void execute(Bank bank, ArrayNode output, ObjectMapper mapper) {
+        Account account = bank.getAccountByIBAN(IBAN);
+        User user = bank.getUserByEmail(email);
+        if (account == null) {
+            System.out.println("Account not found");
+        } else if (user == null) {
+            System.out.println("User not found");
+        } else {
+            if (user.getAccounts().contains(account)) {
+                user.getAccounts().remove(account);
+                deleteSuccess(output, mapper);
+            } else {
+                System.out.println("Account does not belong to the user");
+            }
+        }
+    }
+
+    private void deleteSuccess(ArrayNode output, ObjectMapper mapper) {
+        ObjectNode finalNode = mapper.createObjectNode();
+        finalNode.put("command", "deleteAccount");
+        ObjectNode outputNode = mapper.createObjectNode();
+        outputNode.put("success", "Account deleted");
+        outputNode.put("timestamp", timestamp);
+        finalNode.set("output", outputNode);
+        finalNode.put("timestamp", timestamp);
+        output.add(finalNode);
 
     }
 }
