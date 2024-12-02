@@ -1,9 +1,11 @@
 package org.poo.baseinput;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.Getter;
 import lombok.Setter;
 import org.poo.accounts.Account;
 import org.poo.fileio.UserInput;
-import org.poo.tranzactions.Tranzaction;
+
 
 import java.util.ArrayList;
 
@@ -14,7 +16,7 @@ public class User {
     private String firstName;
     private String lastName;
     private String email;
-    private ArrayList<Tranzaction> tranzactions;
+    private ArrayList<ObjectNode> tranzactions;
     private ArrayList<Account> accounts; // must have the cards
 
     public User(UserInput userInput) {

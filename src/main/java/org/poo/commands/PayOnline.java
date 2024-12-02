@@ -40,11 +40,12 @@ public class PayOnline implements Command{
         } else if (!user.getAccounts().contains(account)) {
             // System.out.println("Card does not belong to user");
             cardNotFound(output, mapper);
-        } // else if (account.getBalance() < amount) {
-            //System.out.println("Insufficient funds");
-        //}
+        } else if (account.getBalance() < amount * bank.findExchangeRate(currency, account.getCurrency())) {
+            user.getTranzactions().add(insufficientFunds(output, mapper));
+        }
         else {
             amount = amount * bank.findExchangeRate(currency, account.getCurrency()); // converts to specific amount
+            user.getTranzactions().add(successfulPayment(output, mapper));
             PayOnlineVisitor visitor = new PayOnlineVisitor(amount, timestamp, description,
                     commerciant, mapper, output, account);
             card.accept(visitor);
@@ -61,5 +62,21 @@ public class PayOnline implements Command{
         finalNode.set("output", outputNode);
         finalNode.put("timestamp", timestamp);
         output.add(finalNode);
+    }
+
+    private ObjectNode insufficientFunds(ArrayNode output, ObjectMapper mapper) {
+        ObjectNode finalNode = mapper.createObjectNode();
+        finalNode.put("timestamp", timestamp);
+        finalNode.put("description", "Insufficient funds");
+        return finalNode;
+    }
+
+    private ObjectNode successfulPayment(ArrayNode output, ObjectMapper mapper) {
+        ObjectNode finalNode = mapper.createObjectNode();
+        finalNode.put("timestamp", timestamp);
+        finalNode.put("description", "Card payment");
+        finalNode.put("amount", amount);
+        finalNode.put("commerciant", commerciant);
+        return finalNode;
     }
 }

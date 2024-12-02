@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.poo.accounts.Account;
 import org.poo.baseinput.Commerciant;
+import org.poo.baseinput.ExchangeRate;
 import org.poo.baseinput.User;
 import org.poo.cards.Card;
 import org.poo.parsers.InputParser;
@@ -16,7 +17,7 @@ public class Bank {
     private ArrayList<Commerciant> commerciants;
     private Map<String, List<Edge>> exchangeRates;
     private ArrayList<User> users;
-
+    private ArrayList<ExchangeRate> exchangeRatesList;
     private static Bank instance = null;
     static {
         instance = new Bank();
@@ -30,6 +31,7 @@ public class Bank {
         commerciants = parser.getCommerciants();
         exchangeRates = parser.getGraph();
         users = parser.getUsers();
+        exchangeRatesList = parser.getExchangeRatesList();
     }
 
     public User getUserByEmail(String email) {
@@ -45,6 +47,28 @@ public class Bank {
         for (User user : users) {
             for (Account account : user.getAccounts()) {
                 if (account.getIBAN().equals(iban)) {
+                    return account;
+                }
+            }
+        }
+        return null;
+    }
+
+    public User getUserByIBAN(String iban) {
+        for (User user : users) {
+            for (Account account : user.getAccounts()) {
+                if (account.getIBAN().equals(iban)) {
+                    return user;
+                }
+            }
+        }
+        return null;
+    }
+
+    public Account getAccountByIBANOrAlias (String ibanOrAlias) {
+        for (User user : users) {
+            for (Account account : user.getAccounts()) {
+                if (account.getIBAN().equals(ibanOrAlias) || account.getAlias().equals(ibanOrAlias)) {
                     return account;
                 }
             }
@@ -80,6 +104,11 @@ public class Bank {
 
 
     public double findExchangeRate(String from, String to) {
+        for(ExchangeRate exchangeRate : exchangeRatesList) {
+            if (exchangeRate.getFrom().equals(from) && exchangeRate.getTo().equals(to)) {
+                return exchangeRate.getRate();
+            }
+        }
         Queue<Pair<String, Double>> queue = new LinkedList<>();
         Set<String> visited = new HashSet<>();
 
@@ -90,6 +119,9 @@ public class Bank {
             double currentRate = current.getValue();
 
             if (currentCurrency.equals(to)) {
+                ExchangeRate exchangeRate = new ExchangeRate(from, currentRate, to);
+                exchangeRatesList.add(exchangeRate);
+                exchangeRatesList.add(new ExchangeRate(exchangeRate));
                 return currentRate;
             }
 

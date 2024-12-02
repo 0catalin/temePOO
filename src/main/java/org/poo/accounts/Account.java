@@ -13,7 +13,7 @@ import java.util.ArrayList;
 public abstract class Account {
     // poate clasa abstracta
     private String currency;
-    private double minBalance = -1; // poate 0
+    private double minBalance = 0;
     private String alias;
     private String IBAN;
     private ArrayList<Card> cards;
