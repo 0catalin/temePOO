@@ -1,6 +1,7 @@
 package org.poo.accounts;
 
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.poo.ReportVisitor;
 import org.poo.SpendingsReportVisitor;
 import org.poo.utils.Utils;
 
@@ -31,6 +32,8 @@ public class SavingsAccount extends Account{
         visitor.visit(this);
     }
 
-
+    public void accept(ReportVisitor visitor) {
+        visitor.visit(this);
+    }
 
 }

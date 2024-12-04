@@ -33,7 +33,7 @@ public class SpendingsReport implements Command{
         User user = bank.getUserByIBAN(IBAN);
         if(user != null) {
             SpendingsReportVisitor visitor = new SpendingsReportVisitor(IBAN, timestamp,
-                    startTimestamp, endTimestamp, user, mapper, output);
+                    startTimestamp, endTimestamp, user, mapper, output, bank);
             account.accept(visitor);
         } else {
             userNotFound(output, mapper);

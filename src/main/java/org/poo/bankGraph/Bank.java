@@ -18,6 +18,8 @@ public class Bank {
     private Map<String, List<Edge>> exchangeRates;
     private ArrayList<User> users;
     private ArrayList<ExchangeRate> exchangeRatesList;
+    private Map<Integer, String> map = new HashMap<>();
+    private Map<Integer, String> map2 = new HashMap<>();
     private static Bank instance = null;
     static {
         instance = new Bank();
@@ -32,6 +34,7 @@ public class Bank {
         exchangeRates = parser.getGraph();
         users = parser.getUsers();
         exchangeRatesList = parser.getExchangeRatesList();
+        map = new HashMap<>();
     }
 
     public User getUserByEmail(String email) {
@@ -42,7 +45,9 @@ public class Bank {
         }
         return null;
     }
-
+    public Map<Integer, String> getMap() {
+        return map;
+    }
     public Account getAccountByIBAN (String iban) {
         for (User user : users) {
             for (Account account : user.getAccounts()) {

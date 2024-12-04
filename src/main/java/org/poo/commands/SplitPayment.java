@@ -36,21 +36,21 @@ public class SplitPayment implements Command{
         for (Account account : accountList) {
             if(account.getBalance() - eachAmount * bank.findExchangeRate(currency, account.getCurrency()) < account.getMinBalance()) {
                 problemIBAN = account.getIBAN();
-                break;
             }
         }
         if(problemIBAN.isEmpty()) {
             for (int i = 0; i < accountList.size(); i++) {
                 userList.get(i).getTranzactions().add(splitPayment(mapper));
                 bank.getAccountByIBAN(accountsForSplit.get(i)).setBalance(accountList.get(i).getBalance() -
-                        eachAmount * bank.findExchangeRate(accountList.get(i).getCurrency(), currency));
+                        eachAmount * bank.findExchangeRate(currency, accountList.get(i).getCurrency()));
                 // testul gresit, trebuie inversate alea de currency daca se modifica testul
             }
         } else {
             ObjectNode node = splitPayment(mapper);
-            node.put("error", "Account " + problemIBAN +  "has insufficient funds for a split payment.");
-            for (User user : userList) {
-                user.getTranzactions().add(node);
+            node.put("error", "Account " + problemIBAN +  " has insufficient funds for a split payment.");
+            for (int i = 0; i < userList.size(); i++) {
+                userList.get(i).getTranzactions().add(node);
+                // bank.getMap2().put(userList.get(i).getTranzactions().size(), accountList.get(i).getIBAN());
             }
         }
     }

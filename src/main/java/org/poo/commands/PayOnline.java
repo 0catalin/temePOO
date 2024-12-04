@@ -49,7 +49,7 @@ public class PayOnline implements Command{
                 PayOnlineVisitor visitor = new PayOnlineVisitor(amount, timestamp, description,
                         commerciant, mapper, output, account, bank);
                 if (card.accept(visitor)) {
-                    user.getTranzactions().add(successfulPayment(output, mapper));
+                    bank.getMap().put(timestamp, account.getIBAN());
                 }
             }
 
@@ -70,14 +70,7 @@ public class PayOnline implements Command{
 
 
 
-    private ObjectNode successfulPayment(ArrayNode output, ObjectMapper mapper) {
-        ObjectNode finalNode = mapper.createObjectNode();
-        finalNode.put("timestamp", timestamp);
-        finalNode.put("description", "Card payment");
-        finalNode.put("amount", amount);
-        finalNode.put("commerciant", commerciant);
-        return finalNode;
-    }
+
 
 
 }

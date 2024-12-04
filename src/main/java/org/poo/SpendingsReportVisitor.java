@@ -6,12 +6,10 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.poo.accounts.Account;
 import org.poo.accounts.ClassicAccount;
 import org.poo.accounts.SavingsAccount;
+import org.poo.bankGraph.Bank;
 import org.poo.baseinput.User;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class SpendingsReportVisitor {
@@ -22,8 +20,9 @@ public class SpendingsReportVisitor {
     private User user;
     private ObjectMapper mapper;
     private ArrayNode output;
+    private Bank bank;
 
-    public SpendingsReportVisitor(String IBAN, int timestamp, int startTimestamp, int endTimestamp, User user, ObjectMapper mapper, ArrayNode output) {
+    public SpendingsReportVisitor(String IBAN, int timestamp, int startTimestamp, int endTimestamp, User user, ObjectMapper mapper, ArrayNode output, Bank bank) {
         this.IBAN = IBAN;
         this.timestamp = timestamp;
         this.startTimestamp = startTimestamp;
@@ -31,22 +30,34 @@ public class SpendingsReportVisitor {
         this.user = user;
         this.mapper = mapper;
         this.output = output;
+        this.bank = bank;
     }
 
     public void visit(ClassicAccount account) {
+        List<ObjectNode> tranzactionsFiltered = new ArrayList<>();
+
         List<ObjectNode> tranzactions = user.getTranzactions().stream().filter(node -> {
             int timestamp = node.get("timestamp").asInt();
             return timestamp >= startTimestamp && timestamp <= endTimestamp && node.has("commerciant");
         }).collect(Collectors.toList());
+        if (tranzactions != null) {
+            for (ObjectNode tranzaction : tranzactions) {
 
+                if (bank.getMap().containsKey(tranzaction.get("timestamp").asInt()) && bank.getMap().get(tranzaction.get("timestamp").asInt()).equals(IBAN)) {
+                    tranzactionsFiltered.add(tranzaction);
+                }
+            }
+        }
 
-        Map<String, Double> commerciantTotals = new HashMap<>();
-        for (ObjectNode transaction : tranzactions) {
+        Map<String, Double> commerciantTotals = new LinkedHashMap<>();
+        if(tranzactionsFiltered.size() > 0) {
+            for (ObjectNode tranzaction : tranzactionsFiltered) {
 
-            String commerciant = transaction.get("commerciant").asText();
-            double amount = transaction.get("amount").asDouble();
-            commerciantTotals.put(commerciant, commerciantTotals.getOrDefault(commerciant, 0.0) + amount);
+                String commerciant = tranzaction.get("commerciant").asText();
+                double amount = tranzaction.get("amount").asDouble();
+                commerciantTotals.put(commerciant, commerciantTotals.getOrDefault(commerciant, 0.0) + amount);
 
+            }
         }
 
         List<ObjectNode> commerciants = new ArrayList<>();
@@ -57,11 +68,11 @@ public class SpendingsReportVisitor {
             commerciants.add(commerciantNode);
         }
 
-        commerciants.sort((a, b) -> Double.compare(b.get("total").asDouble(), a.get("total").asDouble()));
+
+        commerciants.sort((a, b) -> a.get("commerciant").asText().compareTo(b.get("commerciant").asText()));
 
 
-
-        addToOutput(output, mapper, tranzactions, account, commerciants);
+        addToOutput(output, mapper, tranzactionsFiltered, account, commerciants);
     }
 
     public void visit(SavingsAccount account) {
@@ -95,4 +106,6 @@ public class SpendingsReportVisitor {
         node.put("timestamp", timestamp);
         output.add(node);
     }
+
+
 }

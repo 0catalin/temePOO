@@ -2,6 +2,7 @@ package org.poo.commands;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.poo.accounts.Account;
 import org.poo.accounts.ClassicAccount;
 import org.poo.accounts.SavingsAccount;
@@ -27,9 +28,28 @@ public class ChangeInterestRate implements Command{
          else if(account.getType().equals("savings")) {
             SavingsAccount savingsAccount = (SavingsAccount) account;
             savingsAccount.setInterestRate(interestRate);
+            bank.getUserByIBAN(IBAN).getTranzactions().add(successSet(mapper));
         } else {
-            System.out.println("ACCOUNT IS NOT SAVINGS ACCOUNT");
+            output.add(savingsAccountError(mapper));
         }
 
+    }
+
+    private ObjectNode savingsAccountError(ObjectMapper mapper) {
+        ObjectNode node = mapper.createObjectNode();
+        ObjectNode outputNode = mapper.createObjectNode();
+        outputNode.put("description", "This is not a savings account");
+        outputNode.put("timestamp", timestamp);
+        node.put("command", "changeInterestRate");
+        node.set("output", outputNode);
+        node.put("timestamp", timestamp);
+        return node;
+    }
+
+    private ObjectNode successSet(ObjectMapper mapper) {
+        ObjectNode node = mapper.createObjectNode();
+        node.put("description", "Interest rate of the account changed to " + interestRate);
+        node.put("timestamp", timestamp);
+        return node;
     }
 }

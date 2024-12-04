@@ -3,6 +3,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.Getter;
 import lombok.Setter;
 import org.poo.PayOnlineVisitor;
+import org.poo.ReportVisitor;
 import org.poo.SpendingsReportVisitor;
 import org.poo.cards.Card;
 
@@ -50,6 +51,6 @@ public abstract class Account {
     }
 
     public abstract void accept(SpendingsReportVisitor visitor);
-
+    public abstract void accept(ReportVisitor visitor);
 
 }

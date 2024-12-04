@@ -31,6 +31,7 @@ public class DeleteAccount implements Command{
         } else if (account.getBalance() != 0) {
             System.out.println("Account balance not zero");
             deleteFailure(output, mapper);
+            bank.getUserByIBAN(account.getIBAN()).getTranzactions().add(deleteFundsRemaining(mapper));
         } else {
             if (user.getAccounts().contains(account)) {
                 user.getAccounts().remove(account);
@@ -63,4 +64,12 @@ public class DeleteAccount implements Command{
         finalNode.put("timestamp", timestamp);
         output.add(finalNode);
     }
+
+    private ObjectNode deleteFundsRemaining(ObjectMapper mapper) {
+        ObjectNode finalNode = mapper.createObjectNode();
+        finalNode.put("description", "Account couldn't be deleted - there are funds remaining");
+        finalNode.put("timestamp", timestamp);
+        return finalNode;
+    }
+
 }
