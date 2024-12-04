@@ -102,6 +102,15 @@ public class Bank {
         return null;
     }
 
+    public User getUserByAccount (Account account) {
+        for (User user : users) {
+            if (user.getAccounts().contains(account)) {
+                return user;
+            }
+        }
+        return null;
+    }
+
 
     public double findExchangeRate(String from, String to) {
         for(ExchangeRate exchangeRate : exchangeRatesList) {

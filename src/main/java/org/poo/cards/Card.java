@@ -10,7 +10,5 @@ public abstract class Card {
     private String cardNumber;
     private String status;
 
-    public void accept(PayOnlineVisitor visitor) {
-
-    }
+    public abstract boolean accept(PayOnlineVisitor visitor);
 }

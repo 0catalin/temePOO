@@ -33,22 +33,26 @@ public class PayOnline implements Command{
         Card card = bank.getCardByCardNumber(cardNumber);
         User user = bank.getUserByEmail(email);
         Account account = bank.getAccountByCardNumber(cardNumber);
-        if(card == null) {
+        if (card == null) {
             cardNotFound(output, mapper);
         } else if (user == null) {
             System.out.println("User not found"); // de sters, probabil
         } else if (!user.getAccounts().contains(account)) {
             // System.out.println("Card does not belong to user");
             cardNotFound(output, mapper);
-        } else if (account.getBalance() < amount * bank.findExchangeRate(currency, account.getCurrency())) {
-            user.getTranzactions().add(insufficientFunds(output, mapper));
-        }
+        } //else if (account.getBalance() < amount * bank.findExchangeRate(currency, account.getCurrency())) {
+            //user.getTranzactions().add(insufficientFunds(output, mapper));
+        //}
         else {
-            amount = amount * bank.findExchangeRate(currency, account.getCurrency()); // converts to specific amount
-            user.getTranzactions().add(successfulPayment(output, mapper));
-            PayOnlineVisitor visitor = new PayOnlineVisitor(amount, timestamp, description,
-                    commerciant, mapper, output, account);
-            card.accept(visitor);
+            if(account.getBalance() != 0) {
+                amount = amount * bank.findExchangeRate(currency, account.getCurrency()); // converts to specific amount
+                PayOnlineVisitor visitor = new PayOnlineVisitor(amount, timestamp, description,
+                        commerciant, mapper, output, account, bank);
+                if (card.accept(visitor)) {
+                    user.getTranzactions().add(successfulPayment(output, mapper));
+                }
+            }
+
         }
 
     }
@@ -64,12 +68,7 @@ public class PayOnline implements Command{
         output.add(finalNode);
     }
 
-    private ObjectNode insufficientFunds(ArrayNode output, ObjectMapper mapper) {
-        ObjectNode finalNode = mapper.createObjectNode();
-        finalNode.put("timestamp", timestamp);
-        finalNode.put("description", "Insufficient funds");
-        return finalNode;
-    }
+
 
     private ObjectNode successfulPayment(ArrayNode output, ObjectMapper mapper) {
         ObjectNode finalNode = mapper.createObjectNode();
@@ -79,4 +78,6 @@ public class PayOnline implements Command{
         finalNode.put("commerciant", commerciant);
         return finalNode;
     }
+
+
 }

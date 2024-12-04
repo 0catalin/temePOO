@@ -9,8 +9,8 @@ public class RegularCard extends Card{
         setCardNumber(Utils.generateCardNumber());
     }
 
-    public void accept(PayOnlineVisitor visitor) {
-        visitor.visit(this);
+    public boolean accept(PayOnlineVisitor visitor) {
+        return visitor.visit(this);
     }
 
 }

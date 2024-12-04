@@ -2,9 +2,11 @@ package org.poo.commands;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.poo.bankGraph.Bank;
 import org.poo.accounts.Account;
 import org.poo.baseinput.User;
+import org.poo.cards.Card;
 import org.poo.cards.OneTimeCard;
 import org.poo.fileio.CommandInput;
 
@@ -28,10 +30,22 @@ public class CreateOneTimeCard implements Command{
             System.out.println("User not found");
         } else {
             if (user.getAccounts().contains(account)) {
-                account.getCards().add(new OneTimeCard());
+                Card card = new OneTimeCard();
+                user.getTranzactions().add(addToUsersTranzactions(mapper, card));
+                account.getCards().add(card);
             } else {
                 System.out.println("Account does not belong to the user");
             }
         }
+    }
+
+    private ObjectNode addToUsersTranzactions(ObjectMapper mapper, Card card) {
+        ObjectNode output = mapper.createObjectNode();
+        output.put("account", IBAN);
+        output.put("card", card.getCardNumber());
+        output.put("cardHolder", email);
+        output.put("description", "New card created");
+        output.put("timestamp", timestamp);
+        return output;
     }
 }

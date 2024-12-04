@@ -50,4 +50,5 @@ public class CreateCard implements Command{
 
         return output;
     }
+
 }

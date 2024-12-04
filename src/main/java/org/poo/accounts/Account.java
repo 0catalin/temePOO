@@ -3,6 +3,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.Getter;
 import lombok.Setter;
 import org.poo.PayOnlineVisitor;
+import org.poo.SpendingsReportVisitor;
 import org.poo.cards.Card;
 
 import java.util.ArrayList;
@@ -29,6 +30,26 @@ public abstract class Account {
         }
         return null;
     }
+
+    public void checkAccountCards() {
+        if (balance < minBalance && cards != null) {
+            for (Card card : cards) {
+                if (!card.getStatus().equals("blocked")) {
+                    card.setStatus("frozen");
+                }
+            }
+        }
+
+        else if (balance > minBalance && cards != null) {
+            for (Card card : cards) {
+                if (card.getStatus().equals("frozen")) {
+                    card.setStatus("active");
+                }
+            }
+        }
+    }
+
+    public abstract void accept(SpendingsReportVisitor visitor);
 
 
 }
