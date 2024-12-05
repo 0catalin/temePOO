@@ -78,47 +78,7 @@ public class SpendingsReportVisitor {
     }
 
     public void visit(SavingsAccount account) {
-        List<ObjectNode> tranzactionsFiltered = new ArrayList<>();
-
-        LinkedHashMap<ObjectNode, List<String>> tranzactions = user.getTranzactions().entrySet().stream().filter(entry -> {
-            ObjectNode node = entry.getKey();
-            int timestamp = node.get("timestamp").asInt();
-            return timestamp >= startTimestamp && timestamp <= endTimestamp && node.has("commerciant");
-        }).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (oldValue, newValue) -> oldValue, LinkedHashMap::new));
-
-        if (tranzactions != null) {
-            for (Map.Entry<ObjectNode, List<String>> entry : tranzactions.entrySet()) {
-                ObjectNode tranzaction = entry.getKey();
-                if (tranzactions.get(tranzaction).get(0).equals(IBAN)) {
-                    tranzactionsFiltered.add(tranzaction);
-                }
-            }
-        }
-
-        Map<String, Double> commerciantTotals = new LinkedHashMap<>();
-        if(tranzactionsFiltered.size() > 0) {
-            for (ObjectNode tranzaction : tranzactionsFiltered) {
-
-                String commerciant = tranzaction.get("commerciant").asText();
-                double amount = tranzaction.get("amount").asDouble();
-                commerciantTotals.put(commerciant, commerciantTotals.getOrDefault(commerciant, 0.0) + amount);
-
-            }
-        }
-
-        List<ObjectNode> commerciants = new ArrayList<>();
-        for (Map.Entry<String, Double> entry : commerciantTotals.entrySet()) {
-            ObjectNode commerciantNode = mapper.createObjectNode();
-            commerciantNode.put("commerciant", entry.getKey());
-            commerciantNode.put("total", entry.getValue());
-            commerciants.add(commerciantNode);
-        }
-
-
-        commerciants.sort((a, b) -> a.get("commerciant").asText().compareTo(b.get("commerciant").asText()));
-
-
-        addToOutput(output, mapper, tranzactionsFiltered, account, commerciants);
+    output.add(spendingsReportOnSavingsAccountError(mapper));
 
         // List<ObjectNode> tranzactions = new ArrayList<>();
         // List<ObjectNode> commerciants = new ArrayList<>();
@@ -149,6 +109,16 @@ public class SpendingsReportVisitor {
         node.set("output", tranzaction);
         node.put("timestamp", timestamp);
         output.add(node);
+    }
+
+    public ObjectNode spendingsReportOnSavingsAccountError(ObjectMapper mapper) {
+        ObjectNode node = mapper.createObjectNode();
+        node.put("command", "spendingsReport");
+        ObjectNode errorNode = mapper.createObjectNode();
+        errorNode.put("error", "This kind of report is not supported for a saving account");
+        node.set("output", errorNode);
+        node.put("timestamp", timestamp);
+        return node;
     }
 
 
