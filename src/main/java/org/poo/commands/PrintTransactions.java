@@ -7,6 +7,9 @@ import org.poo.bankGraph.Bank;
 import org.poo.baseinput.User;
 import org.poo.fileio.CommandInput;
 
+import java.util.List;
+import java.util.Map;
+
 public class PrintTransactions implements Command{
     private String email;
     private int timestamp;
@@ -24,8 +27,11 @@ public class PrintTransactions implements Command{
             ObjectNode transaction = mapper.createObjectNode();
             transaction.put("command", "printTransactions");
             ArrayNode outputNode = mapper.createArrayNode();
-            for (ObjectNode objectNode : user.getTranzactions()) {
-                outputNode.add(objectNode);
+            for (Map.Entry<ObjectNode, List<String>> entry : user.getTranzactions().entrySet()) {
+                List<String> values = entry.getValue();
+                for (String value : values) {
+                    outputNode.add(entry.getKey());
+                }
             }
             transaction.set("output", outputNode);
             transaction.put("timestamp", timestamp);

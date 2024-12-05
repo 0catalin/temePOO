@@ -10,6 +10,8 @@ import org.poo.cards.Card;
 import org.poo.cards.RegularCard;
 import org.poo.fileio.CommandInput;
 
+import java.util.ArrayList;
+
 public class CreateCard implements Command{
     private String IBAN;
     private String email;
@@ -32,7 +34,7 @@ public class CreateCard implements Command{
             if (user.getAccounts().contains(account)) {
                 Card card = new RegularCard();
                 account.getCards().add(card);
-                user.getTranzactions().add(addToUsersTranzactions(mapper, card));
+                user.getTranzactions().computeIfAbsent(addToUsersTranzactions(mapper, card), k -> new ArrayList<>()).add(IBAN);
             } else {
                 System.out.println("Account does not belong to the user");
             }

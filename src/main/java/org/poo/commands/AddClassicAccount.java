@@ -8,6 +8,8 @@ import org.poo.accounts.ClassicAccount;
 import org.poo.baseinput.User;
 import org.poo.fileio.CommandInput;
 
+import java.util.ArrayList;
+
 public class AddClassicAccount implements Command{
     private String email;
     private String currency;
@@ -23,7 +25,7 @@ public class AddClassicAccount implements Command{
         if(bank.getUserByEmail(email) != null) {
             User user = bank.getUserByEmail(email);
             user.getAccounts().add(classicAccount);
-            user.getTranzactions().add(addToUsersTranzactions(mapper));
+            user.getTranzactions().computeIfAbsent(addToUsersTranzactions(mapper), k -> new ArrayList<>()).add(classicAccount.getIBAN());
 
         } else {
             System.out.println("User Not found"); // de modificat daca nu e vreo problema

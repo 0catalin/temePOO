@@ -7,6 +7,8 @@ import org.poo.bankGraph.Bank;
 import org.poo.accounts.Account;
 import org.poo.fileio.CommandInput;
 
+import java.util.ArrayList;
+
 public class DeleteCard implements Command{
     private String cardNumber;
     private int timestamp;
@@ -23,7 +25,7 @@ public class DeleteCard implements Command{
         } else {
             String IBAN = account.getIBAN();
             String email = bank.getUserByIBAN(IBAN).getEmail();
-            bank.getUserByIBAN(IBAN).getTranzactions().add(successfulDeletion(output, mapper, IBAN, email));
+            bank.getUserByIBAN(IBAN).getTranzactions().computeIfAbsent(successfulDeletion(output, mapper, IBAN, email), k -> new ArrayList<>()).add(IBAN);
             account.getCards().remove(account.getCardByCardNumber(cardNumber));
         }
 

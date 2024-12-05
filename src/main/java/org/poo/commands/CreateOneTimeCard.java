@@ -10,6 +10,8 @@ import org.poo.cards.Card;
 import org.poo.cards.OneTimeCard;
 import org.poo.fileio.CommandInput;
 
+import java.util.ArrayList;
+
 public class CreateOneTimeCard implements Command{
     private String IBAN;
     private String email;
@@ -31,7 +33,7 @@ public class CreateOneTimeCard implements Command{
         } else {
             if (user.getAccounts().contains(account)) {
                 Card card = new OneTimeCard();
-                user.getTranzactions().add(addToUsersTranzactions(mapper, card));
+                user.getTranzactions().computeIfAbsent(addToUsersTranzactions(mapper, card), k -> new ArrayList<>()).add(IBAN);
                 account.getCards().add(card);
             } else {
                 System.out.println("Account does not belong to the user");

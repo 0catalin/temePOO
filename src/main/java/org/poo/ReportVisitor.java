@@ -10,7 +10,9 @@ import org.poo.bankGraph.Bank;
 import org.poo.baseinput.User;
 
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ReportVisitor {
@@ -35,11 +37,21 @@ public class ReportVisitor {
 
     public void visit(ClassicAccount account) {
         List<ObjectNode> tranzactionsFiltered = new ArrayList<>();
-        List<ObjectNode> tranzactionsFiltered2 = new ArrayList<>();
-        List<ObjectNode> tranzactions = user.getTranzactions().stream().filter(node -> {
+
+        LinkedHashMap<ObjectNode, List<String>> tranzactions = user.getTranzactions().entrySet().stream().filter(entry -> {
+            ObjectNode node = entry.getKey();
             int timestamp = node.get("timestamp").asInt();
             return timestamp >= startTimestamp && timestamp <= endTimestamp;
-        }).collect(Collectors.toList());
+        }).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (oldValue, newValue) -> oldValue, LinkedHashMap::new));
+
+        if (tranzactions != null) {
+            for (Map.Entry<ObjectNode, List<String>> entry : tranzactions.entrySet()) {
+                ObjectNode tranzaction = entry.getKey();
+                if (tranzactions.get(tranzaction).get(0).equals(IBAN)) {
+                    tranzactionsFiltered.add(tranzaction);
+                }
+            }
+        }
 
  /*
         if(tranzactions != null) {
@@ -66,7 +78,7 @@ public class ReportVisitor {
         }
 */
 
-        addToOutput(output, mapper, tranzactions, account);
+        addToOutput(output, mapper, tranzactionsFiltered, account);
     }
 
 

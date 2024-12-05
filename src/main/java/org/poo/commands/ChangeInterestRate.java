@@ -9,6 +9,8 @@ import org.poo.accounts.SavingsAccount;
 import org.poo.bankGraph.Bank;
 import org.poo.fileio.CommandInput;
 
+import java.util.ArrayList;
+
 public class ChangeInterestRate implements Command{
     private String IBAN;
     private int timestamp;
@@ -28,7 +30,7 @@ public class ChangeInterestRate implements Command{
          else if(account.getType().equals("savings")) {
             SavingsAccount savingsAccount = (SavingsAccount) account;
             savingsAccount.setInterestRate(interestRate);
-            bank.getUserByIBAN(IBAN).getTranzactions().add(successSet(mapper));
+            bank.getUserByIBAN(IBAN).getTranzactions().computeIfAbsent(successSet(mapper), k -> new ArrayList<>()).add(IBAN);
         } else {
             output.add(savingsAccountError(mapper));
         }

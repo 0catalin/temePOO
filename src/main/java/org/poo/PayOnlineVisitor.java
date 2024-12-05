@@ -11,6 +11,8 @@ import org.poo.cards.OneTimeCard;
 import org.poo.cards.RegularCard;
 import org.poo.utils.Utils;
 
+import java.util.ArrayList;
+
 public class PayOnlineVisitor {
     private double amount;
     private int timestamp;
@@ -37,19 +39,19 @@ public class PayOnlineVisitor {
     public boolean visit(OneTimeCard card) {
         if (account.getBalance() < amount) {
             bank.getMap().put(timestamp, account.getIBAN());
-            bank.getUserByIBAN(account.getIBAN()).getTranzactions().add(insufficientFunds());
+            bank.getUserByIBAN(account.getIBAN()).getTranzactions().computeIfAbsent(insufficientFunds(), k -> new ArrayList<>()).add(account.getIBAN());
             return false;
         } else if (account.getBalance() - amount < account.getMinBalance()) {
             bank.getMap().put(timestamp, account.getIBAN());
-            bank.getUserByIBAN(account.getIBAN()).getTranzactions().add(insufficientFunds());
+            bank.getUserByIBAN(account.getIBAN()).getTranzactions().computeIfAbsent(insufficientFunds(), k -> new ArrayList<>()).add(account.getIBAN());
             card.setStatus("frozen");
             return false;
         } else {
             account.setBalance(account.getBalance() - amount);
-            bank.getUserByIBAN(account.getIBAN()).getTranzactions().add(successfulPayment(output, mapper));
-            bank.getUserByIBAN(account.getIBAN()).getTranzactions().add(oneTimeCardDestroyed(card));
+            bank.getUserByIBAN(account.getIBAN()).getTranzactions().computeIfAbsent(successfulPayment(output, mapper), k -> new ArrayList<>()).add(account.getIBAN());
+            bank.getUserByIBAN(account.getIBAN()).getTranzactions().computeIfAbsent(oneTimeCardDestroyed(card), k -> new ArrayList<>()).add(account.getIBAN());
             card.setCardNumber(Utils.generateCardNumber());
-            bank.getUserByIBAN(account.getIBAN()).getTranzactions().add(oneTimeCardCreated(card));
+            bank.getUserByIBAN(account.getIBAN()).getTranzactions().computeIfAbsent(oneTimeCardCreated(card), k -> new ArrayList<>()).add(account.getIBAN());
 
             return true;
         }
@@ -58,20 +60,20 @@ public class PayOnlineVisitor {
     public boolean visit(RegularCard card) {
         if (account.getBalance() < amount) {
             bank.getMap().put(timestamp, account.getIBAN());
-            bank.getUserByIBAN(account.getIBAN()).getTranzactions().add(insufficientFunds());
+            bank.getUserByIBAN(account.getIBAN()).getTranzactions().computeIfAbsent(insufficientFunds(), k -> new ArrayList<>()).add(account.getIBAN());
             return false;
         } else if (card.getStatus().equals("frozen")) {
             bank.getMap().put(timestamp, account.getIBAN());
-            bank.getUserByIBAN(account.getIBAN()).getTranzactions().add(blockedOrFrozenError("frozen"));
+            bank.getUserByIBAN(account.getIBAN()).getTranzactions().computeIfAbsent(blockedOrFrozenError("frozen"), k -> new ArrayList<>()).add(account.getIBAN());
             return false;
         } else if (account.getBalance() - amount < account.getMinBalance()) {
             bank.getMap().put(timestamp, account.getIBAN());
-            bank.getUserByIBAN(account.getIBAN()).getTranzactions().add(blockedOrFrozenError("frozen"));
+            bank.getUserByIBAN(account.getIBAN()).getTranzactions().computeIfAbsent(blockedOrFrozenError("frozen"), k -> new ArrayList<>()).add(account.getIBAN());
             card.setStatus("frozen");
             return false;
         } else {
             account.setBalance(account.getBalance() - amount);
-            bank.getUserByIBAN(account.getIBAN()).getTranzactions().add(successfulPayment(output, mapper));
+            bank.getUserByIBAN(account.getIBAN()).getTranzactions().computeIfAbsent(successfulPayment(output, mapper), k -> new ArrayList<>()).add(account.getIBAN());
             return true;
         }
     }

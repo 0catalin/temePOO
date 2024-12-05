@@ -36,14 +36,16 @@ public class SpendingsReportVisitor {
     public void visit(ClassicAccount account) {
         List<ObjectNode> tranzactionsFiltered = new ArrayList<>();
 
-        List<ObjectNode> tranzactions = user.getTranzactions().stream().filter(node -> {
+        LinkedHashMap<ObjectNode, List<String>> tranzactions = user.getTranzactions().entrySet().stream().filter(entry -> {
+            ObjectNode node = entry.getKey();
             int timestamp = node.get("timestamp").asInt();
             return timestamp >= startTimestamp && timestamp <= endTimestamp && node.has("commerciant");
-        }).collect(Collectors.toList());
-        if (tranzactions != null) {
-            for (ObjectNode tranzaction : tranzactions) {
+        }).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (oldValue, newValue) -> oldValue, LinkedHashMap::new));
 
-                if (bank.getMap().containsKey(tranzaction.get("timestamp").asInt()) && bank.getMap().get(tranzaction.get("timestamp").asInt()).equals(IBAN)) {
+        if (tranzactions != null) {
+            for (Map.Entry<ObjectNode, List<String>> entry : tranzactions.entrySet()) {
+                ObjectNode tranzaction = entry.getKey();
+                if (tranzactions.get(tranzaction).get(0).equals(IBAN)) {
                     tranzactionsFiltered.add(tranzaction);
                 }
             }
@@ -76,9 +78,51 @@ public class SpendingsReportVisitor {
     }
 
     public void visit(SavingsAccount account) {
-        List<ObjectNode> tranzactions = new ArrayList<>();
+        List<ObjectNode> tranzactionsFiltered = new ArrayList<>();
+
+        LinkedHashMap<ObjectNode, List<String>> tranzactions = user.getTranzactions().entrySet().stream().filter(entry -> {
+            ObjectNode node = entry.getKey();
+            int timestamp = node.get("timestamp").asInt();
+            return timestamp >= startTimestamp && timestamp <= endTimestamp && node.has("commerciant");
+        }).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (oldValue, newValue) -> oldValue, LinkedHashMap::new));
+
+        if (tranzactions != null) {
+            for (Map.Entry<ObjectNode, List<String>> entry : tranzactions.entrySet()) {
+                ObjectNode tranzaction = entry.getKey();
+                if (tranzactions.get(tranzaction).get(0).equals(IBAN)) {
+                    tranzactionsFiltered.add(tranzaction);
+                }
+            }
+        }
+
+        Map<String, Double> commerciantTotals = new LinkedHashMap<>();
+        if(tranzactionsFiltered.size() > 0) {
+            for (ObjectNode tranzaction : tranzactionsFiltered) {
+
+                String commerciant = tranzaction.get("commerciant").asText();
+                double amount = tranzaction.get("amount").asDouble();
+                commerciantTotals.put(commerciant, commerciantTotals.getOrDefault(commerciant, 0.0) + amount);
+
+            }
+        }
+
         List<ObjectNode> commerciants = new ArrayList<>();
-        addToOutput(output, mapper, tranzactions, account, commerciants);
+        for (Map.Entry<String, Double> entry : commerciantTotals.entrySet()) {
+            ObjectNode commerciantNode = mapper.createObjectNode();
+            commerciantNode.put("commerciant", entry.getKey());
+            commerciantNode.put("total", entry.getValue());
+            commerciants.add(commerciantNode);
+        }
+
+
+        commerciants.sort((a, b) -> a.get("commerciant").asText().compareTo(b.get("commerciant").asText()));
+
+
+        addToOutput(output, mapper, tranzactionsFiltered, account, commerciants);
+
+        // List<ObjectNode> tranzactions = new ArrayList<>();
+        // List<ObjectNode> commerciants = new ArrayList<>();
+        // addToOutput(output, mapper, tranzactions, account, commerciants); implementare veche
     }
 
     public void addToOutput(ArrayNode output, ObjectMapper mapper, List<ObjectNode> tranzactions, Account account, List<ObjectNode> commerciants) {

@@ -9,6 +9,8 @@ import org.poo.baseinput.User;
 import org.poo.cards.Card;
 import org.poo.fileio.CommandInput;
 
+import java.util.ArrayList;
+
 public class CheckCardStatus implements Command{
     private String cardNumber;
     private int timestamp;
@@ -26,12 +28,12 @@ public class CheckCardStatus implements Command{
         } else {
             User user = bank.getUserByIBAN(account.getIBAN());
             if (account.getBalance() < account.getMinBalance()) {
-                user.getTranzactions().add(cardStatusError("frozen", mapper));
+                user.getTranzactions().computeIfAbsent(cardStatusError("frozen", mapper), k -> new ArrayList<>()).add("");
             } else if (card.getStatus().equals("blocked")) {
-                user.getTranzactions().add(cardStatusError("blocked", mapper));
+                user.getTranzactions().computeIfAbsent(cardStatusError("blocked", mapper), k -> new ArrayList<>()).add("");
             } else if (account.getBalance() - account.getMinBalance() <= 30 &&
                     account.getBalance() - account.getMinBalance() >= 0) {
-                user.getTranzactions().add(cardStatusWarning(mapper));
+                user.getTranzactions().computeIfAbsent(cardStatusWarning(mapper), k -> new ArrayList<>()).add("");
             }
         }
     }

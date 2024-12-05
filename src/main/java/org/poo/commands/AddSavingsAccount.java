@@ -8,6 +8,8 @@ import org.poo.accounts.SavingsAccount;
 import org.poo.baseinput.User;
 import org.poo.fileio.CommandInput;
 
+import java.util.ArrayList;
+
 public class AddSavingsAccount implements Command{
     private String email;
     private String currency;
@@ -25,7 +27,7 @@ public class AddSavingsAccount implements Command{
             SavingsAccount savingsAccount = new SavingsAccount(currency, interestRate);
             User user = bank.getUserByEmail(email);
             user.getAccounts().add(savingsAccount);
-            user.getTranzactions().add(addToUsersTranzactions(mapper));
+            user.getTranzactions().computeIfAbsent(addToUsersTranzactions(mapper), k -> new ArrayList<>()).add("");
         } else {
             System.out.println("User Not found"); // de modificat daca nu e vreo problema
         }

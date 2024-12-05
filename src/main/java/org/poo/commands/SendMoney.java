@@ -8,6 +8,8 @@ import org.poo.accounts.Account;
 import org.poo.baseinput.User;
 import org.poo.fileio.CommandInput;
 
+import java.util.ArrayList;
+
 public class SendMoney implements Command{
     private double amount;
     private int timestamp;
@@ -30,12 +32,12 @@ public class SendMoney implements Command{
         if(accountSender == null || accountReceiver == null) {
             System.out.println("Account not found");
         } else if (accountSender.getBalance() < amount) {
-            bank.getUserByIBAN(accountSender.getIBAN()).getTranzactions().add(insufficientFunds(mapper));
+            bank.getUserByIBAN(accountSender.getIBAN()).getTranzactions().computeIfAbsent(insufficientFunds(mapper), k -> new ArrayList<>()).add(IBAN);
         } else {
-            userSender.getTranzactions().add(addToSendersTranzactions(mapper, accountSender, accountReceiver));
+            userSender.getTranzactions().computeIfAbsent(addToSendersTranzactions(mapper, accountSender, accountReceiver), k -> new ArrayList<>()).add(IBAN);
             User userReceiver = bank.getUserByAccount(accountReceiver);
 
-            userReceiver.getTranzactions().add(addToReceiversTranzactions(bank, mapper, accountSender, accountReceiver));
+            userReceiver.getTranzactions().computeIfAbsent(addToReceiversTranzactions(bank, mapper, accountSender, accountReceiver), k->new ArrayList<>()).add(accountReceiver.getIBAN());
 
             accountSender.setBalance(accountSender.getBalance() - amount);
             accountReceiver.setBalance(accountReceiver.getBalance() +
