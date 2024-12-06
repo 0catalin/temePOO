@@ -1,26 +1,25 @@
 package org.poo.commands;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
+
 import org.poo.accounts.Account;
 import org.poo.bankGraph.Bank;
 import org.poo.baseinput.User;
-import org.poo.cards.RegularCard;
 import org.poo.fileio.CommandInput;
 
-public class SetAlias implements Command{
-    private String IBAN;
+public final class SetAlias implements Command {
+    private String iban;
     private String email;
     private String alias;
 
-    public SetAlias(CommandInput commandInput) {
+    public SetAlias(final CommandInput commandInput) {
         email = commandInput.getEmail();
-        IBAN = commandInput.getAccount();
+        iban = commandInput.getAccount();
         alias = commandInput.getAlias();
     }
 
+    @Override
     public void execute() {
-        Account account = Bank.getInstance().getAccountByIBAN(IBAN);
+        Account account = Bank.getInstance().getAccountByIBAN(iban);
         User user = Bank.getInstance().getUserByEmail(email);
         if (account == null) {
          // don't have to do anything with exception

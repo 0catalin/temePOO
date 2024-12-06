@@ -16,14 +16,14 @@ import java.util.*;
 @Getter
 @Setter
 
-    public class InputParser {
+    public final class InputParser {
         private ArrayList<Command> commands;
         private ArrayList<Commerciant> commerciants;
         private Map<String, List<Edge>> graph;
         private ArrayList<User> users;
         private ArrayList<ExchangeRate> exchangeRatesList;
 
-        public InputParser(ObjectInput input) {
+        public InputParser(final ObjectInput input) {
             commands = new ArrayList<>();
             commerciants = new ArrayList<>();
             graph = new HashMap<>();
@@ -32,7 +32,7 @@ import java.util.*;
             for (UserInput userInput : input.getUsers()) {
                 users.add(new User(userInput));
             }
-            for(ExchangeInput exchangeInput : input.getExchangeRates()) {
+            for (ExchangeInput exchangeInput : input.getExchangeRates()) {
                 ExchangeRate exchangeRate = new ExchangeRate(exchangeInput);
                 exchangeRatesList.add(exchangeRate);
                 exchangeRatesList.add(new ExchangeRate(exchangeRate));

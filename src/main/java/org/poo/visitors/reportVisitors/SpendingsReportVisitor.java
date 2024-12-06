@@ -1,4 +1,4 @@
-package org.poo;
+package org.poo.visitors.reportVisitors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -7,28 +7,31 @@ import org.poo.accounts.Account;
 import org.poo.accounts.ClassicAccount;
 import org.poo.accounts.SavingsAccount;
 import org.poo.bankGraph.Bank;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class SpendingsReportVisitor {
-    private String IBAN;
+public final class SpendingsReportVisitor implements Visitor {
+    private String iban;
     private int timestamp;
     private int startTimestamp;
     private int endTimestamp;
 
-    public SpendingsReportVisitor(String IBAN, int timestamp, int startTimestamp, int endTimestamp) {
-        this.IBAN = IBAN;
+    public SpendingsReportVisitor(final String iban, final int timestamp,
+                                  final int startTimestamp, final int endTimestamp) {
+        this.iban = iban;
         this.timestamp = timestamp;
         this.startTimestamp = startTimestamp;
         this.endTimestamp = endTimestamp;
     }
 
-    public void visit(ClassicAccount account) {
+    public void visit(final ClassicAccount account) {
 
 
-        List<ObjectNode> tranzactions = Bank.getInstance().getAccountByIBAN(IBAN).getSpendingReports().stream().filter(node -> {
-            int timestamp = node.get("timestamp").asInt();
-            return timestamp >= startTimestamp && timestamp <= endTimestamp;
+        List<ObjectNode> tranzactions = Bank.getInstance().getAccountByIBAN(iban)
+                .getSpendingReports().stream().filter(node -> {
+            int timeStamp = node.get("timestamp").asInt();
+            return timeStamp >= startTimestamp && timeStamp <= endTimestamp;
         }).collect(Collectors.toList());
 
 
@@ -37,12 +40,13 @@ public class SpendingsReportVisitor {
 
 
         Map<String, Double> commerciantTotals = new LinkedHashMap<>();
-        if(tranzactions.size() > 0) {
+        if  (tranzactions.size() > 0) {
             for (ObjectNode tranzaction : tranzactions) {
 
                 String commerciant = tranzaction.get("commerciant").asText();
                 double amount = tranzaction.get("amount").asDouble();
-                commerciantTotals.put(commerciant, commerciantTotals.getOrDefault(commerciant, 0.0) + amount);
+                commerciantTotals.put(commerciant,
+                        commerciantTotals.getOrDefault(commerciant, 0.0) + amount);
 
             }
         }
@@ -58,33 +62,35 @@ public class SpendingsReportVisitor {
         }
 
 
-        commerciants.sort((a, b) -> a.get("commerciant").asText().compareTo(b.get("commerciant").asText()));
+        commerciants.sort((a, b) -> a.get("commerciant").asText()
+                .compareTo(b.get("commerciant").asText()));
 
 
         addToOutput(tranzactions, account, commerciants);
     }
 
-    public void visit(SavingsAccount account) {
+    public void visit(final SavingsAccount account) {
         Bank.getInstance().getOutput().add(spendingsReportOnSavingsAccountError());
     }
 
-    public void addToOutput(List<ObjectNode> tranzactions, Account account, List<ObjectNode> commerciants) {
+    private void addToOutput(final List<ObjectNode> tranzactions, final Account account,
+                             final List<ObjectNode> commerciants) {
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode node = mapper.createObjectNode();
         node.put("command", "spendingsReport");
         ObjectNode tranzaction = mapper.createObjectNode();
-        tranzaction.put("IBAN", IBAN);
+        tranzaction.put("IBAN", iban);
         tranzaction.put("balance", account.getBalance());
         tranzaction.put("currency", account.getCurrency());
         ArrayNode transactions = mapper.createArrayNode();
-        if(transactions != null) {
+        if (transactions != null) {
             for (ObjectNode tranzactionNode : tranzactions) {
                 transactions.add(tranzactionNode);
             }
         }
         tranzaction.set("transactions", transactions);
         ArrayNode commerciantsNode = mapper.createArrayNode();
-        if(commerciants != null) {
+        if (commerciants != null) {
             for (ObjectNode commerciantNode : commerciants) {
                 commerciantsNode.add(commerciantNode);
             }
@@ -95,7 +101,7 @@ public class SpendingsReportVisitor {
         Bank.getInstance().getOutput().add(node);
     }
 
-    public ObjectNode spendingsReportOnSavingsAccountError() {
+    private ObjectNode spendingsReportOnSavingsAccountError() {
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode node = mapper.createObjectNode();
         node.put("command", "spendingsReport");

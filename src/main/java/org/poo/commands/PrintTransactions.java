@@ -7,13 +7,11 @@ import org.poo.bankGraph.Bank;
 import org.poo.baseinput.User;
 import org.poo.fileio.CommandInput;
 
-import java.util.List;
-import java.util.Map;
 
-public class PrintTransactions implements Command{
+public final class PrintTransactions implements Command {
     private String email;
     private int timestamp;
-    public PrintTransactions(CommandInput commandInput) {
+    public PrintTransactions(final CommandInput commandInput) {
         email = commandInput.getEmail();
         timestamp = commandInput.getTimestamp();
     }

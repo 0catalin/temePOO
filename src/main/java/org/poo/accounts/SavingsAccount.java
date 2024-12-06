@@ -1,23 +1,21 @@
 package org.poo.accounts;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.poo.ReportVisitor;
-import org.poo.SpendingsReportVisitor;
+import org.poo.visitors.reportVisitors.Visitor;
 import org.poo.utils.Utils;
 
 import java.util.ArrayList;
 
 
 
-public class SavingsAccount extends Account{
+public final class SavingsAccount extends Account {
     private double interestRate;
-    public SavingsAccount(String currency, double interestRate) {
+    public SavingsAccount(final String currency, final double interestRate) {
         setCurrency(currency);
         this.interestRate = interestRate;
         setBalance(0);
         setCards(new ArrayList<>());
         setAlias("");
-        setIBAN(Utils.generateIBAN());
+        setIban(Utils.generateIBAN());
         setType("savings");
         setSpendingReports(new ArrayList<>());
         setReportsSavings(new ArrayList<>());
@@ -27,15 +25,11 @@ public class SavingsAccount extends Account{
     public double getInterestRate() {
         return interestRate;
     }
-    public void setInterestRate(double interestRate) {
+    public void setInterestRate(final double interestRate) {
         this.interestRate = interestRate;
     }
 
-    public void accept(SpendingsReportVisitor visitor) {
-        visitor.visit(this);
-    }
-
-    public void accept(ReportVisitor visitor) {
+    public void accept(final Visitor visitor) {
         visitor.visit(this);
     }
 

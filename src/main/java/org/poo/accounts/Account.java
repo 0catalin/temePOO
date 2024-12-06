@@ -2,11 +2,8 @@ package org.poo.accounts;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.Getter;
 import lombok.Setter;
-import org.poo.PayOnlineVisitor;
-import org.poo.ReportVisitor;
-import org.poo.SpendingsReportVisitor;
+import org.poo.visitors.reportVisitors.Visitor;
 import org.poo.cards.Card;
-import org.poo.commands.Report;
 
 import java.util.ArrayList;
 
@@ -18,7 +15,7 @@ public abstract class Account {
     private String currency;
     private double minBalance = 0;
     private String alias;
-    private String IBAN;
+    private String iban;
     private ArrayList<Card> cards;
     private double balance;
     private String type;
@@ -29,7 +26,7 @@ public abstract class Account {
     private static final int WARNING_LIMIT = 30;
 
 
-    public Card getCardByCardNumber(String cardNumber) {
+    public Card getCardByCardNumber(final String cardNumber) {
         for (Card card : cards) {
             if (card.getCardNumber().equals(cardNumber)) {
                 return card;
@@ -44,7 +41,6 @@ public abstract class Account {
     public boolean isInWarningRange() {
         return balance - minBalance <= WARNING_LIMIT;
     }
-    public abstract void accept(SpendingsReportVisitor visitor);
-    public abstract void accept(ReportVisitor visitor);
+    public abstract void accept(Visitor visitor);
 
 }

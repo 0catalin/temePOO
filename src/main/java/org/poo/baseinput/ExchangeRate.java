@@ -11,24 +11,25 @@ public class ExchangeRate {
     private String to;
     private double rate;
 
-    public ExchangeRate(ExchangeInput exchangeInput) {
+    public ExchangeRate(final ExchangeInput exchangeInput) {
         from = exchangeInput.getFrom();
         to = exchangeInput.getTo();
         rate = exchangeInput.getRate();
     }
 
-    public ExchangeRate(ExchangeRate exchangeRate) {
+    public ExchangeRate(final ExchangeRate exchangeRate) {
         from = exchangeRate.getTo();
         to = exchangeRate.getFrom();
         rate = 1 / exchangeRate.getRate();
     }
-    public ExchangeRate(String from, double rate, String to) {
+
+    public ExchangeRate(final String from, final double rate, final String to) {
         this.from = from;
         this.to = to;
         this.rate = rate;
     }
 
-    public ExchangeRate(ExchangeRate exchangeRate, ExchangeRate exchangeRate2) {
+    public ExchangeRate(final ExchangeRate exchangeRate, final ExchangeRate exchangeRate2) {
         this.from = exchangeRate.getFrom();
         this.to = exchangeRate2.getTo();
         this.rate = exchangeRate.getRate() * exchangeRate2.getRate();

@@ -1,7 +1,6 @@
 package org.poo.commands;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.poo.accounts.Account;
 import org.poo.bankGraph.Bank;
@@ -9,24 +8,24 @@ import org.poo.baseinput.User;
 import org.poo.cards.Card;
 import org.poo.fileio.CommandInput;
 
-import java.util.ArrayList;
 
-public class CheckCardStatus implements Command{
+public final class CheckCardStatus implements Command {
     private String cardNumber;
     private int timestamp;
 
-    public CheckCardStatus(CommandInput commandInput) {
+    public CheckCardStatus(final CommandInput commandInput) {
         timestamp = commandInput.getTimestamp();
         cardNumber = commandInput.getCardNumber();
     }
 
+    @Override
     public void execute() {
         Card card = Bank.getInstance().getCardByCardNumber(cardNumber);
         Account account = Bank.getInstance().getAccountByCardNumber(cardNumber);
         if (card == null) {
             cardNotFoundError();
         } else {
-            User user = Bank.getInstance().getUserByIBAN(account.getIBAN());
+            User user = Bank.getInstance().getUserByIBAN(account.getIban());
             if (account.getBalance() < account.getMinBalance()) {
                 user.getTranzactions().add(cardFrozenError());
             } else if (account.isInWarningRange()) {
@@ -59,7 +58,8 @@ public class CheckCardStatus implements Command{
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode node = mapper.createObjectNode();
         node.put("timestamp", timestamp);
-        node.put("description", "You have reached the minimum amount of funds, the card will be frozen");
+        node.put("description",
+                "You have reached the minimum amount of funds, the card will be frozen");
         return node;
     }
 }

@@ -1,30 +1,25 @@
-package org.poo;
+package org.poo.visitors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.poo.accounts.Account;
-import org.poo.accounts.ClassicAccount;
 import org.poo.bankGraph.Bank;
 import org.poo.baseinput.User;
 import org.poo.cards.Card;
 import org.poo.cards.OneTimeCard;
 import org.poo.cards.RegularCard;
-import org.poo.utils.Utils;
 
-import java.util.ArrayList;
-
-public class PayOnlineVisitor {
+public final class PayOnlineVisitor {
     private double amount;
     private int timestamp;
     private String commerciant;
     private Account account;
-    private final static String CARD_DESTROYED = "The card has been destroyed";
-    private final static String CARD_CREATED = "New card created";
+    private final String cardDestroyed = "The card has been destroyed";
+    private final String cardCreated = "New card created";
 
 
-    public PayOnlineVisitor(double amount, int timestamp,
-                            String commerciant, Account account) {
+    public PayOnlineVisitor(final double amount, final int timestamp,
+                            final String commerciant, final Account account) {
 
         this.amount = amount;
         this.timestamp = timestamp;
@@ -32,8 +27,8 @@ public class PayOnlineVisitor {
         this.account = account;
     }
 
-    public void visit(OneTimeCard card) {
-        User user = Bank.getInstance().getUserByIBAN(account.getIBAN());
+    public void visit(final OneTimeCard card) {
+        User user = Bank.getInstance().getUserByIBAN(account.getIban());
         if (account.getBalance() < amount) {
             user.getTranzactions().add(insufficientFunds());
             account.getReportsClassic().add(insufficientFunds());
@@ -48,18 +43,18 @@ public class PayOnlineVisitor {
             account.getReportsClassic().add(successfulPayment());
             account.getSpendingReports().add(successfulPayment());
 
-            user.getTranzactions().add(oneTimeCardCreatedOrDestroyed(card, CARD_DESTROYED));
-            account.getReportsClassic().add(oneTimeCardCreatedOrDestroyed(card, CARD_DESTROYED));
+            user.getTranzactions().add(oneTimeCardCreatedOrDestroyed(card, cardDestroyed));
+            account.getReportsClassic().add(oneTimeCardCreatedOrDestroyed(card, cardDestroyed));
 
             card.updateCardNumber();
 
-            user.getTranzactions().add(oneTimeCardCreatedOrDestroyed(card, CARD_CREATED));
-            account.getReportsClassic().add(oneTimeCardCreatedOrDestroyed(card, CARD_CREATED));
+            user.getTranzactions().add(oneTimeCardCreatedOrDestroyed(card, cardCreated));
+            account.getReportsClassic().add(oneTimeCardCreatedOrDestroyed(card, cardCreated));
         }
     }
 
-    public void visit(RegularCard card) {
-        User user = Bank.getInstance().getUserByIBAN(account.getIBAN());
+    public void visit(final RegularCard card) {
+        User user = Bank.getInstance().getUserByIBAN(account.getIban());
         if (account.getBalance() < amount) {
             user.getTranzactions().add(insufficientFunds());
             account.getReportsClassic().add(insufficientFunds());
@@ -79,7 +74,7 @@ public class PayOnlineVisitor {
         }
     }
 
-    public ObjectNode blockedOrFrozenError(String error) {
+    private ObjectNode blockedOrFrozenError(final String error) {
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode errorNode = mapper.createObjectNode();
         errorNode.put("timestamp", timestamp);
@@ -95,12 +90,12 @@ public class PayOnlineVisitor {
         return finalNode;
     }
 
-    private ObjectNode oneTimeCardCreatedOrDestroyed(Card card, String message) {
+    private ObjectNode oneTimeCardCreatedOrDestroyed(final Card card, final String message) {
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode finalNode = mapper.createObjectNode();
-        finalNode.put("account", account.getIBAN());
+        finalNode.put("account", account.getIban());
         finalNode.put("card", card.getCardNumber());
-        finalNode.put("cardHolder", Bank.getInstance().getUserByIBAN(account.getIBAN()).getEmail());
+        finalNode.put("cardHolder", Bank.getInstance().getUserByIBAN(account.getIban()).getEmail());
         finalNode.put("description", message);
         finalNode.put("timestamp", timestamp);
         return finalNode;

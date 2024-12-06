@@ -1,29 +1,30 @@
 package org.poo.commands;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.poo.accounts.Account;
 import org.poo.accounts.SavingsAccount;
 import org.poo.bankGraph.Bank;
 import org.poo.fileio.CommandInput;
 
-public class AddInterest implements Command{
-    private String IBAN;
+public final class AddInterest implements Command {
+    private String iban;
     private int timestamp;
 
-    public AddInterest(CommandInput commandInput) {
+    public AddInterest(final CommandInput commandInput) {
         timestamp = commandInput.getTimestamp();
-        IBAN = commandInput.getAccount();
+        iban = commandInput.getAccount();
     }
 
+    @Override
     public void execute() {
-        Account account = Bank.getInstance().getAccountByIBAN(IBAN);
-        if(account == null) {
+        Account account = Bank.getInstance().getAccountByIBAN(iban);
+        if (account == null) {
             // never happens
         }
-        if(account.getType().equals("savings")) {
-            account.setBalance(account.getBalance() * ( 1 + ((SavingsAccount)account).getInterestRate()));
+        if (account.getType().equals("savings")) {
+            account.setBalance(account.getBalance()
+                    * (1 + ((SavingsAccount) account).getInterestRate()));
         } else {
             Bank.getInstance().getOutput().add(savingsAccountError());
         }

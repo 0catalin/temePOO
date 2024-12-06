@@ -1,28 +1,26 @@
 package org.poo.commands;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.poo.bankGraph.Bank;
 import org.poo.accounts.Account;
 import org.poo.baseinput.User;
 import org.poo.fileio.CommandInput;
 
-import java.util.ArrayList;
-
-public class DeleteAccount implements Command{
-    private String IBAN;
+public final class DeleteAccount implements Command {
+    private String iban;
     private String email;
     private int timestamp;
 
-    public DeleteAccount(CommandInput commandInput) {
+    public DeleteAccount(final CommandInput commandInput) {
         timestamp = commandInput.getTimestamp();
         email = commandInput.getEmail();
-        IBAN = commandInput.getAccount();
+        iban = commandInput.getAccount();
     }
 
+    @Override
     public void execute() {
-        Account account = Bank.getInstance().getAccountByIBAN(IBAN);
+        Account account = Bank.getInstance().getAccountByIBAN(iban);
         User user = Bank.getInstance().getUserByEmail(email);
         if (account == null) {
             deleteFailure();
@@ -30,7 +28,8 @@ public class DeleteAccount implements Command{
             deleteFailure();
         } else if (!account.isEmpty()) {
             deleteFailure();
-            Bank.getInstance().getUserByIBAN(account.getIBAN()).getTranzactions().add(deleteFundsRemaining());
+            Bank.getInstance().getUserByIBAN(account.getIban())
+                    .getTranzactions().add(deleteFundsRemaining());
             account.getReportsClassic().add(deleteFundsRemaining());
         } else if (user.getAccounts().contains(account)) {
                 user.getAccounts().remove(account);
@@ -57,7 +56,8 @@ public class DeleteAccount implements Command{
         ObjectNode finalNode = mapper.createObjectNode();
         finalNode.put("command", "deleteAccount");
         ObjectNode outputNode = mapper.createObjectNode();
-        outputNode.put("error", "Account couldn't be deleted - see org.poo.transactions for details");
+        outputNode.put("error",
+                "Account couldn't be deleted - see org.poo.transactions for details");
         outputNode.put("timestamp", timestamp);
         finalNode.set("output", outputNode);
         finalNode.put("timestamp", timestamp);

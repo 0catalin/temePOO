@@ -1,23 +1,22 @@
 package org.poo.commands;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
+
 import org.poo.accounts.Account;
 import org.poo.bankGraph.Bank;
-import org.poo.cards.Card;
 import org.poo.fileio.CommandInput;
 
-public class SetMinimumBalance implements Command{
-    private String IBAN;
+public final class SetMinimumBalance implements Command {
+    private String iban;
     private double minBalance;
 
-    public SetMinimumBalance(CommandInput commandInput) {
-        IBAN = commandInput.getAccount();
+    public SetMinimumBalance(final CommandInput commandInput) {
+        iban = commandInput.getAccount();
         minBalance = commandInput.getAmount();
     }
 
+    @Override
     public void execute() {
-        Account account = Bank.getInstance().getAccountByIBAN(IBAN);
+        Account account = Bank.getInstance().getAccountByIBAN(iban);
         if (account != null) {
             account.setMinBalance(minBalance);
         } else {

@@ -5,11 +5,11 @@ import lombok.Getter;
 @Setter
 @Getter
 
-public class Edge {
-    String to;
-    double rate;
+public final class Edge {
+    private String to;
+    private double rate;
 
-    public Edge(String to, double rate) {
+    public Edge(final String to, final double rate) {
         this.to = to;
         this.rate = rate;
     }

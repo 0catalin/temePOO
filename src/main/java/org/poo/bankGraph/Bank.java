@@ -14,13 +14,11 @@ import java.util.*;
 
 @Getter
 @Setter
-public class Bank {
+public final class Bank {
     private ArrayList<Commerciant> commerciants;
     private Map<String, List<Edge>> exchangeRates;
     private ArrayList<User> users;
     private ArrayList<ExchangeRate> exchangeRatesList;
-    private Map<Integer, String> map = new HashMap<>();
-    private Map<Integer, String> map2 = new HashMap<>();
     private ArrayNode output;
     private static Bank instance = null;
     static {
@@ -31,16 +29,15 @@ public class Bank {
     }
     private Bank() { }
 
-    public void applyParams(InputParser parser, ArrayNode output) {
+    public void applyParams(final InputParser parser, final ArrayNode finalNode) {
         commerciants = parser.getCommerciants();
         exchangeRates = parser.getGraph();
         users = parser.getUsers();
         exchangeRatesList = parser.getExchangeRatesList();
-        map = new HashMap<>();
-        this.output = output;
+        output = finalNode;
     }
 
-    public User getUserByEmail(String email) {
+    public User getUserByEmail(final String email) {
         for (User user : users) {
             if (user.getEmail().equals(email)) {
                 return user;
@@ -48,13 +45,11 @@ public class Bank {
         }
         return null;
     }
-    public Map<Integer, String> getMap() {
-        return map;
-    }
-    public Account getAccountByIBAN (String iban) {
+
+    public Account getAccountByIBAN(final String iban) {
         for (User user : users) {
             for (Account account : user.getAccounts()) {
-                if (account.getIBAN().equals(iban)) {
+                if (account.getIban().equals(iban)) {
                     return account;
                 }
             }
@@ -62,10 +57,10 @@ public class Bank {
         return null;
     }
 
-    public User getUserByIBAN(String iban) {
+    public User getUserByIBAN(final String iban) {
         for (User user : users) {
             for (Account account : user.getAccounts()) {
-                if (account.getIBAN().equals(iban)) {
+                if (account.getIban().equals(iban)) {
                     return user;
                 }
             }
@@ -73,10 +68,11 @@ public class Bank {
         return null;
     }
 
-    public Account getAccountByIBANOrAlias (String ibanOrAlias) {
+    public Account getAccountByIBANOrAlias(final String ibanOrAlias) {
         for (User user : users) {
             for (Account account : user.getAccounts()) {
-                if (account.getIBAN().equals(ibanOrAlias) || account.getAlias().equals(ibanOrAlias)) {
+                if (account.getIban().equals(ibanOrAlias)
+                        || account.getAlias().equals(ibanOrAlias)) {
                     return account;
                 }
             }
@@ -84,7 +80,7 @@ public class Bank {
         return null;
     }
 
-    public Account getAccountByCardNumber(String cardNumber) {
+    public Account getAccountByCardNumber(final String cardNumber) {
         for (User user : users) {
             for (Account account : user.getAccounts()) {
                 for (Card card : account.getCards()) {
@@ -97,7 +93,7 @@ public class Bank {
         return null;
     }
 
-    public Card getCardByCardNumber(String cardNumber) {
+    public Card getCardByCardNumber(final String cardNumber) {
         for (User user : users) {
             for (Account account : user.getAccounts()) {
                 for (Card card : account.getCards()) {
@@ -110,7 +106,7 @@ public class Bank {
         return null;
     }
 
-    public User getUserByAccount (Account account) {
+    public User getUserByAccount(final Account account) {
         for (User user : users) {
             if (user.getAccounts().contains(account)) {
                 return user;
@@ -120,8 +116,8 @@ public class Bank {
     }
 
 
-    public double findExchangeRate(String from, String to) {
-        for(ExchangeRate exchangeRate : exchangeRatesList) {
+    public double findExchangeRate(final String from, final String to) {
+        for (ExchangeRate exchangeRate : exchangeRatesList) {
             if (exchangeRate.getFrom().equals(from) && exchangeRate.getTo().equals(to)) {
                 return exchangeRate.getRate();
             }

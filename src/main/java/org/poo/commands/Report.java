@@ -3,34 +3,32 @@ package org.poo.commands;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.poo.ReportVisitor;
+import org.poo.visitors.reportVisitors.ReportVisitor;
+import org.poo.visitors.reportVisitors.Visitor;
 import org.poo.accounts.Account;
 import org.poo.bankGraph.Bank;
 import org.poo.baseinput.User;
 import org.poo.fileio.CommandInput;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
-public class Report implements Command{
+public final class Report implements Command {
     private int startTimestamp;
     private int endTimestamp;
-    private String IBAN;
+    private String iban;
     private int timestamp;
 
-    public Report(CommandInput commandInput) {
-        IBAN = commandInput.getAccount();
+    public Report(final CommandInput commandInput) {
+        iban = commandInput.getAccount();
         endTimestamp = commandInput.getEndTimestamp();
         startTimestamp = commandInput.getStartTimestamp();
         timestamp = commandInput.getTimestamp();
     }
 
+    @Override
     public void execute() {
-        Account account = Bank.getInstance().getAccountByIBAN(IBAN);
-        User user = Bank.getInstance().getUserByIBAN(IBAN);
-        if(user != null) {
-            ReportVisitor visitor = new ReportVisitor(startTimestamp, endTimestamp, timestamp, IBAN);
+        Account account = Bank.getInstance().getAccountByIBAN(iban);
+        User user = Bank.getInstance().getUserByIBAN(iban);
+        if (user != null) {
+            Visitor visitor = new ReportVisitor(startTimestamp, endTimestamp, timestamp, iban);
             account.accept(visitor);
         } else {
             userNotFound(Bank.getInstance().getOutput());
@@ -38,7 +36,7 @@ public class Report implements Command{
     }
 
 
-    private void userNotFound(ArrayNode output) {
+    private void userNotFound(final ArrayNode output) {
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode node = mapper.createObjectNode();
         node.put("command", "report");

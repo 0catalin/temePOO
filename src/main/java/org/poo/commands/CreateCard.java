@@ -1,7 +1,6 @@
 package org.poo.commands;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.poo.bankGraph.Bank;
 import org.poo.accounts.Account;
@@ -10,21 +9,22 @@ import org.poo.cards.Card;
 import org.poo.cards.RegularCard;
 import org.poo.fileio.CommandInput;
 
-import java.util.ArrayList;
 
-public class CreateCard implements Command{
-    private String IBAN;
+
+public final class CreateCard implements Command {
+    private String iban;
     private String email;
     private int timestamp;
 
-    public CreateCard(CommandInput commandInput) {
+    public CreateCard(final CommandInput commandInput) {
         timestamp = commandInput.getTimestamp();
         email = commandInput.getEmail();
-        IBAN = commandInput.getAccount();
+        iban = commandInput.getAccount();
     }
 
+    @Override
     public void execute() {
-        Account account = Bank.getInstance().getAccountByIBAN(IBAN);
+        Account account = Bank.getInstance().getAccountByIBAN(iban);
         User user = Bank.getInstance().getUserByEmail(email);
         if (account == null) {
             // never happening
@@ -35,22 +35,23 @@ public class CreateCard implements Command{
                 Card card = new RegularCard();
                 account.getCards().add(card);
                 user.getTranzactions().add(addToUsersTranzactions(card));
-                Bank.getInstance().getAccountByIBAN(IBAN).getReportsClassic().add(addToUsersTranzactions(card));
+                Bank.getInstance().getAccountByIBAN(iban)
+                        .getReportsClassic().add(addToUsersTranzactions(card));
             } else {
-                System.out.println("Account does not belong to the user");
+                // no need to take action
             }
         }
 
     }
 
-    private ObjectNode addToUsersTranzactions(Card card) {
+    private ObjectNode addToUsersTranzactions(final Card card) {
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode output = mapper.createObjectNode();
         output.put("timestamp", timestamp);
         output.put("description", "New card created");
         output.put("card", card.getCardNumber());
         output.put("cardHolder", email);
-        output.put("account", IBAN);
+        output.put("account", iban);
 
         return output;
     }

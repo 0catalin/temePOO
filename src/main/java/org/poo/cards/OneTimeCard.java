@@ -1,15 +1,15 @@
 package org.poo.cards;
 
-import org.poo.PayOnlineVisitor;
+import org.poo.visitors.PayOnlineVisitor;
 import org.poo.utils.Utils;
 
-public class OneTimeCard extends Card{
+public final class OneTimeCard extends Card {
     public OneTimeCard() {
         setStatus("active");
         setCardNumber(Utils.generateCardNumber());
     }
 
-    public void accept(PayOnlineVisitor visitor) {
+    public void accept(final PayOnlineVisitor visitor) {
         visitor.visit(this);
     }
 }

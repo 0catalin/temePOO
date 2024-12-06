@@ -1,23 +1,22 @@
 package org.poo.commands;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import org.poo.bankGraph.Bank;
 import org.poo.accounts.Account;
 import org.poo.fileio.CommandInput;
 
-public class AddFunds implements Command {
-    private String IBAN;
+public final class AddFunds implements Command {
+    private String iban;
     private double amount;
 
-    public AddFunds(CommandInput commandInput) {
+    public AddFunds(final CommandInput commandInput) {
         amount = commandInput.getAmount();
-        IBAN = commandInput.getAccount();
+        iban = commandInput.getAccount();
     }
 
+    @Override
     public void execute() {
-        Account account = Bank.getInstance().getAccountByIBAN(IBAN);
-        if(account == null) {
+        Account account = Bank.getInstance().getAccountByIBAN(iban);
+        if (account == null) {
             // never happens
         } else {
             account.setBalance(account.getBalance() + amount);

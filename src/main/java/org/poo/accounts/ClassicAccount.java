@@ -1,9 +1,7 @@
 package org.poo.accounts;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.Getter;
 import lombok.Setter;
-import org.poo.ReportVisitor;
-import org.poo.SpendingsReportVisitor;
+import org.poo.visitors.reportVisitors.Visitor;
 import org.poo.utils.Utils;
 
 import java.util.ArrayList;
@@ -11,23 +9,20 @@ import java.util.ArrayList;
 @Getter
 @Setter
 
-public class ClassicAccount extends Account{
-    public ClassicAccount(String currency) {
+public final class ClassicAccount extends Account {
+    public ClassicAccount(final String currency) {
         setCurrency(currency);
         setBalance(0);
         setCards(new ArrayList<>());
         setAlias("");
-        setIBAN(Utils.generateIBAN());
+        setIban(Utils.generateIBAN());
         setType("classic");
         setSpendingReports(new ArrayList<>());
         setReportsSavings(new ArrayList<>());
         setReportsClassic(new ArrayList<>());
+    }
+    public void accept(final Visitor visitor) {
+        visitor.visit(this);
+    }
 
-    }
-    public void accept(SpendingsReportVisitor visitor) {
-        visitor.visit(this);
-    }
-    public void accept(ReportVisitor visitor) {
-        visitor.visit(this);
-    }
 }

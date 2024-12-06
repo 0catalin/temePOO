@@ -1,4 +1,4 @@
-package org.poo;
+package org.poo.visitors.reportVisitors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -7,47 +7,51 @@ import org.poo.accounts.Account;
 import org.poo.accounts.ClassicAccount;
 import org.poo.accounts.SavingsAccount;
 import org.poo.bankGraph.Bank;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class ReportVisitor {
+public final class ReportVisitor implements Visitor {
 
     private int startTimestamp;
     private int endTimestamp;
     private int timestamp;
-    private String IBAN;
-    public ReportVisitor(int startTimestamp, int endTimestamp, int timestamp, String IBAN) {
+    private String iban;
+    public ReportVisitor(final int startTimestamp, final int endTimestamp,
+                         final int timestamp, final String iban) {
 
         this.startTimestamp = startTimestamp;
         this.endTimestamp = endTimestamp;
         this.timestamp = timestamp;
-        this.IBAN = IBAN;
+        this.iban = iban;
     }
 
-    public void visit(ClassicAccount account) {
-        List<ObjectNode> tranzactions = Bank.getInstance().getAccountByIBAN(IBAN).getReportsClassic().stream().filter(node -> {
-            int timestamp = node.get("timestamp").asInt();
-            return timestamp >= startTimestamp && timestamp <= endTimestamp;
+    public void visit(final ClassicAccount account) {
+        List<ObjectNode> tranzactions = Bank.getInstance().
+                getAccountByIBAN(iban).getReportsClassic().stream().filter(node -> {
+            int timeStamp = node.get("timestamp").asInt();
+            return timeStamp >= startTimestamp && timeStamp <= endTimestamp;
         }).collect(Collectors.toList());
         addToOutput(tranzactions, account);
     }
 
 
-    public void visit(SavingsAccount account) {
-        List<ObjectNode> tranzactions = Bank.getInstance().getAccountByIBAN(IBAN).getReportsSavings().stream().filter(node -> {
-            int timestamp = node.get("timestamp").asInt();
-            return timestamp >= startTimestamp && timestamp <= endTimestamp;
+    public void visit(final SavingsAccount account) {
+        List<ObjectNode> tranzactions = Bank.getInstance()
+                .getAccountByIBAN(iban).getReportsSavings().stream().filter(node -> {
+            int timeStamp = node.get("timestamp").asInt();
+            return timeStamp >= startTimestamp && timeStamp <= endTimestamp;
         }).collect(Collectors.toList());
 
         addToOutput(tranzactions, account);
     }
 
-    private void addToOutput(List<ObjectNode> tranzactions, Account account) {
+    private void addToOutput(final List<ObjectNode> tranzactions, final Account account) {
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode node = mapper.createObjectNode();
         node.put("command", "report");
         ObjectNode tranzaction = mapper.createObjectNode();
-        tranzaction.put("IBAN", IBAN);
+        tranzaction.put("IBAN", iban);
         tranzaction.put("balance", account.getBalance());
         tranzaction.put("currency", account.getCurrency());
         ArrayNode transactions = mapper.createArrayNode();

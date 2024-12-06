@@ -9,44 +9,80 @@ import org.poo.baseinput.User;
 import org.poo.cards.Card;
 import org.poo.fileio.CommandInput;
 
-public class PrintUsers implements Command{
+public final class PrintUsers implements Command {
     private int timestamp;
-    public PrintUsers(CommandInput input) {
+    public PrintUsers(final CommandInput input) {
         timestamp = input.getTimestamp();
     }
+
     @Override
     public void execute() {
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode commandObject = mapper.createObjectNode();
         commandObject.put("command", "printUsers");
-        ArrayNode outputArray = mapper.createArrayNode();
-        for (User user : Bank.getInstance().getUsers()) {
-            ObjectNode userObject = mapper.createObjectNode();
-            userObject.put("firstName", user.getFirstName());
-            userObject.put("lastName", user.getLastName());
-            userObject.put("email", user.getEmail());
-            ArrayNode accountsArray = mapper.createArrayNode();
-            for (Account account : user.getAccounts()) {
-                ObjectNode accountObject = mapper.createObjectNode();
-                accountObject.put("IBAN", account.getIBAN());
-                accountObject.put("balance", account.getBalance());
-                accountObject.put("currency", account.getCurrency());
-                accountObject.put("type", account.getType());
-                ArrayNode cardsArray = mapper.createArrayNode();
-                for (Card card : account.getCards()) {
-                    ObjectNode cardObject = mapper.createObjectNode();
-                    cardObject.put("cardNumber", card.getCardNumber());
-                    cardObject.put("status", card.getStatus());
-                    cardsArray.add(cardObject);
-                }
-                accountObject.set("cards", cardsArray);
-                accountsArray.add(accountObject);
-            }
-            userObject.set("accounts", accountsArray);
-            outputArray.add(userObject);
-        }
+        ArrayNode outputArray = makeUsersArray();
         commandObject.set("output", outputArray);
         commandObject.put("timestamp", timestamp);
+
         Bank.getInstance().getOutput().add(commandObject);
     }
+
+
+    private ArrayNode makeUsersArray() {
+        ObjectMapper mapper = new ObjectMapper();
+        ArrayNode usersArray = mapper.createArrayNode();
+        for (User user : Bank.getInstance().getUsers()) {
+            usersArray.add(convertUserToJson(user));
+        }
+        return usersArray;
+    }
+
+
+    private ObjectNode convertUserToJson(final User user) {
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode userObject = mapper.createObjectNode();
+        userObject.put("firstName", user.getFirstName());
+        userObject.put("lastName", user.getLastName());
+        userObject.put("email", user.getEmail());
+        userObject.set("accounts", makeAccountsArray(user));
+        return userObject;
+    }
+
+    private ArrayNode makeAccountsArray(final User user) {
+        ObjectMapper mapper = new ObjectMapper();
+        ArrayNode accountsArray = mapper.createArrayNode();
+        for (Account account : user.getAccounts()) {
+            accountsArray.add(convertAccountToJson(account));
+        }
+        return accountsArray;
+    }
+
+    private ObjectNode convertAccountToJson(final Account account) {
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode accountObject = mapper.createObjectNode();
+        accountObject.put("IBAN", account.getIban());
+        accountObject.put("balance", account.getBalance());
+        accountObject.put("currency", account.getCurrency());
+        accountObject.put("type", account.getType());
+        accountObject.set("cards", makeCardsArray(account));
+        return accountObject;
+    }
+
+    private ArrayNode makeCardsArray(final Account account) {
+        ObjectMapper mapper = new ObjectMapper();
+        ArrayNode cardsArray = mapper.createArrayNode();
+        for (Card card : account.getCards()) {
+            cardsArray.add(convertCardToJson(card));
+        }
+        return cardsArray;
+    }
+
+    private ObjectNode convertCardToJson(final Card card) {
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode cardObject = mapper.createObjectNode();
+        cardObject.put("cardNumber", card.getCardNumber());
+        cardObject.put("status", card.getStatus());
+        return cardObject;
+    }
 }
+
