@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.poo.accounts.Account;
 import org.poo.accounts.ClassicAccount;
 import org.poo.bankGraph.Bank;
+import org.poo.baseinput.User;
 import org.poo.cards.Card;
 import org.poo.cards.OneTimeCard;
 import org.poo.cards.RegularCard;
@@ -16,121 +17,97 @@ import java.util.ArrayList;
 public class PayOnlineVisitor {
     private double amount;
     private int timestamp;
-    private String description;
     private String commerciant;
-    private ObjectMapper mapper;
-    private ArrayNode output;
     private Account account;
-    private Bank bank;
+    private final static String CARD_DESTROYED = "The card has been destroyed";
+    private final static String CARD_CREATED = "New card created";
 
-    public PayOnlineVisitor(double amount, int timestamp, String description,
-                            String commerciant, ObjectMapper mapper, ArrayNode output, Account account, Bank bank) {
+
+    public PayOnlineVisitor(double amount, int timestamp,
+                            String commerciant, Account account) {
 
         this.amount = amount;
         this.timestamp = timestamp;
-        this.description = description;
         this.commerciant = commerciant;
-        this.mapper = mapper;
-        this.output = output;
         this.account = account;
-        this.bank = bank;
     }
 
-    public boolean visit(OneTimeCard card) {
+    public void visit(OneTimeCard card) {
+        User user = Bank.getInstance().getUserByIBAN(account.getIBAN());
         if (account.getBalance() < amount) {
-            bank.getMap().put(timestamp, account.getIBAN());
-            //bank.getUserByIBAN(account.getIBAN()).getTranzactions().computeIfAbsent(insufficientFunds(), k -> new ArrayList<>()).add(account.getIBAN());
-            bank.getUserByIBAN(account.getIBAN()).getTranzactions().add(insufficientFunds());
-            bank.getAccountByIBAN(account.getIBAN()).getReportsClassic().add(insufficientFunds());
-            return false;
+            user.getTranzactions().add(insufficientFunds());
+            account.getReportsClassic().add(insufficientFunds());
         } else if (account.getBalance() - amount < account.getMinBalance()) {
-            bank.getMap().put(timestamp, account.getIBAN());
-            //bank.getUserByIBAN(account.getIBAN()).getTranzactions().computeIfAbsent(insufficientFunds(), k -> new ArrayList<>()).add(account.getIBAN());
-            bank.getUserByIBAN(account.getIBAN()).getTranzactions().add(insufficientFunds());
-            bank.getAccountByIBAN(account.getIBAN()).getReportsClassic().add(insufficientFunds());
+            user.getTranzactions().add(insufficientFunds());
+            account.getReportsClassic().add(insufficientFunds());
             card.setStatus("frozen");
-            return false;
         } else {
             account.setBalance(account.getBalance() - amount);
-            //bank.getUserByIBAN(account.getIBAN()).getTranzactions().computeIfAbsent(successfulPayment(output, mapper), k -> new ArrayList<>()).add(account.getIBAN());
-            bank.getUserByIBAN(account.getIBAN()).getTranzactions().add(successfulPayment(output, mapper));
-            bank.getAccountByIBAN(account.getIBAN()).getReportsClassic().add(successfulPayment(output, mapper));
-            bank.getAccountByIBAN(account.getIBAN()).getSpendingReports().add(successfulPayment(output, mapper));
-            //bank.getUserByIBAN(account.getIBAN()).getTranzactions().computeIfAbsent(oneTimeCardDestroyed(card), k -> new ArrayList<>()).add(account.getIBAN());
-            bank.getUserByIBAN(account.getIBAN()).getTranzactions().add(oneTimeCardDestroyed(card));
-            bank.getAccountByIBAN(account.getIBAN()).getReportsClassic().add(oneTimeCardDestroyed(card));
-            card.setCardNumber(Utils.generateCardNumber());
-            //bank.getUserByIBAN(account.getIBAN()).getTranzactions().computeIfAbsent(oneTimeCardCreated(card), k -> new ArrayList<>()).add(account.getIBAN());
-            bank.getUserByIBAN(account.getIBAN()).getTranzactions().add(oneTimeCardCreated(card));
-            bank.getAccountByIBAN(account.getIBAN()).getReportsClassic().add(oneTimeCardCreated(card));
-            return true;
+
+            user.getTranzactions().add(successfulPayment());
+            account.getReportsClassic().add(successfulPayment());
+            account.getSpendingReports().add(successfulPayment());
+
+            user.getTranzactions().add(oneTimeCardCreatedOrDestroyed(card, CARD_DESTROYED));
+            account.getReportsClassic().add(oneTimeCardCreatedOrDestroyed(card, CARD_DESTROYED));
+
+            card.updateCardNumber();
+
+            user.getTranzactions().add(oneTimeCardCreatedOrDestroyed(card, CARD_CREATED));
+            account.getReportsClassic().add(oneTimeCardCreatedOrDestroyed(card, CARD_CREATED));
         }
     }
 
-    public boolean visit(RegularCard card) {
+    public void visit(RegularCard card) {
+        User user = Bank.getInstance().getUserByIBAN(account.getIBAN());
         if (account.getBalance() < amount) {
-            bank.getMap().put(timestamp, account.getIBAN());
-            //bank.getUserByIBAN(account.getIBAN()).getTranzactions().computeIfAbsent(insufficientFunds(), k -> new ArrayList<>()).add(account.getIBAN());
-            bank.getUserByIBAN(account.getIBAN()).getTranzactions().add(insufficientFunds());
-            bank.getAccountByIBAN(account.getIBAN()).getReportsClassic().add(insufficientFunds());
-            return false;
+            user.getTranzactions().add(insufficientFunds());
+            account.getReportsClassic().add(insufficientFunds());
         } else if (card.getStatus().equals("frozen")) {
-            bank.getMap().put(timestamp, account.getIBAN());
-            //bank.getUserByIBAN(account.getIBAN()).getTranzactions().computeIfAbsent(blockedOrFrozenError("frozen"), k -> new ArrayList<>()).add(account.getIBAN());
-            bank.getUserByIBAN(account.getIBAN()).getTranzactions().add(blockedOrFrozenError("frozen"));
-            bank.getAccountByIBAN(account.getIBAN()).getReportsClassic().add(blockedOrFrozenError("frozen"));
-            return false;
+            user.getTranzactions().add(blockedOrFrozenError("frozen"));
+            account.getReportsClassic().add(blockedOrFrozenError("frozen"));
         } else if (account.getBalance() - amount < account.getMinBalance()) {
-            bank.getMap().put(timestamp, account.getIBAN());
-            //bank.getUserByIBAN(account.getIBAN()).getTranzactions().computeIfAbsent(blockedOrFrozenError("frozen"), k -> new ArrayList<>()).add(account.getIBAN());
-            bank.getUserByIBAN(account.getIBAN()).getTranzactions().add(blockedOrFrozenError("frozen"));
-            bank.getAccountByIBAN(account.getIBAN()).getReportsClassic().add(blockedOrFrozenError("frozen"));
+            user.getTranzactions().add(blockedOrFrozenError("frozen"));
+            account.getReportsClassic().add(blockedOrFrozenError("frozen"));
             card.setStatus("frozen");
-            return false;
         } else {
             account.setBalance(account.getBalance() - amount);
-            //bank.getUserByIBAN(account.getIBAN()).getTranzactions().computeIfAbsent(successfulPayment(output, mapper), k -> new ArrayList<>()).add(account.getIBAN());
-            bank.getUserByIBAN(account.getIBAN()).getTranzactions().add(successfulPayment(output, mapper));
-            bank.getAccountByIBAN(account.getIBAN()).getReportsClassic().add(successfulPayment(output, mapper));
-            bank.getAccountByIBAN(account.getIBAN()).getSpendingReports().add(successfulPayment(output, mapper));
-            return true;
+
+            user.getTranzactions().add(successfulPayment());
+            account.getReportsClassic().add(successfulPayment());
+            account.getSpendingReports().add(successfulPayment());
         }
     }
 
     public ObjectNode blockedOrFrozenError(String error) {
+        ObjectMapper mapper = new ObjectMapper();
         ObjectNode errorNode = mapper.createObjectNode();
         errorNode.put("timestamp", timestamp);
         errorNode.put("description", "The card is " + error);
         return errorNode;
     }
+
     private ObjectNode insufficientFunds() {
+        ObjectMapper mapper = new ObjectMapper();
         ObjectNode finalNode = mapper.createObjectNode();
         finalNode.put("timestamp", timestamp);
         finalNode.put("description", "Insufficient funds");
         return finalNode;
     }
 
-    private ObjectNode oneTimeCardDestroyed(Card card) {
+    private ObjectNode oneTimeCardCreatedOrDestroyed(Card card, String message) {
+        ObjectMapper mapper = new ObjectMapper();
         ObjectNode finalNode = mapper.createObjectNode();
         finalNode.put("account", account.getIBAN());
         finalNode.put("card", card.getCardNumber());
-        finalNode.put("cardHolder", bank.getUserByIBAN(account.getIBAN()).getEmail());
-        finalNode.put("description", "The card has been destroyed");
+        finalNode.put("cardHolder", Bank.getInstance().getUserByIBAN(account.getIBAN()).getEmail());
+        finalNode.put("description", message);
         finalNode.put("timestamp", timestamp);
         return finalNode;
     }
 
-    private ObjectNode oneTimeCardCreated(Card card) {
-        ObjectNode finalNode = mapper.createObjectNode();
-        finalNode.put("account", account.getIBAN());
-        finalNode.put("card", card.getCardNumber());
-        finalNode.put("cardHolder", bank.getUserByIBAN(account.getIBAN()).getEmail());
-        finalNode.put("description", "New card created");
-        finalNode.put("timestamp", timestamp);
-        return finalNode;
-    }
-
-    private ObjectNode successfulPayment(ArrayNode output, ObjectMapper mapper) {
+    private ObjectNode successfulPayment() {
+        ObjectMapper mapper = new ObjectMapper();
         ObjectNode finalNode = mapper.createObjectNode();
         finalNode.put("timestamp", timestamp);
         finalNode.put("description", "Card payment");

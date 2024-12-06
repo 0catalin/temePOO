@@ -26,19 +26,20 @@ public class Report implements Command{
         timestamp = commandInput.getTimestamp();
     }
 
-    public void execute(Bank bank, ArrayNode output, ObjectMapper mapper) {
-        Account account = bank.getAccountByIBAN(IBAN);
-        User user = bank.getUserByIBAN(IBAN);
+    public void execute() {
+        Account account = Bank.getInstance().getAccountByIBAN(IBAN);
+        User user = Bank.getInstance().getUserByIBAN(IBAN);
         if(user != null) {
-            ReportVisitor visitor = new ReportVisitor(user, mapper, startTimestamp, endTimestamp, timestamp, output, IBAN, bank);
+            ReportVisitor visitor = new ReportVisitor(startTimestamp, endTimestamp, timestamp, IBAN);
             account.accept(visitor);
         } else {
-            userNotFound(output, mapper);
+            userNotFound(Bank.getInstance().getOutput());
         }
     }
 
 
-    private void userNotFound(ArrayNode output, ObjectMapper mapper) {
+    private void userNotFound(ArrayNode output) {
+        ObjectMapper mapper = new ObjectMapper();
         ObjectNode node = mapper.createObjectNode();
         node.put("command", "report");
         ObjectNode outputNode = mapper.createObjectNode();

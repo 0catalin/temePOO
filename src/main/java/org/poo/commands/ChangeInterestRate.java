@@ -22,24 +22,24 @@ public class ChangeInterestRate implements Command{
         interestRate = commandInput.getInterestRate();
     }
 
-    public void execute(Bank bank, ArrayNode output, ObjectMapper mapper) {
-        Account account = bank.getAccountByIBAN(IBAN);
-        if(account == null) {
-            System.out.println("Account not found");
+    public void execute() {
+        Account account = Bank.getInstance().getAccountByIBAN(IBAN);
+        if (account == null) {
+            // case never happening
         }
          else if(account.getType().equals("savings")) {
             SavingsAccount savingsAccount = (SavingsAccount) account;
             savingsAccount.setInterestRate(interestRate);
-            //bank.getUserByIBAN(IBAN).getTranzactions().computeIfAbsent(successSet(mapper), k -> new ArrayList<>()).add(IBAN);
-            bank.getUserByIBAN(IBAN).getTranzactions().add(successSet(mapper));
-            bank.getAccountByIBAN(IBAN).getReportsSavings().add(successSet(mapper));
+            Bank.getInstance().getUserByIBAN(IBAN).getTranzactions().add(successSet());
+            Bank.getInstance().getAccountByIBAN(IBAN).getReportsSavings().add(successSet());
         } else {
-            output.add(savingsAccountError(mapper));
+            Bank.getInstance().getOutput().add(savingsAccountError());
         }
 
     }
 
-    private ObjectNode savingsAccountError(ObjectMapper mapper) {
+    private ObjectNode savingsAccountError() {
+        ObjectMapper mapper = new ObjectMapper();
         ObjectNode node = mapper.createObjectNode();
         ObjectNode outputNode = mapper.createObjectNode();
         outputNode.put("description", "This is not a savings account");
@@ -50,7 +50,8 @@ public class ChangeInterestRate implements Command{
         return node;
     }
 
-    private ObjectNode successSet(ObjectMapper mapper) {
+    private ObjectNode successSet() {
+        ObjectMapper mapper = new ObjectMapper();
         ObjectNode node = mapper.createObjectNode();
         node.put("description", "Interest rate of the account changed to " + interestRate);
         node.put("timestamp", timestamp);

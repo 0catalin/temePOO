@@ -23,20 +23,19 @@ public class CreateCard implements Command{
         IBAN = commandInput.getAccount();
     }
 
-    public void execute(Bank bank, ArrayNode output, ObjectMapper mapper) {
-        Account account = bank.getAccountByIBAN(IBAN);
-        User user = bank.getUserByEmail(email);
+    public void execute() {
+        Account account = Bank.getInstance().getAccountByIBAN(IBAN);
+        User user = Bank.getInstance().getUserByEmail(email);
         if (account == null) {
-            System.out.println("Account not found");
+            // never happening
         } else if (user == null) {
-            System.out.println("User not found");
+            System.out.println("User not found -- l");
         } else {
             if (user.getAccounts().contains(account)) {
                 Card card = new RegularCard();
                 account.getCards().add(card);
-                //user.getTranzactions().computeIfAbsent(addToUsersTranzactions(mapper, card), k -> new ArrayList<>()).add(IBAN);
-                user.getTranzactions().add(addToUsersTranzactions(mapper, card));
-                bank.getAccountByIBAN(IBAN).getReportsClassic().add(addToUsersTranzactions(mapper, card));
+                user.getTranzactions().add(addToUsersTranzactions(card));
+                Bank.getInstance().getAccountByIBAN(IBAN).getReportsClassic().add(addToUsersTranzactions(card));
             } else {
                 System.out.println("Account does not belong to the user");
             }
@@ -44,7 +43,8 @@ public class CreateCard implements Command{
 
     }
 
-    private ObjectNode addToUsersTranzactions(ObjectMapper mapper, Card card) {
+    private ObjectNode addToUsersTranzactions(Card card) {
+        ObjectMapper mapper = new ObjectMapper();
         ObjectNode output = mapper.createObjectNode();
         output.put("timestamp", timestamp);
         output.put("description", "New card created");

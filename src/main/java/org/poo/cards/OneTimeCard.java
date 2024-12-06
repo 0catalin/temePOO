@@ -9,7 +9,7 @@ public class OneTimeCard extends Card{
         setCardNumber(Utils.generateCardNumber());
     }
 
-    public boolean accept(PayOnlineVisitor visitor) {
-        return visitor.visit(this);
+    public void accept(PayOnlineVisitor visitor) {
+        visitor.visit(this);
     }
 }

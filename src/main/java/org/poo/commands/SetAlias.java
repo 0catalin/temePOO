@@ -19,19 +19,16 @@ public class SetAlias implements Command{
         alias = commandInput.getAlias();
     }
 
-    public void execute(Bank bank, ArrayNode output, ObjectMapper mapper) {
-        Account account = bank.getAccountByIBAN(IBAN);
-        User user = bank.getUserByEmail(email);
+    public void execute() {
+        Account account = Bank.getInstance().getAccountByIBAN(IBAN);
+        User user = Bank.getInstance().getUserByEmail(email);
         if (account == null) {
-            System.out.println("Account not found");
+         // don't have to do anything with exception
         } else if (user == null) {
-            System.out.println("User not found");
-        } else {
-            if (user.getAccounts().contains(account)) {
-                account.setAlias(alias);
-            } else {
-                System.out.println("Account does not belong to the user");
-            }
+            // don't have to do anything with exception
+        } else if (user.getAccounts().contains(account)) {
+            account.setAlias(alias);
         }
     }
+
 }

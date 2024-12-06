@@ -28,41 +28,20 @@ public class SpendingsReport implements Command{
         timestamp = commandInput.getTimestamp();
     }
 
-    public void execute(Bank bank, ArrayNode output, ObjectMapper mapper) {
-        Account account = bank.getAccountByIBAN(IBAN);
-        User user = bank.getUserByIBAN(IBAN);
+    public void execute() {
+        Account account = Bank.getInstance().getAccountByIBAN(IBAN);
+        User user = Bank.getInstance().getUserByIBAN(IBAN);
         if(user != null) {
             SpendingsReportVisitor visitor = new SpendingsReportVisitor(IBAN, timestamp,
-                    startTimestamp, endTimestamp, user, mapper, output, bank);
+                    startTimestamp, endTimestamp);
             account.accept(visitor);
         } else {
-            userNotFound(output, mapper);
+            userNotFound(Bank.getInstance().getOutput());
         }
     }
 
-    public void addToOutput(ArrayNode output, ObjectMapper mapper, List<ObjectNode> tranzactions, Account account, List<ObjectNode> commerciants) {
-        ObjectNode node = mapper.createObjectNode();
-        node.put("command", "spendingsReport");
-        ObjectNode tranzaction = mapper.createObjectNode();
-        tranzaction.put("IBAN", IBAN);
-        tranzaction.put("balance", account.getBalance());
-        tranzaction.put("currency", account.getCurrency());
-        ArrayNode transactions = mapper.createArrayNode();
-        for (ObjectNode tranzactionNode : tranzactions) {
-            transactions.add(tranzactionNode);
-        }
-        tranzaction.set("transactions", transactions);
-        ArrayNode commerciantsNode = mapper.createArrayNode();
-        for (ObjectNode commerciantNode : commerciants) {
-            commerciantsNode.add(commerciantNode);
-        }
-        tranzaction.set("commerciants", commerciantsNode);
-        node.set("output", tranzaction);
-        node.put("timestamp", timestamp);
-        output.add(node);
-    }
-
-    private void userNotFound(ArrayNode output, ObjectMapper mapper) {
+    private void userNotFound(ArrayNode output) {
+        ObjectMapper mapper = new ObjectMapper();
         ObjectNode node = mapper.createObjectNode();
         node.put("command", "spendingsReport");
         ObjectNode outputNode = mapper.createObjectNode();

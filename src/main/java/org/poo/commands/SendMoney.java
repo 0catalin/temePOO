@@ -25,36 +25,34 @@ public class SendMoney implements Command{
         receiver = commandInput.getReceiver();
     }
 
-    public void execute(Bank bank, ArrayNode output, ObjectMapper mapper) {
-        Account accountSender = bank.getAccountByIBAN(IBAN);
-        Account accountReceiver = bank.getAccountByIBANOrAlias(receiver);
-        User userSender = bank.getUserByIBAN(IBAN);
+    public void execute() {
+        Account accountSender = Bank.getInstance().getAccountByIBAN(IBAN);
+        Account accountReceiver = Bank.getInstance().getAccountByIBANOrAlias(receiver);
+        User userSender = Bank.getInstance().getUserByIBAN(IBAN);
         if(accountSender == null || accountReceiver == null) {
-            System.out.println("Account not found");
+            // have to do something with exception
         } else if (accountSender.getBalance() < amount) {
-            //bank.getUserByIBAN(accountSender.getIBAN()).getTranzactions().computeIfAbsent(insufficientFunds(mapper), k -> new ArrayList<>()).add(IBAN);
-            bank.getUserByIBAN(accountSender.getIBAN()).getTranzactions().add(insufficientFunds(mapper));
-            accountSender.getReportsClassic().add(insufficientFunds(mapper));
+            Bank.getInstance().getUserByIBAN(accountSender.getIBAN()).getTranzactions().add(insufficientFunds());
+            accountSender.getReportsClassic().add(insufficientFunds());
         } else {
-            //userSender.getTranzactions().computeIfAbsent(addToSendersTranzactions(mapper, accountSender, accountReceiver), k -> new ArrayList<>()).add(IBAN);
-            userSender.getTranzactions().add(addToSendersTranzactions(mapper, accountSender, accountReceiver));
-            accountSender.getReportsClassic().add(addToSendersTranzactions(mapper, accountSender, accountReceiver));
+            userSender.getTranzactions().add(addToSendersTranzactions(accountSender, accountReceiver));
+            accountSender.getReportsClassic().add(addToSendersTranzactions(accountSender, accountReceiver));
 
-            User userReceiver = bank.getUserByAccount(accountReceiver);
+            User userReceiver = Bank.getInstance().getUserByAccount(accountReceiver);
 
-            //userReceiver.getTranzactions().computeIfAbsent(addToReceiversTranzactions(bank, mapper, accountSender, accountReceiver), k->new ArrayList<>()).add(accountReceiver.getIBAN());
-            userReceiver.getTranzactions().add(addToReceiversTranzactions(bank, mapper, accountSender, accountReceiver));
-            accountReceiver.getReportsClassic().add(addToReceiversTranzactions(bank, mapper, accountSender, accountReceiver));
+            userReceiver.getTranzactions().add(addToReceiversTranzactions(accountSender, accountReceiver));
+            accountReceiver.getReportsClassic().add(addToReceiversTranzactions(accountSender, accountReceiver));
 
             accountSender.setBalance(accountSender.getBalance() - amount);
             accountReceiver.setBalance(accountReceiver.getBalance() +
-                    amount * bank.findExchangeRate(accountSender.getCurrency(),
+                    amount * Bank.getInstance().findExchangeRate(accountSender.getCurrency(),
                             accountReceiver.getCurrency()));
 
         }
     }
 
-    private ObjectNode addToSendersTranzactions(ObjectMapper mapper, Account accountSender, Account accountReceiver) {
+    private ObjectNode addToSendersTranzactions(Account accountSender, Account accountReceiver) {
+        ObjectMapper mapper = new ObjectMapper();
         ObjectNode output = mapper.createObjectNode();
         output.put("timestamp", timestamp);
         output.put("description", description);
@@ -65,19 +63,21 @@ public class SendMoney implements Command{
         return output;
     }
 
-    private ObjectNode addToReceiversTranzactions(Bank bank, ObjectMapper mapper, Account accountSender, Account accountReceiver) {
+    private ObjectNode addToReceiversTranzactions(Account accountSender, Account accountReceiver) {
+        ObjectMapper mapper = new ObjectMapper();
         ObjectNode output = mapper.createObjectNode();
         output.put("timestamp", timestamp);
         output.put("description", description);
         output.put("senderIBAN", IBAN);
         output.put("receiverIBAN", accountReceiver.getIBAN());
-        output.put("amount", "" + amount * bank.findExchangeRate(accountSender.getCurrency(),
+        output.put("amount", "" + amount * Bank.getInstance().findExchangeRate(accountSender.getCurrency(),
                 accountReceiver.getCurrency())+ " " + accountReceiver.getCurrency());
         output.put("transferType", "received");
         return output;
     }
 
-    private ObjectNode insufficientFunds(ObjectMapper mapper) {
+    private ObjectNode insufficientFunds() {
+        ObjectMapper mapper = new ObjectMapper();
         ObjectNode finalNode = mapper.createObjectNode();
         finalNode.put("timestamp", timestamp);
         finalNode.put("description", "Insufficient funds");

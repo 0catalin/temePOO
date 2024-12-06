@@ -1,28 +1,19 @@
 package org.poo.parsers;
-import com.fasterxml.jackson.databind.ObjectMapper;
+
 import com.fasterxml.jackson.databind.node.ArrayNode;
-import lombok.Getter;
-import lombok.Setter;
+
 import org.poo.bankGraph.Bank;
 import org.poo.commands.Command;
 
 import java.util.ArrayList;
 
-@Getter
-@Setter
 
-public final class CommandParser {
-    // maybe make this a singleton
-    // in the future
-    private Bank bank;
-    public CommandParser(Bank bank) {
-        this.bank = bank;
-    }
 
-    public void parse(ArrayList <Command> commands, ArrayNode output, ObjectMapper mapper) {
+public abstract class CommandParser {
+    public static void parse(ArrayList <Command> commands) {
 
         for (Command command : commands) {
-            command.execute(bank, output, mapper);
+            command.execute();
         }
     }
 }

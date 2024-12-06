@@ -17,19 +17,20 @@ public class AddInterest implements Command{
         IBAN = commandInput.getAccount();
     }
 
-    public void execute(Bank bank, ArrayNode output, ObjectMapper mapper) {
-        Account account = bank.getAccountByIBAN(IBAN);
+    public void execute() {
+        Account account = Bank.getInstance().getAccountByIBAN(IBAN);
         if(account == null) {
-            System.out.println("Account not found");
+            // never happens
         }
         if(account.getType().equals("savings")) {
             account.setBalance(account.getBalance() * ( 1 + ((SavingsAccount)account).getInterestRate()));
         } else {
-            output.add(savingsAccountError(mapper));
+            Bank.getInstance().getOutput().add(savingsAccountError());
         }
     }
 
-    private ObjectNode savingsAccountError(ObjectMapper mapper) {
+    private ObjectNode savingsAccountError() {
+        ObjectMapper mapper = new ObjectMapper();
         ObjectNode node = mapper.createObjectNode();
         ObjectNode outputNode = mapper.createObjectNode();
         outputNode.put("description", "This is not a savings account");

@@ -26,6 +26,8 @@ public abstract class Account {
     private ArrayList<ObjectNode> reportsSavings;
     private ArrayList<ObjectNode> reportsClassic;
 
+    private static final int WARNING_LIMIT = 30;
+
 
     public Card getCardByCardNumber(String cardNumber) {
         for (Card card : cards) {
@@ -36,24 +38,12 @@ public abstract class Account {
         return null;
     }
 
-    public void checkAccountCards() {
-        if (balance < minBalance && cards != null) {
-            for (Card card : cards) {
-                if (!card.getStatus().equals("blocked")) {
-                    card.setStatus("frozen");
-                }
-            }
-        }
-
-        else if (balance > minBalance && cards != null) {
-            for (Card card : cards) {
-                if (card.getStatus().equals("frozen")) {
-                    card.setStatus("active");
-                }
-            }
-        }
+    public boolean isEmpty() {
+        return balance == 0;
     }
-
+    public boolean isInWarningRange() {
+        return balance - minBalance <= WARNING_LIMIT;
+    }
     public abstract void accept(SpendingsReportVisitor visitor);
     public abstract void accept(ReportVisitor visitor);
 

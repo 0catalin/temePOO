@@ -20,28 +20,23 @@ public class CheckCardStatus implements Command{
         cardNumber = commandInput.getCardNumber();
     }
 
-    public void execute(Bank bank, ArrayNode output, ObjectMapper mapper) {
-        Card card = bank.getCardByCardNumber(cardNumber);
-        Account account = bank.getAccountByCardNumber(cardNumber);
+    public void execute() {
+        Card card = Bank.getInstance().getCardByCardNumber(cardNumber);
+        Account account = Bank.getInstance().getAccountByCardNumber(cardNumber);
         if (card == null) {
-            cardNotFoundError(output, mapper);
+            cardNotFoundError();
         } else {
-            User user = bank.getUserByIBAN(account.getIBAN());
+            User user = Bank.getInstance().getUserByIBAN(account.getIBAN());
             if (account.getBalance() < account.getMinBalance()) {
-                //user.getTranzactions().computeIfAbsent(cardStatusError("frozen", mapper), k -> new ArrayList<>()).add("");
-                user.getTranzactions().add(cardStatusError("frozen", mapper));
-            } else if (card.getStatus().equals("blocked")) {
-                //user.getTranzactions().computeIfAbsent(cardStatusError("blocked", mapper), k -> new ArrayList<>()).add("");
-                user.getTranzactions().add(cardStatusError("blocked", mapper));
-            } else if (account.getBalance() - account.getMinBalance() <= 30 &&
-                    account.getBalance() - account.getMinBalance() >= 0) {
-                //user.getTranzactions().computeIfAbsent(cardStatusWarning(mapper), k -> new ArrayList<>()).add("");
-                user.getTranzactions().add(cardStatusWarning(mapper));
+                user.getTranzactions().add(cardFrozenError());
+            } else if (account.isInWarningRange()) {
+                user.getTranzactions().add(cardStatusWarning());
             }
         }
     }
 
-    private void cardNotFoundError(ArrayNode output, ObjectMapper mapper) {
+    private void cardNotFoundError() {
+        ObjectMapper mapper = new ObjectMapper();
         ObjectNode error = mapper.createObjectNode();
         error.put("command", "checkCardStatus");
         ObjectNode outputNode = mapper.createObjectNode();
@@ -49,17 +44,19 @@ public class CheckCardStatus implements Command{
         outputNode.put("description", "Card not found");
         error.set("output", outputNode);
         error.put("timestamp", timestamp);
-        output.add(error);
+        Bank.getInstance().getOutput().add(error);
     }
 
-    private ObjectNode cardStatusError(String status, ObjectMapper mapper) {
+    private ObjectNode cardFrozenError() {
+        ObjectMapper mapper = new ObjectMapper();
         ObjectNode node = mapper.createObjectNode();
         node.put("timestamp", timestamp);
-        node.put("description", "The card is " + status);
+        node.put("description", "The card is frozen");
         return node;
     }
 
-    private ObjectNode cardStatusWarning(ObjectMapper mapper) {
+    private ObjectNode cardStatusWarning() {
+        ObjectMapper mapper = new ObjectMapper();
         ObjectNode node = mapper.createObjectNode();
         node.put("timestamp", timestamp);
         node.put("description", "You have reached the minimum amount of funds, the card will be frozen");

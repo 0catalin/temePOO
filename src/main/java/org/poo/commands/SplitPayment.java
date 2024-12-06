@@ -24,43 +24,40 @@ public class SplitPayment implements Command{
         accountsForSplit = commandInput.getAccounts();
     }
 
-    public void execute(Bank bank, ArrayNode output, ObjectMapper mapper) {
+    public void execute() {
         ArrayList<Account> accountList = new ArrayList<Account>();
-        ArrayList<User> userList = new ArrayList<>();
+        ArrayList<User> userList = new ArrayList<User>();
         for (String IBAN : accountsForSplit ) {
-            accountList.add(bank.getAccountByIBAN(IBAN));
-            userList.add(bank.getUserByIBAN(IBAN));
+            accountList.add(Bank.getInstance().getAccountByIBAN(IBAN));
+            userList.add(Bank.getInstance().getUserByIBAN(IBAN));
         }
         String problemIBAN = "";
         double eachAmount = amount / accountList.size(); // amount per each
         for (Account account : accountList) {
-            if(account.getBalance() - eachAmount * bank.findExchangeRate(currency, account.getCurrency()) < account.getMinBalance()) {
+            if(account.getBalance() - eachAmount * Bank.getInstance().findExchangeRate(currency, account.getCurrency()) < account.getMinBalance()) {
                 problemIBAN = account.getIBAN();
             }
         }
         if(problemIBAN.isEmpty()) {
             for (int i = 0; i < accountList.size(); i++) {
-                //userList.get(i).getTranzactions().computeIfAbsent(splitPayment(mapper), k -> new ArrayList<>()).add(accountsForSplit.get(i));
-                userList.get(i).getTranzactions().add(splitPayment(mapper));
-                accountList.get(i).getReportsClassic().add(splitPayment(mapper));
+                userList.get(i).getTranzactions().add(splitPayment());
+                accountList.get(i).getReportsClassic().add(splitPayment());
 
-                bank.getAccountByIBAN(accountsForSplit.get(i)).setBalance(accountList.get(i).getBalance() -
-                        eachAmount * bank.findExchangeRate(currency, accountList.get(i).getCurrency()));
-                // testul gresit, trebuie inversate alea de currency daca se modifica testul
+                Bank.getInstance().getAccountByIBAN(accountsForSplit.get(i)).setBalance(accountList.get(i).getBalance() -
+                        eachAmount * Bank.getInstance().findExchangeRate(currency, accountList.get(i).getCurrency()));
             }
         } else {
-            ObjectNode node = splitPayment(mapper);
+            ObjectNode node = splitPayment();
             node.put("error", "Account " + problemIBAN +  " has insufficient funds for a split payment.");
             for (int i = 0; i < userList.size(); i++) {
-                //userList.get(i).getTranzactions().computeIfAbsent(node, k -> new ArrayList<>()).add(accountsForSplit.get(i));
                 userList.get(i).getTranzactions().add(node);
                 accountList.get(i).getReportsClassic().add(node);
-                // bank.getMap2().put(userList.get(i).getTranzactions().size(), accountList.get(i).getIBAN());
             }
         }
     }
 
-    public ObjectNode splitPayment(ObjectMapper mapper) {
+    private ObjectNode splitPayment() {
+        ObjectMapper mapper = new ObjectMapper();
         ObjectNode successNode = mapper.createObjectNode();
         successNode.put("timestamp", timestamp);
         successNode.put("description", "Split payment of " + String.format("%.2f", amount) + " " + currency);

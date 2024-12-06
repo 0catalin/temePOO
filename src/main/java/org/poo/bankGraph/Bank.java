@@ -1,5 +1,6 @@
 package org.poo.bankGraph;
 
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import lombok.Getter;
 import lombok.Setter;
 import org.poo.accounts.Account;
@@ -20,6 +21,7 @@ public class Bank {
     private ArrayList<ExchangeRate> exchangeRatesList;
     private Map<Integer, String> map = new HashMap<>();
     private Map<Integer, String> map2 = new HashMap<>();
+    private ArrayNode output;
     private static Bank instance = null;
     static {
         instance = new Bank();
@@ -29,12 +31,13 @@ public class Bank {
     }
     private Bank() { }
 
-    public void applyParams(InputParser parser) {
+    public void applyParams(InputParser parser, ArrayNode output) {
         commerciants = parser.getCommerciants();
         exchangeRates = parser.getGraph();
         users = parser.getUsers();
         exchangeRatesList = parser.getExchangeRatesList();
         map = new HashMap<>();
+        this.output = output;
     }
 
     public User getUserByEmail(String email) {

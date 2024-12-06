@@ -8,7 +8,6 @@ import org.poo.accounts.ClassicAccount;
 import org.poo.baseinput.User;
 import org.poo.fileio.CommandInput;
 
-import java.util.ArrayList;
 
 public class AddClassicAccount implements Command{
     private String email;
@@ -20,24 +19,24 @@ public class AddClassicAccount implements Command{
         timestamp = commandInput.getTimestamp();
     }
 
-    public void execute(Bank bank, ArrayNode output, ObjectMapper mapper) {
+    public void execute() {
         ClassicAccount classicAccount = new ClassicAccount(currency);
-        if(bank.getUserByEmail(email) != null) {
-            User user = bank.getUserByEmail(email);
+        if(Bank.getInstance().getUserByEmail(email) != null) {
+            User user = Bank.getInstance().getUserByEmail(email);
             user.getAccounts().add(classicAccount);
 
-            //user.getTranzactions().computeIfAbsent(addToUsersTranzactions(mapper), k -> new ArrayList<>()).add(classicAccount.getIBAN());
-            user.getTranzactions().add(addToUsersTranzactions(mapper));
-            bank.getAccountByIBAN(classicAccount.getIBAN()).getReportsClassic().add(addToUsersTranzactions(mapper));
+            user.getTranzactions().add(addToUsersTranzactions());
+            Bank.getInstance().getAccountByIBAN(classicAccount.getIBAN()).getReportsClassic().add(addToUsersTranzactions());
 
 
         } else {
-            System.out.println("User Not found"); // de modificat daca nu e vreo problema
+            // never happens
         }
 
     }
 
-    private ObjectNode addToUsersTranzactions(ObjectMapper mapper) {
+    private ObjectNode addToUsersTranzactions() {
+        ObjectMapper mapper = new ObjectMapper();
         ObjectNode output = mapper.createObjectNode();
         output.put("timestamp", timestamp);
         output.put("description", "New account created");

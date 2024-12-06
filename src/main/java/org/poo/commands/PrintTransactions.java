@@ -19,11 +19,12 @@ public class PrintTransactions implements Command{
     }
 
     @Override
-    public void execute(Bank bank, ArrayNode output, ObjectMapper mapper) {
-        User user = bank.getUserByEmail(email);
+    public void execute() {
+        User user = Bank.getInstance().getUserByEmail(email);
         if (user == null) {
-            System.out.println("User not found");
+            // no need here
         } else {
+            ObjectMapper mapper = new ObjectMapper();
             ObjectNode transaction = mapper.createObjectNode();
             transaction.put("command", "printTransactions");
             ArrayNode outputNode = mapper.createArrayNode();
@@ -32,7 +33,7 @@ public class PrintTransactions implements Command{
             }
             transaction.set("output", outputNode);
             transaction.put("timestamp", timestamp);
-            output.add(transaction);
+            Bank.getInstance().getOutput().add(transaction);
         }
 
     }

@@ -22,20 +22,20 @@ public class AddSavingsAccount implements Command{
         interestRate = commandInput.getInterestRate();
     }
 
-    public void execute(Bank bank, ArrayNode output, ObjectMapper mapper) {
-        if(bank.getUserByEmail(email) != null) {
+    public void execute() {
+        if(Bank.getInstance().getUserByEmail(email) != null) {
             SavingsAccount savingsAccount = new SavingsAccount(currency, interestRate);
-            User user = bank.getUserByEmail(email);
+            User user = Bank.getInstance().getUserByEmail(email);
             user.getAccounts().add(savingsAccount);
-            //user.getTranzactions().computeIfAbsent(addToUsersTranzactions(mapper), k -> new ArrayList<>()).add("");
-            user.getTranzactions().add(addToUsersTranzactions(mapper));
-            bank.getAccountByIBAN(savingsAccount.getIBAN()).getReportsClassic().add(addToUsersTranzactions(mapper));
+            user.getTranzactions().add(addToUsersTranzactions());
+            Bank.getInstance().getAccountByIBAN(savingsAccount.getIBAN()).getReportsClassic().add(addToUsersTranzactions());
         } else {
-            System.out.println("User Not found"); // de modificat daca nu e vreo problema
+            // it happens once
         }
     }
 
-    private ObjectNode addToUsersTranzactions(ObjectMapper mapper) {
+    private ObjectNode addToUsersTranzactions() {
+        ObjectMapper mapper = new ObjectMapper();
         ObjectNode output = mapper.createObjectNode();
         output.put("timestamp", timestamp);
         output.put("description", "New account created");

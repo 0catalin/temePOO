@@ -15,11 +15,12 @@ public class PrintUsers implements Command{
         timestamp = input.getTimestamp();
     }
     @Override
-    public void execute(Bank bank, ArrayNode output, ObjectMapper mapper) {
+    public void execute() {
+        ObjectMapper mapper = new ObjectMapper();
         ObjectNode commandObject = mapper.createObjectNode();
         commandObject.put("command", "printUsers");
         ArrayNode outputArray = mapper.createArrayNode();
-        for (User user : bank.getUsers()) {
+        for (User user : Bank.getInstance().getUsers()) {
             ObjectNode userObject = mapper.createObjectNode();
             userObject.put("firstName", user.getFirstName());
             userObject.put("lastName", user.getLastName());
@@ -46,6 +47,6 @@ public class PrintUsers implements Command{
         }
         commandObject.set("output", outputArray);
         commandObject.put("timestamp", timestamp);
-        output.add(commandObject);
+        Bank.getInstance().getOutput().add(commandObject);
     }
 }

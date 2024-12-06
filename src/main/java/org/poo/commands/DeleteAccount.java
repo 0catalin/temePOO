@@ -21,33 +21,27 @@ public class DeleteAccount implements Command{
         IBAN = commandInput.getAccount();
     }
 
-    public void execute(Bank bank, ArrayNode output, ObjectMapper mapper) {
-        Account account = bank.getAccountByIBAN(IBAN);
-        User user = bank.getUserByEmail(email);
+    public void execute() {
+        Account account = Bank.getInstance().getAccountByIBAN(IBAN);
+        User user = Bank.getInstance().getUserByEmail(email);
         if (account == null) {
-            System.out.println("Account not found");
-            deleteFailure(output, mapper);
+            deleteFailure();
         } else if (user == null) {
-            System.out.println("User not found");
-            deleteFailure(output, mapper);
-        } else if (account.getBalance() != 0) {
-            System.out.println("Account balance not zero");
-            deleteFailure(output, mapper);
-            //bank.getUserByIBAN(account.getIBAN()).getTranzactions().computeIfAbsent(deleteFundsRemaining(mapper), k -> new ArrayList<>()).add("");
-            bank.getUserByIBAN(account.getIBAN()).getTranzactions().add(deleteFundsRemaining(mapper));
-            account.getReportsClassic().add(deleteFundsRemaining(mapper));
-        } else {
-            if (user.getAccounts().contains(account)) {
+            deleteFailure();
+        } else if (!account.isEmpty()) {
+            deleteFailure();
+            Bank.getInstance().getUserByIBAN(account.getIBAN()).getTranzactions().add(deleteFundsRemaining());
+            account.getReportsClassic().add(deleteFundsRemaining());
+        } else if (user.getAccounts().contains(account)) {
                 user.getAccounts().remove(account);
-                deleteSuccess(output, mapper);
-            } else {
-                System.out.println("Account does not belong to the user");
-                deleteFailure(output, mapper);
-            }
+                deleteSuccess();
+        } else {
+            deleteFailure();
         }
     }
 
-    private void deleteSuccess(ArrayNode output, ObjectMapper mapper) {
+    private void deleteSuccess() {
+        ObjectMapper mapper = new ObjectMapper();
         ObjectNode finalNode = mapper.createObjectNode();
         finalNode.put("command", "deleteAccount");
         ObjectNode outputNode = mapper.createObjectNode();
@@ -55,10 +49,11 @@ public class DeleteAccount implements Command{
         outputNode.put("timestamp", timestamp);
         finalNode.set("output", outputNode);
         finalNode.put("timestamp", timestamp);
-        output.add(finalNode);
+        Bank.getInstance().getOutput().add(finalNode);
     }
 
-    private void deleteFailure(ArrayNode output, ObjectMapper mapper) {
+    private void deleteFailure() {
+        ObjectMapper mapper = new ObjectMapper();
         ObjectNode finalNode = mapper.createObjectNode();
         finalNode.put("command", "deleteAccount");
         ObjectNode outputNode = mapper.createObjectNode();
@@ -66,10 +61,11 @@ public class DeleteAccount implements Command{
         outputNode.put("timestamp", timestamp);
         finalNode.set("output", outputNode);
         finalNode.put("timestamp", timestamp);
-        output.add(finalNode);
+        Bank.getInstance().getOutput().add(finalNode);
     }
 
-    private ObjectNode deleteFundsRemaining(ObjectMapper mapper) {
+    private ObjectNode deleteFundsRemaining() {
+        ObjectMapper mapper = new ObjectMapper();
         ObjectNode finalNode = mapper.createObjectNode();
         finalNode.put("description", "Account couldn't be deleted - there are funds remaining");
         finalNode.put("timestamp", timestamp);

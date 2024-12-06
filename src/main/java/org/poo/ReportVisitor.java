@@ -7,83 +7,43 @@ import org.poo.accounts.Account;
 import org.poo.accounts.ClassicAccount;
 import org.poo.accounts.SavingsAccount;
 import org.poo.bankGraph.Bank;
-import org.poo.baseinput.User;
-
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 public class ReportVisitor {
-    private User user;
-    private ObjectMapper mapper;
+
     private int startTimestamp;
     private int endTimestamp;
     private int timestamp;
-    private ArrayNode output;
     private String IBAN;
-    private Bank bank;
-    public ReportVisitor(User user, ObjectMapper mapper, int startTimestamp, int endTimestamp, int timestamp, ArrayNode output, String IBAN, Bank bank) {
-        this.user = user;
-        this.mapper = mapper;
+    public ReportVisitor(int startTimestamp, int endTimestamp, int timestamp, String IBAN) {
+
         this.startTimestamp = startTimestamp;
         this.endTimestamp = endTimestamp;
         this.timestamp = timestamp;
-        this.output = output;
         this.IBAN = IBAN;
-        this.bank = bank;
     }
 
     public void visit(ClassicAccount account) {
-
-
-        List<ObjectNode> tranzactions = bank.getAccountByIBAN(IBAN).getReportsClassic().stream().filter(node -> {
+        List<ObjectNode> tranzactions = Bank.getInstance().getAccountByIBAN(IBAN).getReportsClassic().stream().filter(node -> {
             int timestamp = node.get("timestamp").asInt();
             return timestamp >= startTimestamp && timestamp <= endTimestamp;
         }).collect(Collectors.toList());
-
-
-
- /*
-        if(tranzactions != null) {
-            for (int i = 0; i < tranzactions.size(); i++) {
-                if(bank.getMap2().containsKey(i) && bank.getMap2().get(i).equals(IBAN)){
-                    tranzactionsFiltered.add(tranzactions.get(i));
-                } else if (!bank.getMap2().containsKey(i)){
-                    tranzactionsFiltered.add(tranzactions.get(i));
-                }
-            }
-        }
-
-
-
-
-
-        if (tranzactionsFiltered != null) {
-            for (ObjectNode tranzaction : tranzactionsFiltered) {
-
-                if (bank.getMap().containsKey(tranzaction.get("timestamp").asInt()) && bank.getMap().get(tranzaction.get("timestamp").asInt()).equals(IBAN)) {
-                    tranzactionsFiltered2.add(tranzaction);
-                }
-            }
-        }
-*/
-
-        addToOutput(output, mapper, tranzactions, account);
+        addToOutput(tranzactions, account);
     }
 
 
     public void visit(SavingsAccount account) {
-        List<ObjectNode> tranzactions = bank.getAccountByIBAN(IBAN).getReportsSavings().stream().filter(node -> {
+        List<ObjectNode> tranzactions = Bank.getInstance().getAccountByIBAN(IBAN).getReportsSavings().stream().filter(node -> {
             int timestamp = node.get("timestamp").asInt();
             return timestamp >= startTimestamp && timestamp <= endTimestamp;
         }).collect(Collectors.toList());
 
-        addToOutput(output, mapper, tranzactions, account);
+        addToOutput(tranzactions, account);
     }
 
-    private void addToOutput(ArrayNode output, ObjectMapper mapper, List<ObjectNode> tranzactions, Account account) {
+    private void addToOutput(List<ObjectNode> tranzactions, Account account) {
+        ObjectMapper mapper = new ObjectMapper();
         ObjectNode node = mapper.createObjectNode();
         node.put("command", "report");
         ObjectNode tranzaction = mapper.createObjectNode();
@@ -97,6 +57,6 @@ public class ReportVisitor {
         tranzaction.set("transactions", transactions);
         node.set("output", tranzaction);
         node.put("timestamp", timestamp);
-        output.add(node);
+        Bank.getInstance().getOutput().add(node);
     }
 }

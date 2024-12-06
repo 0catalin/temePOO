@@ -15,7 +15,6 @@ public class PayOnline implements Command{
     private double amount;
     private int timestamp;
     private String currency;
-    private String description;
     private String commerciant;
     private String email;
 
@@ -25,39 +24,34 @@ public class PayOnline implements Command{
         currency = commandInput.getCurrency();
         amount = commandInput.getAmount();
         commerciant = commandInput.getCommerciant();
-        description = commandInput.getDescription();
         cardNumber = commandInput.getCardNumber();
     }
 
-    public void execute(Bank bank, ArrayNode output, ObjectMapper mapper) {
-        Card card = bank.getCardByCardNumber(cardNumber);
-        User user = bank.getUserByEmail(email);
-        Account account = bank.getAccountByCardNumber(cardNumber);
+    public void execute() {
+        Card card = Bank.getInstance().getCardByCardNumber(cardNumber);
+        User user = Bank.getInstance().getUserByEmail(email);
+        Account account = Bank.getInstance().getAccountByCardNumber(cardNumber);
         if (card == null) {
-            cardNotFound(output, mapper);
+            cardNotFound();
         } else if (user == null) {
-            System.out.println("User not found"); // de sters, probabil
+            // no need here
         } else if (!user.getAccounts().contains(account)) {
-            // System.out.println("Card does not belong to user");
-            cardNotFound(output, mapper);
-        } //else if (account.getBalance() < amount * bank.findExchangeRate(currency, account.getCurrency())) {
-            //user.getTranzactions().add(insufficientFunds(output, mapper));
-        //}
+            cardNotFound();
+        }
         else {
             if(account.getBalance() != 0) {
-                amount = amount * bank.findExchangeRate(currency, account.getCurrency()); // converts to specific amount
-                PayOnlineVisitor visitor = new PayOnlineVisitor(amount, timestamp, description,
-                        commerciant, mapper, output, account, bank);
-                if (card.accept(visitor)) {
-                    bank.getMap().put(timestamp, account.getIBAN());
-                }
+                amount = amount * Bank.getInstance().findExchangeRate(currency, account.getCurrency()); // converts to specific amount
+                PayOnlineVisitor visitor = new PayOnlineVisitor(amount, timestamp,
+                        commerciant, account);
+                card.accept(visitor);
             }
 
         }
 
     }
 
-    private void cardNotFound(ArrayNode output, ObjectMapper mapper) {
+    private void cardNotFound() {
+        ObjectMapper mapper = new ObjectMapper();
         ObjectNode finalNode = mapper.createObjectNode();
         finalNode.put("command", "payOnline");
         ObjectNode outputNode = mapper.createObjectNode();
@@ -65,7 +59,7 @@ public class PayOnline implements Command{
         outputNode.put("timestamp", timestamp);
         finalNode.set("output", outputNode);
         finalNode.put("timestamp", timestamp);
-        output.add(finalNode);
+        Bank.getInstance().getOutput().add(finalNode);
     }
 
 

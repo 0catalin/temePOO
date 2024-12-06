@@ -10,20 +10,18 @@ import org.poo.fileio.CommandInput;
 public class SetMinimumBalance implements Command{
     private String IBAN;
     private double minBalance;
-    private int timestamp;
 
     public SetMinimumBalance(CommandInput commandInput) {
-        timestamp = commandInput.getTimestamp();
         IBAN = commandInput.getAccount();
         minBalance = commandInput.getAmount();
     }
 
-    public void execute(Bank bank, ArrayNode output, ObjectMapper mapper) {
-        Account account = bank.getAccountByIBAN(IBAN);
+    public void execute() {
+        Account account = Bank.getInstance().getAccountByIBAN(IBAN);
         if (account != null) {
             account.setMinBalance(minBalance);
         } else {
-            System.out.println("Account not found");
+            // don't have to handle exception
         }
     }
 }

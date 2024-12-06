@@ -7,7 +7,6 @@ import org.poo.bankGraph.Bank;
 import org.poo.accounts.Account;
 import org.poo.fileio.CommandInput;
 
-import java.util.ArrayList;
 
 public class DeleteCard implements Command{
     private String cardNumber;
@@ -18,22 +17,22 @@ public class DeleteCard implements Command{
         cardNumber = commandInput.getCardNumber();
     }
 
-    public void execute(Bank bank, ArrayNode output, ObjectMapper mapper) {
-        Account account = bank.getAccountByCardNumber(cardNumber);
-        if(account == null) {
-            System.out.println("Card not found");
+    public void execute() {
+        Account account = Bank.getInstance().getAccountByCardNumber(cardNumber);
+        if (account == null) {
+
         } else {
             String IBAN = account.getIBAN();
-            String email = bank.getUserByIBAN(IBAN).getEmail();
-            //bank.getUserByIBAN(IBAN).getTranzactions().computeIfAbsent(successfulDeletion(output, mapper, IBAN, email), k -> new ArrayList<>()).add(IBAN);
-            bank.getUserByIBAN(IBAN).getTranzactions().add(successfulDeletion(output, mapper, IBAN, email));
-            account.getReportsClassic().add(successfulDeletion(output, mapper, IBAN, email));
+            String email = Bank.getInstance().getUserByIBAN(IBAN).getEmail();
+            Bank.getInstance().getUserByIBAN(IBAN).getTranzactions().add(successfulDeletion(IBAN, email));
+            account.getReportsClassic().add(successfulDeletion(IBAN, email));
             account.getCards().remove(account.getCardByCardNumber(cardNumber));
         }
 
     }
 
-    private ObjectNode successfulDeletion(ArrayNode output, ObjectMapper mapper, String IBAN, String email) {
+    private ObjectNode successfulDeletion(String IBAN, String email) {
+        ObjectMapper mapper = new ObjectMapper();
         ObjectNode finalNode = mapper.createObjectNode();
         finalNode.put("timestamp", timestamp);
         finalNode.put("description", "The card has been destroyed");
