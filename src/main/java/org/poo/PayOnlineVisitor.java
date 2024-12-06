@@ -39,20 +39,30 @@ public class PayOnlineVisitor {
     public boolean visit(OneTimeCard card) {
         if (account.getBalance() < amount) {
             bank.getMap().put(timestamp, account.getIBAN());
-            bank.getUserByIBAN(account.getIBAN()).getTranzactions().computeIfAbsent(insufficientFunds(), k -> new ArrayList<>()).add(account.getIBAN());
+            //bank.getUserByIBAN(account.getIBAN()).getTranzactions().computeIfAbsent(insufficientFunds(), k -> new ArrayList<>()).add(account.getIBAN());
+            bank.getUserByIBAN(account.getIBAN()).getTranzactions().add(insufficientFunds());
+            bank.getAccountByIBAN(account.getIBAN()).getReportsClassic().add(insufficientFunds());
             return false;
         } else if (account.getBalance() - amount < account.getMinBalance()) {
             bank.getMap().put(timestamp, account.getIBAN());
-            bank.getUserByIBAN(account.getIBAN()).getTranzactions().computeIfAbsent(insufficientFunds(), k -> new ArrayList<>()).add(account.getIBAN());
+            //bank.getUserByIBAN(account.getIBAN()).getTranzactions().computeIfAbsent(insufficientFunds(), k -> new ArrayList<>()).add(account.getIBAN());
+            bank.getUserByIBAN(account.getIBAN()).getTranzactions().add(insufficientFunds());
+            bank.getAccountByIBAN(account.getIBAN()).getReportsClassic().add(insufficientFunds());
             card.setStatus("frozen");
             return false;
         } else {
             account.setBalance(account.getBalance() - amount);
-            bank.getUserByIBAN(account.getIBAN()).getTranzactions().computeIfAbsent(successfulPayment(output, mapper), k -> new ArrayList<>()).add(account.getIBAN());
-            bank.getUserByIBAN(account.getIBAN()).getTranzactions().computeIfAbsent(oneTimeCardDestroyed(card), k -> new ArrayList<>()).add(account.getIBAN());
+            //bank.getUserByIBAN(account.getIBAN()).getTranzactions().computeIfAbsent(successfulPayment(output, mapper), k -> new ArrayList<>()).add(account.getIBAN());
+            bank.getUserByIBAN(account.getIBAN()).getTranzactions().add(successfulPayment(output, mapper));
+            bank.getAccountByIBAN(account.getIBAN()).getReportsClassic().add(successfulPayment(output, mapper));
+            bank.getAccountByIBAN(account.getIBAN()).getSpendingReports().add(successfulPayment(output, mapper));
+            //bank.getUserByIBAN(account.getIBAN()).getTranzactions().computeIfAbsent(oneTimeCardDestroyed(card), k -> new ArrayList<>()).add(account.getIBAN());
+            bank.getUserByIBAN(account.getIBAN()).getTranzactions().add(oneTimeCardDestroyed(card));
+            bank.getAccountByIBAN(account.getIBAN()).getReportsClassic().add(oneTimeCardDestroyed(card));
             card.setCardNumber(Utils.generateCardNumber());
-            bank.getUserByIBAN(account.getIBAN()).getTranzactions().computeIfAbsent(oneTimeCardCreated(card), k -> new ArrayList<>()).add(account.getIBAN());
-
+            //bank.getUserByIBAN(account.getIBAN()).getTranzactions().computeIfAbsent(oneTimeCardCreated(card), k -> new ArrayList<>()).add(account.getIBAN());
+            bank.getUserByIBAN(account.getIBAN()).getTranzactions().add(oneTimeCardCreated(card));
+            bank.getAccountByIBAN(account.getIBAN()).getReportsClassic().add(oneTimeCardCreated(card));
             return true;
         }
     }
@@ -60,20 +70,29 @@ public class PayOnlineVisitor {
     public boolean visit(RegularCard card) {
         if (account.getBalance() < amount) {
             bank.getMap().put(timestamp, account.getIBAN());
-            bank.getUserByIBAN(account.getIBAN()).getTranzactions().computeIfAbsent(insufficientFunds(), k -> new ArrayList<>()).add(account.getIBAN());
+            //bank.getUserByIBAN(account.getIBAN()).getTranzactions().computeIfAbsent(insufficientFunds(), k -> new ArrayList<>()).add(account.getIBAN());
+            bank.getUserByIBAN(account.getIBAN()).getTranzactions().add(insufficientFunds());
+            bank.getAccountByIBAN(account.getIBAN()).getReportsClassic().add(insufficientFunds());
             return false;
         } else if (card.getStatus().equals("frozen")) {
             bank.getMap().put(timestamp, account.getIBAN());
-            bank.getUserByIBAN(account.getIBAN()).getTranzactions().computeIfAbsent(blockedOrFrozenError("frozen"), k -> new ArrayList<>()).add(account.getIBAN());
+            //bank.getUserByIBAN(account.getIBAN()).getTranzactions().computeIfAbsent(blockedOrFrozenError("frozen"), k -> new ArrayList<>()).add(account.getIBAN());
+            bank.getUserByIBAN(account.getIBAN()).getTranzactions().add(blockedOrFrozenError("frozen"));
+            bank.getAccountByIBAN(account.getIBAN()).getReportsClassic().add(blockedOrFrozenError("frozen"));
             return false;
         } else if (account.getBalance() - amount < account.getMinBalance()) {
             bank.getMap().put(timestamp, account.getIBAN());
-            bank.getUserByIBAN(account.getIBAN()).getTranzactions().computeIfAbsent(blockedOrFrozenError("frozen"), k -> new ArrayList<>()).add(account.getIBAN());
+            //bank.getUserByIBAN(account.getIBAN()).getTranzactions().computeIfAbsent(blockedOrFrozenError("frozen"), k -> new ArrayList<>()).add(account.getIBAN());
+            bank.getUserByIBAN(account.getIBAN()).getTranzactions().add(blockedOrFrozenError("frozen"));
+            bank.getAccountByIBAN(account.getIBAN()).getReportsClassic().add(blockedOrFrozenError("frozen"));
             card.setStatus("frozen");
             return false;
         } else {
             account.setBalance(account.getBalance() - amount);
-            bank.getUserByIBAN(account.getIBAN()).getTranzactions().computeIfAbsent(successfulPayment(output, mapper), k -> new ArrayList<>()).add(account.getIBAN());
+            //bank.getUserByIBAN(account.getIBAN()).getTranzactions().computeIfAbsent(successfulPayment(output, mapper), k -> new ArrayList<>()).add(account.getIBAN());
+            bank.getUserByIBAN(account.getIBAN()).getTranzactions().add(successfulPayment(output, mapper));
+            bank.getAccountByIBAN(account.getIBAN()).getReportsClassic().add(successfulPayment(output, mapper));
+            bank.getAccountByIBAN(account.getIBAN()).getSpendingReports().add(successfulPayment(output, mapper));
             return true;
         }
     }

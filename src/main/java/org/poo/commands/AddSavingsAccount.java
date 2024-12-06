@@ -27,7 +27,9 @@ public class AddSavingsAccount implements Command{
             SavingsAccount savingsAccount = new SavingsAccount(currency, interestRate);
             User user = bank.getUserByEmail(email);
             user.getAccounts().add(savingsAccount);
-            user.getTranzactions().computeIfAbsent(addToUsersTranzactions(mapper), k -> new ArrayList<>()).add("");
+            //user.getTranzactions().computeIfAbsent(addToUsersTranzactions(mapper), k -> new ArrayList<>()).add("");
+            user.getTranzactions().add(addToUsersTranzactions(mapper));
+            bank.getAccountByIBAN(savingsAccount.getIBAN()).getReportsClassic().add(addToUsersTranzactions(mapper));
         } else {
             System.out.println("User Not found"); // de modificat daca nu e vreo problema
         }

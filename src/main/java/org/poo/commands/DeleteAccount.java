@@ -33,7 +33,9 @@ public class DeleteAccount implements Command{
         } else if (account.getBalance() != 0) {
             System.out.println("Account balance not zero");
             deleteFailure(output, mapper);
-            bank.getUserByIBAN(account.getIBAN()).getTranzactions().computeIfAbsent(deleteFundsRemaining(mapper), k -> new ArrayList<>()).add("");
+            //bank.getUserByIBAN(account.getIBAN()).getTranzactions().computeIfAbsent(deleteFundsRemaining(mapper), k -> new ArrayList<>()).add("");
+            bank.getUserByIBAN(account.getIBAN()).getTranzactions().add(deleteFundsRemaining(mapper));
+            account.getReportsClassic().add(deleteFundsRemaining(mapper));
         } else {
             if (user.getAccounts().contains(account)) {
                 user.getAccounts().remove(account);

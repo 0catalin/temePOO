@@ -28,12 +28,15 @@ public class CheckCardStatus implements Command{
         } else {
             User user = bank.getUserByIBAN(account.getIBAN());
             if (account.getBalance() < account.getMinBalance()) {
-                user.getTranzactions().computeIfAbsent(cardStatusError("frozen", mapper), k -> new ArrayList<>()).add("");
+                //user.getTranzactions().computeIfAbsent(cardStatusError("frozen", mapper), k -> new ArrayList<>()).add("");
+                user.getTranzactions().add(cardStatusError("frozen", mapper));
             } else if (card.getStatus().equals("blocked")) {
-                user.getTranzactions().computeIfAbsent(cardStatusError("blocked", mapper), k -> new ArrayList<>()).add("");
+                //user.getTranzactions().computeIfAbsent(cardStatusError("blocked", mapper), k -> new ArrayList<>()).add("");
+                user.getTranzactions().add(cardStatusError("blocked", mapper));
             } else if (account.getBalance() - account.getMinBalance() <= 30 &&
                     account.getBalance() - account.getMinBalance() >= 0) {
-                user.getTranzactions().computeIfAbsent(cardStatusWarning(mapper), k -> new ArrayList<>()).add("");
+                //user.getTranzactions().computeIfAbsent(cardStatusWarning(mapper), k -> new ArrayList<>()).add("");
+                user.getTranzactions().add(cardStatusWarning(mapper));
             }
         }
     }

@@ -25,7 +25,9 @@ public class DeleteCard implements Command{
         } else {
             String IBAN = account.getIBAN();
             String email = bank.getUserByIBAN(IBAN).getEmail();
-            bank.getUserByIBAN(IBAN).getTranzactions().computeIfAbsent(successfulDeletion(output, mapper, IBAN, email), k -> new ArrayList<>()).add(IBAN);
+            //bank.getUserByIBAN(IBAN).getTranzactions().computeIfAbsent(successfulDeletion(output, mapper, IBAN, email), k -> new ArrayList<>()).add(IBAN);
+            bank.getUserByIBAN(IBAN).getTranzactions().add(successfulDeletion(output, mapper, IBAN, email));
+            account.getReportsClassic().add(successfulDeletion(output, mapper, IBAN, email));
             account.getCards().remove(account.getCardByCardNumber(cardNumber));
         }
 

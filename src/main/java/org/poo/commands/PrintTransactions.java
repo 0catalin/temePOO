@@ -27,11 +27,8 @@ public class PrintTransactions implements Command{
             ObjectNode transaction = mapper.createObjectNode();
             transaction.put("command", "printTransactions");
             ArrayNode outputNode = mapper.createArrayNode();
-            for (Map.Entry<ObjectNode, List<String>> entry : user.getTranzactions().entrySet()) {
-                List<String> values = entry.getValue();
-                for (String value : values) {
-                    outputNode.add(entry.getKey());
-                }
+            for (ObjectNode node : user.getTranzactions()) {
+                outputNode.add(node);
             }
             transaction.set("output", outputNode);
             transaction.put("timestamp", timestamp);

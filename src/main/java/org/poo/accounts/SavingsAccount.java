@@ -19,6 +19,9 @@ public class SavingsAccount extends Account{
         setAlias("");
         setIBAN(Utils.generateIBAN());
         setType("savings");
+        setSpendingReports(new ArrayList<>());
+        setReportsSavings(new ArrayList<>());
+        setReportsClassic(new ArrayList<>());
     }
 
     public double getInterestRate() {

@@ -19,14 +19,14 @@ public class User {
     private String firstName;
     private String lastName;
     private String email;
-    private Map<ObjectNode, List<String>> tranzactions;
+    private ArrayList<ObjectNode> tranzactions;
     private ArrayList<Account> accounts; // must have the cards
 
     public User(UserInput userInput) {
         firstName = userInput.getFirstName();
         lastName = userInput.getLastName();
         email = userInput.getEmail();
-        tranzactions = new LinkedHashMap<>();
+        tranzactions = new ArrayList<>();
         accounts = new ArrayList<>();
     }
 

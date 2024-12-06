@@ -34,7 +34,9 @@ public class CreateCard implements Command{
             if (user.getAccounts().contains(account)) {
                 Card card = new RegularCard();
                 account.getCards().add(card);
-                user.getTranzactions().computeIfAbsent(addToUsersTranzactions(mapper, card), k -> new ArrayList<>()).add(IBAN);
+                //user.getTranzactions().computeIfAbsent(addToUsersTranzactions(mapper, card), k -> new ArrayList<>()).add(IBAN);
+                user.getTranzactions().add(addToUsersTranzactions(mapper, card));
+                bank.getAccountByIBAN(IBAN).getReportsClassic().add(addToUsersTranzactions(mapper, card));
             } else {
                 System.out.println("Account does not belong to the user");
             }

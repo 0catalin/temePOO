@@ -36,22 +36,14 @@ public class ReportVisitor {
     }
 
     public void visit(ClassicAccount account) {
-        List<ObjectNode> tranzactionsFiltered = new ArrayList<>();
 
-        LinkedHashMap<ObjectNode, List<String>> tranzactions = user.getTranzactions().entrySet().stream().filter(entry -> {
-            ObjectNode node = entry.getKey();
+
+        List<ObjectNode> tranzactions = bank.getAccountByIBAN(IBAN).getReportsClassic().stream().filter(node -> {
             int timestamp = node.get("timestamp").asInt();
             return timestamp >= startTimestamp && timestamp <= endTimestamp;
-        }).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (oldValue, newValue) -> oldValue, LinkedHashMap::new));
+        }).collect(Collectors.toList());
 
-        if (tranzactions != null) {
-            for (Map.Entry<ObjectNode, List<String>> entry : tranzactions.entrySet()) {
-                ObjectNode tranzaction = entry.getKey();
-                if (tranzactions.get(tranzaction).get(0).equals(IBAN)) {
-                    tranzactionsFiltered.add(tranzaction);
-                }
-            }
-        }
+
 
  /*
         if(tranzactions != null) {
@@ -78,12 +70,17 @@ public class ReportVisitor {
         }
 */
 
-        addToOutput(output, mapper, tranzactionsFiltered, account);
+        addToOutput(output, mapper, tranzactions, account);
     }
 
 
     public void visit(SavingsAccount account) {
+        List<ObjectNode> tranzactions = bank.getAccountByIBAN(IBAN).getReportsSavings().stream().filter(node -> {
+            int timestamp = node.get("timestamp").asInt();
+            return timestamp >= startTimestamp && timestamp <= endTimestamp;
+        }).collect(Collectors.toList());
 
+        addToOutput(output, mapper, tranzactions, account);
     }
 
     private void addToOutput(ArrayNode output, ObjectMapper mapper, List<ObjectNode> tranzactions, Account account) {

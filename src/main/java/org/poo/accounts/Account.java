@@ -6,6 +6,7 @@ import org.poo.PayOnlineVisitor;
 import org.poo.ReportVisitor;
 import org.poo.SpendingsReportVisitor;
 import org.poo.cards.Card;
+import org.poo.commands.Report;
 
 import java.util.ArrayList;
 
@@ -21,6 +22,9 @@ public abstract class Account {
     private ArrayList<Card> cards;
     private double balance;
     private String type;
+    private ArrayList<ObjectNode> spendingReports;
+    private ArrayList<ObjectNode> reportsSavings;
+    private ArrayList<ObjectNode> reportsClassic;
 
 
     public Card getCardByCardNumber(String cardNumber) {

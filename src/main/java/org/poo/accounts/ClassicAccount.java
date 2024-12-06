@@ -19,6 +19,10 @@ public class ClassicAccount extends Account{
         setAlias("");
         setIBAN(Utils.generateIBAN());
         setType("classic");
+        setSpendingReports(new ArrayList<>());
+        setReportsSavings(new ArrayList<>());
+        setReportsClassic(new ArrayList<>());
+
     }
     public void accept(SpendingsReportVisitor visitor) {
         visitor.visit(this);

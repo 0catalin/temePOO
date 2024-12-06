@@ -30,7 +30,9 @@ public class ChangeInterestRate implements Command{
          else if(account.getType().equals("savings")) {
             SavingsAccount savingsAccount = (SavingsAccount) account;
             savingsAccount.setInterestRate(interestRate);
-            bank.getUserByIBAN(IBAN).getTranzactions().computeIfAbsent(successSet(mapper), k -> new ArrayList<>()).add(IBAN);
+            //bank.getUserByIBAN(IBAN).getTranzactions().computeIfAbsent(successSet(mapper), k -> new ArrayList<>()).add(IBAN);
+            bank.getUserByIBAN(IBAN).getTranzactions().add(successSet(mapper));
+            bank.getAccountByIBAN(IBAN).getReportsSavings().add(successSet(mapper));
         } else {
             output.add(savingsAccountError(mapper));
         }

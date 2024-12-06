@@ -25,7 +25,11 @@ public class AddClassicAccount implements Command{
         if(bank.getUserByEmail(email) != null) {
             User user = bank.getUserByEmail(email);
             user.getAccounts().add(classicAccount);
-            user.getTranzactions().computeIfAbsent(addToUsersTranzactions(mapper), k -> new ArrayList<>()).add(classicAccount.getIBAN());
+
+            //user.getTranzactions().computeIfAbsent(addToUsersTranzactions(mapper), k -> new ArrayList<>()).add(classicAccount.getIBAN());
+            user.getTranzactions().add(addToUsersTranzactions(mapper));
+            bank.getAccountByIBAN(classicAccount.getIBAN()).getReportsClassic().add(addToUsersTranzactions(mapper));
+
 
         } else {
             System.out.println("User Not found"); // de modificat daca nu e vreo problema

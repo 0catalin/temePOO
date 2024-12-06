@@ -32,12 +32,19 @@ public class SendMoney implements Command{
         if(accountSender == null || accountReceiver == null) {
             System.out.println("Account not found");
         } else if (accountSender.getBalance() < amount) {
-            bank.getUserByIBAN(accountSender.getIBAN()).getTranzactions().computeIfAbsent(insufficientFunds(mapper), k -> new ArrayList<>()).add(IBAN);
+            //bank.getUserByIBAN(accountSender.getIBAN()).getTranzactions().computeIfAbsent(insufficientFunds(mapper), k -> new ArrayList<>()).add(IBAN);
+            bank.getUserByIBAN(accountSender.getIBAN()).getTranzactions().add(insufficientFunds(mapper));
+            accountSender.getReportsClassic().add(insufficientFunds(mapper));
         } else {
-            userSender.getTranzactions().computeIfAbsent(addToSendersTranzactions(mapper, accountSender, accountReceiver), k -> new ArrayList<>()).add(IBAN);
+            //userSender.getTranzactions().computeIfAbsent(addToSendersTranzactions(mapper, accountSender, accountReceiver), k -> new ArrayList<>()).add(IBAN);
+            userSender.getTranzactions().add(addToSendersTranzactions(mapper, accountSender, accountReceiver));
+            accountSender.getReportsClassic().add(addToSendersTranzactions(mapper, accountSender, accountReceiver));
+
             User userReceiver = bank.getUserByAccount(accountReceiver);
 
-            userReceiver.getTranzactions().computeIfAbsent(addToReceiversTranzactions(bank, mapper, accountSender, accountReceiver), k->new ArrayList<>()).add(accountReceiver.getIBAN());
+            //userReceiver.getTranzactions().computeIfAbsent(addToReceiversTranzactions(bank, mapper, accountSender, accountReceiver), k->new ArrayList<>()).add(accountReceiver.getIBAN());
+            userReceiver.getTranzactions().add(addToReceiversTranzactions(bank, mapper, accountSender, accountReceiver));
+            accountReceiver.getReportsClassic().add(addToReceiversTranzactions(bank, mapper, accountSender, accountReceiver));
 
             accountSender.setBalance(accountSender.getBalance() - amount);
             accountReceiver.setBalance(accountReceiver.getBalance() +
