@@ -8,7 +8,9 @@ import org.poo.baseinput.User;
 import org.poo.exceptions.UserNotFoundException;
 import org.poo.fileio.CommandInput;
 
-
+/**
+ * class implementing the print transactions command
+ */
 public final class PrintTransactions implements Command {
     private String email;
     private int timestamp;

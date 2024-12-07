@@ -7,7 +7,9 @@ import org.poo.fileio.CommandInput;
 
 
 
-
+/**
+ * class implementing the add funds command
+ */
 public final class AddFunds implements Command {
     private String iban;
     private double amount;

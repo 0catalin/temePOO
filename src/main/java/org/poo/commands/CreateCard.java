@@ -12,7 +12,9 @@ import org.poo.exceptions.UserNotFoundException;
 import org.poo.fileio.CommandInput;
 
 
-
+/**
+ * class implementing the create card command
+ */
 public final class CreateCard implements Command {
     private String iban;
     private String email;

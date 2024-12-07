@@ -10,7 +10,9 @@ import org.poo.accounts.Account;
 import org.poo.baseinput.User;
 import org.poo.cards.Card;
 import org.poo.fileio.CommandInput;
-
+/**
+ * class implementing the pay online command
+ */
 public final class PayOnline implements Command {
     private String cardNumber;
     private double amount;

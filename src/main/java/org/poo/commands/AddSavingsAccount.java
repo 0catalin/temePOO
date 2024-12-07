@@ -8,7 +8,9 @@ import org.poo.baseinput.User;
 import org.poo.exceptions.UserNotFoundException;
 import org.poo.fileio.CommandInput;
 
-
+/**
+ * class implementing the add savings account command
+ */
 public final class AddSavingsAccount implements Command {
     private String email;
     private String currency;

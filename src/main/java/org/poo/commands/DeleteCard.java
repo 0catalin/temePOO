@@ -7,7 +7,9 @@ import org.poo.accounts.Account;
 import org.poo.exceptions.AccountNotFoundException;
 import org.poo.fileio.CommandInput;
 
-
+/**
+ * class implementing the delete card command
+ */
 public final class DeleteCard implements Command {
     private String cardNumber;
     private int timestamp;

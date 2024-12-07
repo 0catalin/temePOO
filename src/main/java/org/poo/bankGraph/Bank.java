@@ -24,6 +24,9 @@ import java.util.Collections;
 
 @Getter
 @Setter
+/**
+ * Singleton class designed to have the main classes as fields for all the operations
+ */
 public final class Bank {
     private ArrayList<Commerciant> commerciants;
     private Map<String, List<Edge>> exchangeRates;
@@ -39,14 +42,24 @@ public final class Bank {
     }
     private Bank() { }
 
-    public void applyParams(final InputParser parser, final ArrayNode finalNode) {
+    /**
+     * method that reapplies parameters on every test
+     * @param parser the parser with the input information
+     * @param outputNode the output node which gets printed at the end in output files
+     */
+    public void applyParams(final InputParser parser, final ArrayNode outputNode) {
         commerciants = parser.getCommerciants();
         exchangeRates = parser.getGraph();
         users = parser.getUsers();
         exchangeRatesList = parser.getExchangeRatesList();
-        output = finalNode;
+        output = outputNode;
     }
 
+    /**
+     * method that finds a user by the corresponding email
+     * @param email
+     * @return the corresponding user or exception if not found
+     */
     public User getUserByEmail(final String email) {
         for (User user : users) {
             if (user.getEmail().equals(email)) {
@@ -56,6 +69,11 @@ public final class Bank {
         throw new UserNotFoundException("");
     }
 
+    /**
+     * method that finds an account by the corresponding email
+     * @param iban
+     * @return the corresponding account or exception if not found
+     */
     public Account getAccountByIBAN(final String iban) {
         for (User user : users) {
             for (Account account : user.getAccounts()) {
@@ -67,6 +85,11 @@ public final class Bank {
         throw new AccountNotFoundException("");
     }
 
+    /**
+     * method that finds a user by the corresponding iban
+     * @param iban
+     * @return the corresponding user or exception if not found
+     */
     public User getUserByIBAN(final String iban) {
         for (User user : users) {
             for (Account account : user.getAccounts()) {
@@ -78,6 +101,11 @@ public final class Bank {
         throw new UserNotFoundException("");
     }
 
+    /**
+     * method that finds an account by the corresponding iban or alias
+     * @param ibanOrAlias
+     * @return the corresponding account or exception if not found
+     */
     public Account getAccountByIBANOrAlias(final String ibanOrAlias) {
         for (User user : users) {
             for (Account account : user.getAccounts()) {
@@ -90,6 +118,11 @@ public final class Bank {
         throw new AccountNotFoundException("");
     }
 
+    /**
+     * method that finds an account by the corresponding card id
+     * @param cardNumber
+     * @return the corresponding account or exception if not found
+     */
     public Account getAccountByCardNumber(final String cardNumber) {
         for (User user : users) {
             for (Account account : user.getAccounts()) {
@@ -103,6 +136,11 @@ public final class Bank {
         throw new AccountNotFoundException("");
     }
 
+    /**
+     * method that finds a card by the corresponding card id
+     * @param cardNumber
+     * @return the corresponding card or exception if not found
+     */
     public Card getCardByCardNumber(final String cardNumber) {
         for (User user : users) {
             for (Account account : user.getAccounts()) {
@@ -116,6 +154,11 @@ public final class Bank {
         throw new CardNotFoundException("");
     }
 
+    /**
+     * method that finds a user by the corresponding account
+     * @param account
+     * @return the corresponding user or exception if not found
+     */
     public User getUserByAccount(final Account account) {
         for (User user : users) {
             if (user.getAccounts().contains(account)) {
@@ -125,7 +168,14 @@ public final class Bank {
         throw new UserNotFoundException("");
     }
 
-
+    /**
+     * The method iterates over the exchangeRates that were previously added in O(n) complexity
+     * If it isn't found like that, it runs dfs and adds all the nodes which are not contained into
+     * the found exchange rates
+     * @param from currency from which we want to convert
+     * @param to currency to which we want to convert
+     * @return the conversion rate
+     */
     public double findExchangeRate(final String from, final String to) {
         for (ExchangeRate exchangeRate : exchangeRatesList) {
             if (exchangeRate.getFrom().equals(from) && exchangeRate.getTo().equals(to)) {
@@ -140,6 +190,17 @@ public final class Bank {
             Pair<String, Double> current = queue.poll();
             String currentCurrency = current.getKey();
             double currentRate = current.getValue();
+
+            if (!from.equals(currentCurrency)) {
+                ExchangeRate exchangeRate = new ExchangeRate(from, currentRate, currentCurrency);
+                ExchangeRate reverseExchangeRate = new ExchangeRate(exchangeRate);
+
+                if (!exchangeRatesList.contains(reverseExchangeRate)) {
+                    exchangeRatesList.add(reverseExchangeRate);
+                    exchangeRatesList.add(exchangeRate);
+                }
+            }
+
 
             if (currentCurrency.equals(to)) {
                 ExchangeRate exchangeRate = new ExchangeRate(from, currentRate, to);

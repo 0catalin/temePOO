@@ -8,6 +8,9 @@ import org.poo.bankGraph.Bank;
 import org.poo.exceptions.AccountNotFoundException;
 import org.poo.fileio.CommandInput;
 
+/**
+ * class implementing the add interest command
+ */
 public final class AddInterest implements Command {
     private String iban;
     private int timestamp;

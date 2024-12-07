@@ -11,6 +11,9 @@ import org.poo.fileio.CommandInput;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * class implementing the split payment command
+ */
 public final class SplitPayment implements Command {
     private double amount;
     private int timestamp;

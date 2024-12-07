@@ -11,6 +11,9 @@ import org.poo.bankGraph.Bank;
 import org.poo.baseinput.User;
 import org.poo.fileio.CommandInput;
 
+/**
+ * class implementing the spendings report command
+ */
 public final class SpendingsReport implements Command {
     private int startTimestamp;
     private int endTimestamp;

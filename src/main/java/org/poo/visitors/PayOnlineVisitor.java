@@ -9,6 +9,9 @@ import org.poo.cards.Card;
 import org.poo.cards.OneTimeCard;
 import org.poo.cards.RegularCard;
 
+/**
+ * Visitor which simulates an online card payment based on the type of card
+ */
 public final class PayOnlineVisitor {
     private double amount;
     private int timestamp;
@@ -27,6 +30,10 @@ public final class PayOnlineVisitor {
         this.account = account;
     }
 
+    /**
+     * simulates an online payment with a one time card and takes care of all the error cases
+     * @param card the OneTimeCard which is used for the payment
+     */
     public void visit(final OneTimeCard card) {
         User user = Bank.getInstance().getUserByIBAN(account.getIban());
         if (account.getBalance() < amount) {
@@ -53,6 +60,10 @@ public final class PayOnlineVisitor {
         }
     }
 
+    /**
+     * simulates an online payment with a regular card and takes care of all the error cases
+     * @param card the regular card which is used for the payment
+     */
     public void visit(final RegularCard card) {
         User user = Bank.getInstance().getUserByIBAN(account.getIban());
         if (account.getBalance() < amount) {

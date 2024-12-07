@@ -8,6 +8,10 @@ import org.poo.exceptions.AccountNotFoundException;
 import org.poo.exceptions.UserNotFoundException;
 import org.poo.fileio.CommandInput;
 
+
+/**
+ * class implementing the set alias command
+ */
 public final class SetAlias implements Command {
     private String iban;
     private String email;

@@ -11,6 +11,9 @@ import org.poo.exceptions.AccountNotFoundException;
 import org.poo.exceptions.UserNotFoundException;
 import org.poo.fileio.CommandInput;
 
+/**
+ * class implementing the creating of one time card command
+ */
 public final class CreateOneTimeCard implements Command {
     private String iban;
     private String email;

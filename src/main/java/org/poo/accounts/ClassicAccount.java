@@ -8,7 +8,9 @@ import java.util.ArrayList;
 
 @Getter
 @Setter
-
+/**
+ * class designed to extend Account class, representing a classic account entity
+ */
 public final class ClassicAccount extends Account {
     public ClassicAccount(final String currency) {
         setCurrency(currency);
@@ -21,6 +23,11 @@ public final class ClassicAccount extends Account {
         setReportsSavings(new ArrayList<>());
         setReportsClassic(new ArrayList<>());
     }
+
+    /**
+     * method of accepting the visitor
+     * @param visitor the interface of the possible visitor classes
+     */
     public void accept(final Visitor visitor) {
         visitor.visit(this);
     }

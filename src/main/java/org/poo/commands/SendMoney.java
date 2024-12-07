@@ -9,6 +9,9 @@ import org.poo.exceptions.AccountNotFoundException;
 import org.poo.fileio.CommandInput;
 
 
+/**
+ * class implementing the send money command
+ */
 public final class SendMoney implements Command {
     private double amount;
     private int timestamp;

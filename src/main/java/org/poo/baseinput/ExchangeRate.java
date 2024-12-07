@@ -5,8 +5,10 @@ import org.poo.fileio.ExchangeInput;
 
 @Getter
 @Setter
-
-public class ExchangeRate {
+/**
+ * class designed to store an input exchange rate
+ */
+public final class ExchangeRate {
     private String from;
     private String to;
     private double rate;

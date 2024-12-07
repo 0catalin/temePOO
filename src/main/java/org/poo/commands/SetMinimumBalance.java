@@ -6,6 +6,9 @@ import org.poo.bankGraph.Bank;
 import org.poo.exceptions.AccountNotFoundException;
 import org.poo.fileio.CommandInput;
 
+/**
+ * class implementing the set minimum balance command
+ */
 public final class SetMinimumBalance implements Command {
     private String iban;
     private double minBalance;

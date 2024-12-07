@@ -9,6 +9,11 @@ import org.poo.baseinput.User;
 import org.poo.cards.Card;
 import org.poo.fileio.CommandInput;
 
+
+/**
+ * class implementing the print users command
+ */
+
 public final class PrintUsers implements Command {
     private int timestamp;
     public PrintUsers(final CommandInput input) {

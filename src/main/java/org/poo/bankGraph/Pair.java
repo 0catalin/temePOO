@@ -1,5 +1,10 @@
 package org.poo.bankGraph;
 
+/**
+ * a pair class
+ * @param <K> any Object param
+ * @param <V> any Object param
+ */
 public final class Pair<K, V> {
     private final K key;
     private final V value;

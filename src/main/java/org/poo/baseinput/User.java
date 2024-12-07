@@ -11,8 +11,10 @@ import java.util.ArrayList;
 
 @Getter
 @Setter
-
-public class User {
+/**
+ * class designed to store an input user
+ */
+public final class User {
     private String firstName;
     private String lastName;
     private String email;

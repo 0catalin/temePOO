@@ -25,10 +25,15 @@ public final class SavingsAccount extends Account {
     public double getInterestRate() {
         return interestRate;
     }
+
     public void setInterestRate(final double interestRate) {
         this.interestRate = interestRate;
     }
 
+    /**
+     * method of accepting the visitor
+     * @param visitor the interface of the possible visitor classes
+     */
     public void accept(final Visitor visitor) {
         visitor.visit(this);
     }

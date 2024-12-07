@@ -8,7 +8,9 @@ import org.poo.baseinput.User;
 import org.poo.exceptions.UserNotFoundException;
 import org.poo.fileio.CommandInput;
 
-
+/**
+ * class implementing the add classic account command
+ */
 public final class AddClassicAccount implements Command {
     private String email;
     private String currency;

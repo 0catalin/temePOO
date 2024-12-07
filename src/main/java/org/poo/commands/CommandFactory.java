@@ -2,7 +2,15 @@ package org.poo.commands;
 
 import org.poo.fileio.CommandInput;
 
+/**
+ * factory for the commands, it creates the objects based on the name of the command
+ */
 public abstract class CommandFactory {
+    /**
+     * creates the objects based on the name of the command
+     * @param commandInput the input of the command
+     * @return a new command object depending on the input command name
+     */
     public static Command createCommand(final CommandInput commandInput) {
         if (commandInput.getCommand().equals("printUsers")) {
             return new PrintUsers(commandInput);

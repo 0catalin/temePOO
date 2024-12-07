@@ -8,7 +8,9 @@ import org.poo.baseinput.User;
 import org.poo.exceptions.AccountNotFoundException;
 import org.poo.fileio.CommandInput;
 
-
+/**
+ * class implementing the check card status command
+ */
 public final class CheckCardStatus implements Command {
     private String cardNumber;
     private int timestamp;

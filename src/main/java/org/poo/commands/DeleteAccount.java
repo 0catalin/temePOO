@@ -9,6 +9,9 @@ import org.poo.exceptions.AccountNotFoundException;
 import org.poo.exceptions.UserNotFoundException;
 import org.poo.fileio.CommandInput;
 
+/**
+ * class implementing the delete account command
+ */
 public final class DeleteAccount implements Command {
     private String iban;
     private String email;

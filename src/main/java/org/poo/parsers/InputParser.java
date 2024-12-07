@@ -23,8 +23,10 @@ import java.util.Map;
 
 @Getter
 @Setter
-
-    public final class InputParser {
+/**
+ * class used for parsing the input and storing it in objects
+ */
+public final class InputParser {
         private ArrayList<Command> commands;
         private ArrayList<Commerciant> commerciants;
         private Map<String, List<Edge>> graph;

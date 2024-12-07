@@ -10,6 +10,10 @@ import org.poo.accounts.Account;
 import org.poo.bankGraph.Bank;
 import org.poo.fileio.CommandInput;
 
+/**
+ * class implementing the report command
+ */
+
 public final class Report implements Command {
     private int startTimestamp;
     private int endTimestamp;

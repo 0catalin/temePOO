@@ -15,6 +15,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * Class implementing visitor interface, visiting 2 types of accounts
+ */
 public final class SpendingsReportVisitor implements Visitor {
     private String iban;
     private int timestamp;
@@ -28,19 +31,19 @@ public final class SpendingsReportVisitor implements Visitor {
         this.startTimestamp = startTimestamp;
         this.endTimestamp = endTimestamp;
     }
-
+    /**
+     * takes classic account tranzactions based on the start and end timestamps
+     * creates the commerciants ArrayList by initially using a HashMap
+     * @param account classic account
+     */
     public void visit(final ClassicAccount account) {
-
+        ObjectMapper mapper = new ObjectMapper();
 
         List<ObjectNode> tranzactions = Bank.getInstance().getAccountByIBAN(iban)
                 .getSpendingReports().stream().filter(node -> {
             int timeStamp = node.get("timestamp").asInt();
             return timeStamp >= startTimestamp && timeStamp <= endTimestamp;
         }).collect(Collectors.toList());
-
-
-
-
 
 
         Map<String, Double> commerciantTotals = new LinkedHashMap<>();
@@ -55,7 +58,6 @@ public final class SpendingsReportVisitor implements Visitor {
             }
         }
 
-        ObjectMapper mapper = new ObjectMapper();
 
         List<ObjectNode> commerciants = new ArrayList<>();
         for (Map.Entry<String, Double> entry : commerciantTotals.entrySet()) {
@@ -72,7 +74,10 @@ public final class SpendingsReportVisitor implements Visitor {
 
         addToOutput(tranzactions, account, commerciants);
     }
-
+    /**
+     * adds an error to the output ArrayNode
+     * @param account savings account
+     */
     public void visit(final SavingsAccount account) {
         Bank.getInstance().getOutput().add(spendingsReportOnSavingsAccountError());
     }

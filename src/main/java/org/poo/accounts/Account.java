@@ -9,9 +9,11 @@ import java.util.ArrayList;
 
 @Getter
 @Setter
-
+/**
+ * Class designed to be extended by the Classic and Savings account classes
+ * represents an account
+ */
 public abstract class Account {
-    // poate clasa abstracta
     private String currency;
     private double minBalance = 0;
     private String alias;
@@ -54,6 +56,11 @@ public abstract class Account {
     public boolean isInWarningRange() {
         return balance - minBalance <= WARNING_LIMIT;
     }
+
+    /**
+     * accepts visitors that do different operations on different types of accounts
+     * @param visitor the interface of the possible visitor classes
+     */
     public abstract void accept(Visitor visitor);
 
 }

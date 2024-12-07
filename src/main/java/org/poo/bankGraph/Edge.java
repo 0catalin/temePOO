@@ -4,7 +4,9 @@ import lombok.Getter;
 
 @Setter
 @Getter
-
+/**
+ * a currency graph edge representation
+ */
 public final class Edge {
     private String to;
     private double rate;
