@@ -25,7 +25,11 @@ public abstract class Account {
 
     private static final int WARNING_LIMIT = 30;
 
-
+    /**
+     * iterates through the account cards and returns the corresponding card
+     * @param cardNumber the card id
+     * @return the Card object corresponding to ID
+     */
     public Card getCardByCardNumber(final String cardNumber) {
         for (Card card : cards) {
             if (card.getCardNumber().equals(cardNumber)) {
@@ -35,9 +39,18 @@ public abstract class Account {
         return null;
     }
 
+    /**
+     * checks if an account balance is 0
+     * @return tru if it is 0 false if it is not
+     */
     public boolean isEmpty() {
         return balance == 0;
     }
+
+    /**
+     * checks if the balance is in warning range
+     * @return true if it is and false if it is not
+     */
     public boolean isInWarningRange() {
         return balance - minBalance <= WARNING_LIMIT;
     }

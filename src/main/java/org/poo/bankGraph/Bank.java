@@ -8,9 +8,19 @@ import org.poo.baseinput.Commerciant;
 import org.poo.baseinput.ExchangeRate;
 import org.poo.baseinput.User;
 import org.poo.cards.Card;
+import org.poo.exceptions.AccountNotFoundException;
+import org.poo.exceptions.CardNotFoundException;
+import org.poo.exceptions.UserNotFoundException;
 import org.poo.parsers.InputParser;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Queue;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.Collections;
 
 @Getter
 @Setter
@@ -43,7 +53,7 @@ public final class Bank {
                 return user;
             }
         }
-        return null;
+        throw new UserNotFoundException("");
     }
 
     public Account getAccountByIBAN(final String iban) {
@@ -54,7 +64,7 @@ public final class Bank {
                 }
             }
         }
-        return null;
+        throw new AccountNotFoundException("");
     }
 
     public User getUserByIBAN(final String iban) {
@@ -65,7 +75,7 @@ public final class Bank {
                 }
             }
         }
-        return null;
+        throw new UserNotFoundException("");
     }
 
     public Account getAccountByIBANOrAlias(final String ibanOrAlias) {
@@ -77,7 +87,7 @@ public final class Bank {
                 }
             }
         }
-        return null;
+        throw new AccountNotFoundException("");
     }
 
     public Account getAccountByCardNumber(final String cardNumber) {
@@ -90,7 +100,7 @@ public final class Bank {
                 }
             }
         }
-        return null;
+        throw new AccountNotFoundException("");
     }
 
     public Card getCardByCardNumber(final String cardNumber) {
@@ -103,7 +113,7 @@ public final class Bank {
                 }
             }
         }
-        return null;
+        throw new CardNotFoundException("");
     }
 
     public User getUserByAccount(final Account account) {
@@ -112,7 +122,7 @@ public final class Bank {
                 return user;
             }
         }
-        return null;
+        throw new UserNotFoundException("");
     }
 
 

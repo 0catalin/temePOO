@@ -4,6 +4,8 @@ package org.poo.commands;
 import org.poo.accounts.Account;
 import org.poo.bankGraph.Bank;
 import org.poo.baseinput.User;
+import org.poo.exceptions.AccountNotFoundException;
+import org.poo.exceptions.UserNotFoundException;
 import org.poo.fileio.CommandInput;
 
 public final class SetAlias implements Command {
@@ -19,14 +21,14 @@ public final class SetAlias implements Command {
 
     @Override
     public void execute() {
-        Account account = Bank.getInstance().getAccountByIBAN(iban);
-        User user = Bank.getInstance().getUserByEmail(email);
-        if (account == null) {
-         // don't have to do anything with exception
-        } else if (user == null) {
-            // don't have to do anything with exception
-        } else if (user.getAccounts().contains(account)) {
-            account.setAlias(alias);
+        try {
+            Account account = Bank.getInstance().getAccountByIBAN(iban);
+            User user = Bank.getInstance().getUserByEmail(email);
+            if (user.getAccounts().contains(account)) {
+                account.setAlias(alias);
+            }
+        } catch (UserNotFoundException | AccountNotFoundException e) {
+
         }
     }
 

@@ -2,7 +2,11 @@ package org.poo.commands;
 
 import org.poo.bankGraph.Bank;
 import org.poo.accounts.Account;
+import org.poo.exceptions.AccountNotFoundException;
 import org.poo.fileio.CommandInput;
+
+
+
 
 public final class AddFunds implements Command {
     private String iban;
@@ -15,11 +19,13 @@ public final class AddFunds implements Command {
 
     @Override
     public void execute() {
-        Account account = Bank.getInstance().getAccountByIBAN(iban);
-        if (account == null) {
-            // never happens
-        } else {
+        try {
+            Account account = Bank.getInstance().getAccountByIBAN(iban);
             account.setBalance(account.getBalance() + amount);
+        } catch (AccountNotFoundException e) {
+
         }
+
+
     }
 }

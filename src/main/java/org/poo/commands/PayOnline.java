@@ -3,6 +3,8 @@ package org.poo.commands;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.poo.bankGraph.Bank;
+import org.poo.exceptions.CardNotFoundException;
+import org.poo.exceptions.UserNotFoundException;
 import org.poo.visitors.PayOnlineVisitor;
 import org.poo.accounts.Account;
 import org.poo.baseinput.User;
@@ -28,21 +30,23 @@ public final class PayOnline implements Command {
 
     @Override
     public void execute() {
-        Card card = Bank.getInstance().getCardByCardNumber(cardNumber);
-        User user = Bank.getInstance().getUserByEmail(email);
-        Account account = Bank.getInstance().getAccountByCardNumber(cardNumber);
-        if (card == null) {
-            cardNotFound();
-        } else if (user == null) {
-            // no need here
-        } else if (!user.getAccounts().contains(account)) {
-            cardNotFound();
-        } else if (account.getBalance() != 0) {
+        try {
+            Card card = Bank.getInstance().getCardByCardNumber(cardNumber);
+            User user = Bank.getInstance().getUserByEmail(email);
+            Account account = Bank.getInstance().getAccountByCardNumber(cardNumber);
+            if (!user.getAccounts().contains(account)) {
+                cardNotFound();
+            } else if (account.getBalance() != 0) {
                 amount = amount * Bank.getInstance()
                         .findExchangeRate(currency, account.getCurrency());
                 PayOnlineVisitor visitor = new PayOnlineVisitor(amount, timestamp,
                         commerciant, account);
                 card.accept(visitor);
+            }
+        } catch (CardNotFoundException e) {
+            cardNotFound();
+        } catch (UserNotFoundException e) {
+
         }
 
     }

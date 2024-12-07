@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.poo.bankGraph.Bank;
 import org.poo.baseinput.User;
+import org.poo.exceptions.UserNotFoundException;
 import org.poo.fileio.CommandInput;
 
 
@@ -18,10 +19,8 @@ public final class PrintTransactions implements Command {
 
     @Override
     public void execute() {
-        User user = Bank.getInstance().getUserByEmail(email);
-        if (user == null) {
-            // no need here
-        } else {
+        try {
+            User user = Bank.getInstance().getUserByEmail(email);
             ObjectMapper mapper = new ObjectMapper();
             ObjectNode transaction = mapper.createObjectNode();
             transaction.put("command", "printTransactions");
@@ -32,6 +31,8 @@ public final class PrintTransactions implements Command {
             transaction.set("output", outputNode);
             transaction.put("timestamp", timestamp);
             Bank.getInstance().getOutput().add(transaction);
+        } catch (UserNotFoundException e) {
+
         }
 
     }

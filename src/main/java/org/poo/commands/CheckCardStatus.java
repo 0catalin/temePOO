@@ -5,7 +5,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.poo.accounts.Account;
 import org.poo.bankGraph.Bank;
 import org.poo.baseinput.User;
-import org.poo.cards.Card;
+import org.poo.exceptions.AccountNotFoundException;
 import org.poo.fileio.CommandInput;
 
 
@@ -20,17 +20,16 @@ public final class CheckCardStatus implements Command {
 
     @Override
     public void execute() {
-        Card card = Bank.getInstance().getCardByCardNumber(cardNumber);
-        Account account = Bank.getInstance().getAccountByCardNumber(cardNumber);
-        if (card == null) {
-            cardNotFoundError();
-        } else {
+        try {
+            Account account = Bank.getInstance().getAccountByCardNumber(cardNumber);
             User user = Bank.getInstance().getUserByIBAN(account.getIban());
             if (account.getBalance() < account.getMinBalance()) {
                 user.getTranzactions().add(cardFrozenError());
             } else if (account.isInWarningRange()) {
                 user.getTranzactions().add(cardStatusWarning());
             }
+        } catch (AccountNotFoundException e) {
+            cardNotFoundError();
         }
     }
 

@@ -3,6 +3,7 @@ package org.poo.commands;
 
 import org.poo.accounts.Account;
 import org.poo.bankGraph.Bank;
+import org.poo.exceptions.AccountNotFoundException;
 import org.poo.fileio.CommandInput;
 
 public final class SetMinimumBalance implements Command {
@@ -16,11 +17,11 @@ public final class SetMinimumBalance implements Command {
 
     @Override
     public void execute() {
-        Account account = Bank.getInstance().getAccountByIBAN(iban);
-        if (account != null) {
+        try {
+            Account account = Bank.getInstance().getAccountByIBAN(iban);
             account.setMinBalance(minBalance);
-        } else {
-            // don't have to handle exception
+        } catch (AccountNotFoundException e) {
+
         }
     }
 }

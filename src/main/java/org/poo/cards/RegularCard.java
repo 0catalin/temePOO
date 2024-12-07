@@ -9,7 +9,7 @@ public final class RegularCard extends Card {
         setCardNumber(Utils.generateCardNumber());
     }
 
-    public void accept(PayOnlineVisitor visitor) {
+    public void accept(final PayOnlineVisitor visitor) {
         visitor.visit(this);
     }
 

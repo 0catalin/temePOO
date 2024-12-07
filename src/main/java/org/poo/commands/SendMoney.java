@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.poo.bankGraph.Bank;
 import org.poo.accounts.Account;
 import org.poo.baseinput.User;
+import org.poo.exceptions.AccountNotFoundException;
 import org.poo.fileio.CommandInput;
 
 
@@ -25,32 +26,34 @@ public final class SendMoney implements Command {
 
     @Override
     public void execute() {
-        Account accountSender = Bank.getInstance().getAccountByIBAN(iban);
-        Account accountReceiver = Bank.getInstance().getAccountByIBANOrAlias(receiver);
-        User userSender = Bank.getInstance().getUserByIBAN(iban);
-        if (accountSender == null || accountReceiver == null) {
-            // have to do something with exception
-        } else if (accountSender.getBalance() < amount) {
-            Bank.getInstance().getUserByIBAN(accountSender.getIban())
-                    .getTranzactions().add(insufficientFunds());
-            accountSender.getReportsClassic().add(insufficientFunds());
-        } else {
-            userSender.getTranzactions()
-                    .add(addToSendersTranzactions(accountSender, accountReceiver));
-            accountSender.getReportsClassic()
-                    .add(addToSendersTranzactions(accountSender, accountReceiver));
+        try {
+            Account accountSender = Bank.getInstance().getAccountByIBAN(iban);
+            Account accountReceiver = Bank.getInstance().getAccountByIBANOrAlias(receiver);
+            User userSender = Bank.getInstance().getUserByIBAN(iban);
+            if (accountSender.getBalance() < amount) {
+                Bank.getInstance().getUserByIBAN(accountSender.getIban())
+                        .getTranzactions().add(insufficientFunds());
+                accountSender.getReportsClassic().add(insufficientFunds());
+            } else {
+                userSender.getTranzactions()
+                        .add(addToSendersTranzactions(accountSender, accountReceiver));
+                accountSender.getReportsClassic()
+                        .add(addToSendersTranzactions(accountSender, accountReceiver));
 
-            User userReceiver = Bank.getInstance().getUserByAccount(accountReceiver);
+                User userReceiver = Bank.getInstance().getUserByAccount(accountReceiver);
 
-            userReceiver.getTranzactions()
-                    .add(addToReceiversTranzactions(accountSender, accountReceiver));
-            accountReceiver.getReportsClassic()
-                    .add(addToReceiversTranzactions(accountSender, accountReceiver));
+                userReceiver.getTranzactions()
+                        .add(addToReceiversTranzactions(accountSender, accountReceiver));
+                accountReceiver.getReportsClassic()
+                        .add(addToReceiversTranzactions(accountSender, accountReceiver));
 
-            accountSender.setBalance(accountSender.getBalance() - amount);
-            accountReceiver.setBalance(accountReceiver.getBalance()
-                    + amount * Bank.getInstance().findExchangeRate(accountSender.getCurrency(),
-                            accountReceiver.getCurrency()));
+                accountSender.setBalance(accountSender.getBalance() - amount);
+                accountReceiver.setBalance(accountReceiver.getBalance()
+                        + amount * Bank.getInstance().findExchangeRate(accountSender.getCurrency(),
+                        accountReceiver.getCurrency()));
+
+            }
+        } catch (AccountNotFoundException e) {
 
         }
     }

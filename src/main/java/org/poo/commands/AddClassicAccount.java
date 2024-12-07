@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.poo.bankGraph.Bank;
 import org.poo.accounts.ClassicAccount;
 import org.poo.baseinput.User;
+import org.poo.exceptions.UserNotFoundException;
 import org.poo.fileio.CommandInput;
 
 
@@ -21,16 +22,13 @@ public final class AddClassicAccount implements Command {
     @Override
     public void execute() {
         ClassicAccount classicAccount = new ClassicAccount(currency);
-        if (Bank.getInstance().getUserByEmail(email) != null) {
+        try {
             User user = Bank.getInstance().getUserByEmail(email);
             user.getAccounts().add(classicAccount);
-
             user.getTranzactions().add(addToUsersTranzactions());
             Bank.getInstance().getAccountByIBAN(classicAccount.getIban())
                     .getReportsClassic().add(addToUsersTranzactions());
-
-
-        } else {
+        } catch (UserNotFoundException e) {
             // never happens
         }
 

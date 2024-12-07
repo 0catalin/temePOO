@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.poo.bankGraph.Bank;
 import org.poo.accounts.SavingsAccount;
 import org.poo.baseinput.User;
+import org.poo.exceptions.UserNotFoundException;
 import org.poo.fileio.CommandInput;
 
 
@@ -22,15 +23,15 @@ public final class AddSavingsAccount implements Command {
 
     @Override
     public void execute() {
-        if (Bank.getInstance().getUserByEmail(email) != null) {
+        try  {
             SavingsAccount savingsAccount = new SavingsAccount(currency, interestRate);
             User user = Bank.getInstance().getUserByEmail(email);
             user.getAccounts().add(savingsAccount);
             user.getTranzactions().add(addToUsersTranzactions());
             Bank.getInstance().getAccountByIBAN(savingsAccount.getIban())
                     .getReportsClassic().add(addToUsersTranzactions());
-        } else {
-            // it happens once
+        } catch (UserNotFoundException e) {
+
         }
     }
 

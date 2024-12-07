@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.poo.accounts.Account;
 import org.poo.accounts.SavingsAccount;
 import org.poo.bankGraph.Bank;
+import org.poo.exceptions.AccountNotFoundException;
 import org.poo.fileio.CommandInput;
 
 public final class AddInterest implements Command {
@@ -18,16 +19,18 @@ public final class AddInterest implements Command {
 
     @Override
     public void execute() {
-        Account account = Bank.getInstance().getAccountByIBAN(iban);
-        if (account == null) {
-            // never happens
+        try {
+            Account account = Bank.getInstance().getAccountByIBAN(iban);
+            if (account.getType().equals("savings")) {
+                account.setBalance(account.getBalance()
+                        * (1 + ((SavingsAccount) account).getInterestRate()));
+            } else {
+                Bank.getInstance().getOutput().add(savingsAccountError());
+            }
+        } catch (AccountNotFoundException e) {
+
         }
-        if (account.getType().equals("savings")) {
-            account.setBalance(account.getBalance()
-                    * (1 + ((SavingsAccount) account).getInterestRate()));
-        } else {
-            Bank.getInstance().getOutput().add(savingsAccountError());
-        }
+
     }
 
     private ObjectNode savingsAccountError() {

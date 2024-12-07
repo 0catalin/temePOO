@@ -8,7 +8,11 @@ import org.poo.accounts.ClassicAccount;
 import org.poo.accounts.SavingsAccount;
 import org.poo.bankGraph.Bank;
 
-import java.util.*;
+
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public final class SpendingsReportVisitor implements Visitor {

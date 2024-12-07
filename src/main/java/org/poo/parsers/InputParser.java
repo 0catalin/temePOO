@@ -5,12 +5,20 @@ import org.poo.baseinput.Commerciant;
 import org.poo.baseinput.ExchangeRate;
 import org.poo.baseinput.User;
 import org.poo.commands.CommandFactory;
-import org.poo.fileio.*;
+
 import org.poo.commands.Command;
 import lombok.Getter;
 import lombok.Setter;
+import org.poo.fileio.CommerciantInput;
+import org.poo.fileio.ExchangeInput;
+import org.poo.fileio.ObjectInput;
+import org.poo.fileio.UserInput;
+import org.poo.fileio.CommandInput;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 @Getter
@@ -60,11 +68,6 @@ import java.util.*;
                 commands.add(CommandFactory.createCommand(commandInput));
             }
         }
-
-
-
-
-
 }
 
 

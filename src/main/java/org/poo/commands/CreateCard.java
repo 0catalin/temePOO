@@ -7,6 +7,8 @@ import org.poo.accounts.Account;
 import org.poo.baseinput.User;
 import org.poo.cards.Card;
 import org.poo.cards.RegularCard;
+import org.poo.exceptions.AccountNotFoundException;
+import org.poo.exceptions.UserNotFoundException;
 import org.poo.fileio.CommandInput;
 
 
@@ -24,22 +26,18 @@ public final class CreateCard implements Command {
 
     @Override
     public void execute() {
-        Account account = Bank.getInstance().getAccountByIBAN(iban);
-        User user = Bank.getInstance().getUserByEmail(email);
-        if (account == null) {
-            // never happening
-        } else if (user == null) {
-            System.out.println("User not found -- l");
-        } else {
+        try {
+            Account account = Bank.getInstance().getAccountByIBAN(iban);
+            User user = Bank.getInstance().getUserByEmail(email);
             if (user.getAccounts().contains(account)) {
                 Card card = new RegularCard();
                 account.getCards().add(card);
                 user.getTranzactions().add(addToUsersTranzactions(card));
                 Bank.getInstance().getAccountByIBAN(iban)
                         .getReportsClassic().add(addToUsersTranzactions(card));
-            } else {
-                // no need to take action
-            }
+                }
+        } catch (AccountNotFoundException | UserNotFoundException e) {
+
         }
 
     }

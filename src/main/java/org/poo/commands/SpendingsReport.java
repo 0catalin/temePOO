@@ -3,6 +3,7 @@ package org.poo.commands;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.poo.exceptions.UserNotFoundException;
 import org.poo.visitors.reportVisitors.SpendingsReportVisitor;
 import org.poo.visitors.reportVisitors.Visitor;
 import org.poo.accounts.Account;
@@ -25,13 +26,13 @@ public final class SpendingsReport implements Command {
 
     @Override
     public void execute() {
-        Account account = Bank.getInstance().getAccountByIBAN(iban);
-        User user = Bank.getInstance().getUserByIBAN(iban);
-        if (user != null) {
+        try {
+            User user = Bank.getInstance().getUserByIBAN(iban);
+            Account account = Bank.getInstance().getAccountByIBAN(iban);
             Visitor visitor = new SpendingsReportVisitor(iban, timestamp,
-                    startTimestamp, endTimestamp);
+                        startTimestamp, endTimestamp);
             account.accept(visitor);
-        } else {
+        } catch (UserNotFoundException e) {
             userNotFound(Bank.getInstance().getOutput());
         }
     }

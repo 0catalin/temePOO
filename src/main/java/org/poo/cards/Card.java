@@ -13,6 +13,9 @@ public abstract class Card {
 
     public abstract void accept(PayOnlineVisitor visitor);
 
+    /**
+     * updates card id by generating it with Utils class
+     */
     public void updateCardNumber() {
         cardNumber = Utils.generateCardNumber();
     }

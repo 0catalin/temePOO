@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.poo.bankGraph.Bank;
 import org.poo.accounts.Account;
+import org.poo.exceptions.AccountNotFoundException;
 import org.poo.fileio.CommandInput;
 
 
@@ -18,16 +19,16 @@ public final class DeleteCard implements Command {
 
     @Override
     public void execute() {
-        Account account = Bank.getInstance().getAccountByCardNumber(cardNumber);
-        if (account == null) {
-
-        } else {
+        try {
+            Account account = Bank.getInstance().getAccountByCardNumber(cardNumber);
             String iban = account.getIban();
             String email = Bank.getInstance().getUserByIBAN(iban).getEmail();
             Bank.getInstance().getUserByIBAN(iban)
                     .getTranzactions().add(successfulDeletion(iban, email));
             account.getReportsClassic().add(successfulDeletion(iban, email));
             account.getCards().remove(account.getCardByCardNumber(cardNumber));
+        } catch (AccountNotFoundException e) {
+
         }
 
     }

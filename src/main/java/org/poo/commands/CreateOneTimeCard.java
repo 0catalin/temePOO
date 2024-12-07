@@ -7,6 +7,8 @@ import org.poo.accounts.Account;
 import org.poo.baseinput.User;
 import org.poo.cards.Card;
 import org.poo.cards.OneTimeCard;
+import org.poo.exceptions.AccountNotFoundException;
+import org.poo.exceptions.UserNotFoundException;
 import org.poo.fileio.CommandInput;
 
 public final class CreateOneTimeCard implements Command {
@@ -22,22 +24,18 @@ public final class CreateOneTimeCard implements Command {
 
     @Override
     public void execute() {
-        Account account = Bank.getInstance().getAccountByIBAN(iban);
-        User user = Bank.getInstance().getUserByEmail(email);
-        if (account == null) {
-            // never happens
-        } else if (user == null) {
-            // never happens
-        } else {
+        try {
+            Account account = Bank.getInstance().getAccountByIBAN(iban);
+            User user = Bank.getInstance().getUserByEmail(email);
             if (user.getAccounts().contains(account)) {
                 Card card = new OneTimeCard();
                 user.getTranzactions().add(addToUsersTranzactions(card));
                 Bank.getInstance().getAccountByIBAN(iban)
                         .getReportsClassic().add(addToUsersTranzactions(card));
                 account.getCards().add(card);
-            } else {
-                // never happens
             }
+        } catch (AccountNotFoundException | UserNotFoundException e) {
+
         }
     }
 

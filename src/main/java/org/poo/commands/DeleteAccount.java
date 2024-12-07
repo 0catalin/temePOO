@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.poo.bankGraph.Bank;
 import org.poo.accounts.Account;
 import org.poo.baseinput.User;
+import org.poo.exceptions.AccountNotFoundException;
+import org.poo.exceptions.UserNotFoundException;
 import org.poo.fileio.CommandInput;
 
 public final class DeleteAccount implements Command {
@@ -20,21 +22,21 @@ public final class DeleteAccount implements Command {
 
     @Override
     public void execute() {
-        Account account = Bank.getInstance().getAccountByIBAN(iban);
-        User user = Bank.getInstance().getUserByEmail(email);
-        if (account == null) {
-            deleteFailure();
-        } else if (user == null) {
-            deleteFailure();
-        } else if (!account.isEmpty()) {
-            deleteFailure();
-            Bank.getInstance().getUserByIBAN(account.getIban())
-                    .getTranzactions().add(deleteFundsRemaining());
-            account.getReportsClassic().add(deleteFundsRemaining());
-        } else if (user.getAccounts().contains(account)) {
+        try {
+            Account account = Bank.getInstance().getAccountByIBAN(iban);
+            User user = Bank.getInstance().getUserByEmail(email);
+            if (!account.isEmpty()) {
+                deleteFailure();
+                Bank.getInstance().getUserByIBAN(account.getIban())
+                        .getTranzactions().add(deleteFundsRemaining());
+                account.getReportsClassic().add(deleteFundsRemaining());
+            } else if (user.getAccounts().contains(account)) {
                 user.getAccounts().remove(account);
                 deleteSuccess();
-        } else {
+            } else {
+                deleteFailure();
+            }
+        } catch (AccountNotFoundException | UserNotFoundException e) {
             deleteFailure();
         }
     }

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.poo.accounts.Account;
 import org.poo.accounts.SavingsAccount;
 import org.poo.bankGraph.Bank;
+import org.poo.exceptions.AccountNotFoundException;
 import org.poo.fileio.CommandInput;
 
 
@@ -21,18 +22,19 @@ public final class ChangeInterestRate implements Command {
 
     @Override
     public void execute() {
-        Account account = Bank.getInstance().getAccountByIBAN(iban);
-        if (account == null) {
-            // case never happening
-        }
-         else if (account.getType().equals("savings")) {
-            SavingsAccount savingsAccount = (SavingsAccount) account;
-            savingsAccount.setInterestRate(interestRate);
-            Bank.getInstance().getUserByIBAN(iban).getTranzactions().add(successSet());
-            Bank.getInstance().getAccountByIBAN(iban).getReportsSavings().add(successSet());
-        } else {
-            Bank.getInstance().getOutput().add(savingsAccountError());
-        }
+         try {
+             Account account = Bank.getInstance().getAccountByIBAN(iban);
+             if (account.getType().equals("savings")) {
+                 SavingsAccount savingsAccount = (SavingsAccount) account;
+                 savingsAccount.setInterestRate(interestRate);
+                 Bank.getInstance().getUserByIBAN(iban).getTranzactions().add(successSet());
+                 Bank.getInstance().getAccountByIBAN(iban).getReportsSavings().add(successSet());
+             } else {
+                 Bank.getInstance().getOutput().add(savingsAccountError());
+             }
+         } catch (AccountNotFoundException e) {
+
+         }
 
     }
 
