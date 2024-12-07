@@ -5,9 +5,9 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.poo.accounts.Account;
 import org.poo.bankGraph.Bank;
 import org.poo.baseinput.User;
-import org.poo.cards.Card;
-import org.poo.cards.OneTimeCard;
-import org.poo.cards.RegularCard;
+import org.poo.accounts.cards.Card;
+import org.poo.accounts.cards.OneTimeCard;
+import org.poo.accounts.cards.RegularCard;
 
 /**
  * Visitor which simulates an online card payment based on the type of card

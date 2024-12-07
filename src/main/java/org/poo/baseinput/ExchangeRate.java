@@ -1,7 +1,7 @@
 package org.poo.baseinput;
 import lombok.Getter;
 import lombok.Setter;
-import org.poo.fileio.ExchangeInput;
+import org.poo.parsers.fileio.ExchangeInput;
 
 @Getter
 @Setter
@@ -29,11 +29,5 @@ public final class ExchangeRate {
         this.from = from;
         this.to = to;
         this.rate = rate;
-    }
-
-    public ExchangeRate(final ExchangeRate exchangeRate, final ExchangeRate exchangeRate2) {
-        this.from = exchangeRate.getFrom();
-        this.to = exchangeRate2.getTo();
-        this.rate = exchangeRate.getRate() * exchangeRate2.getRate();
     }
 }

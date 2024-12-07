@@ -7,7 +7,7 @@ import org.poo.accounts.Account;
 import org.poo.baseinput.Commerciant;
 import org.poo.baseinput.ExchangeRate;
 import org.poo.baseinput.User;
-import org.poo.cards.Card;
+import org.poo.accounts.cards.Card;
 import org.poo.exceptions.AccountNotFoundException;
 import org.poo.exceptions.CardNotFoundException;
 import org.poo.exceptions.UserNotFoundException;

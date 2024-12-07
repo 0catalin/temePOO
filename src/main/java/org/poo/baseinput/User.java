@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.Getter;
 import lombok.Setter;
 import org.poo.accounts.Account;
-import org.poo.fileio.UserInput;
+import org.poo.parsers.fileio.UserInput;
 
 
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ public final class User {
     private String lastName;
     private String email;
     private ArrayList<ObjectNode> tranzactions;
-    private ArrayList<Account> accounts; // must have the cards
+    private ArrayList<Account> accounts;
 
     public User(final UserInput userInput) {
         firstName = userInput.getFirstName();

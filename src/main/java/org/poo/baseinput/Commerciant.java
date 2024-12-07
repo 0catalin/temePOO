@@ -1,7 +1,7 @@
 package org.poo.baseinput;
 import lombok.Getter;
 import lombok.Setter;
-import org.poo.fileio.CommerciantInput;
+import org.poo.parsers.fileio.CommerciantInput;
 
 import java.util.ArrayList;
 
@@ -15,8 +15,8 @@ public final class Commerciant {
     private String description;
     private ArrayList<String> commerciants;
     public Commerciant(final CommerciantInput commerciantInput) {
-        this.id = commerciantInput.getId();
-        this.description = commerciantInput.getDescription();
+        id = commerciantInput.getId();
+        description = commerciantInput.getDescription();
         commerciants = new ArrayList<>();
         for (String commerciant : commerciantInput.getCommerciants()) {
             commerciants.add(commerciant);

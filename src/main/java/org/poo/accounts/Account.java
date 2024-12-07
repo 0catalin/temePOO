@@ -3,7 +3,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.Getter;
 import lombok.Setter;
 import org.poo.visitors.reportVisitors.Visitor;
-import org.poo.cards.Card;
+import org.poo.accounts.cards.Card;
 
 import java.util.ArrayList;
 

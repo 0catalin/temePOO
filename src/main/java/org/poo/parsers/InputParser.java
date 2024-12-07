@@ -4,16 +4,16 @@ import org.poo.bankGraph.Edge;
 import org.poo.baseinput.Commerciant;
 import org.poo.baseinput.ExchangeRate;
 import org.poo.baseinput.User;
-import org.poo.commands.CommandFactory;
+import org.poo.parsers.commands.CommandFactory;
 
-import org.poo.commands.Command;
+import org.poo.parsers.commands.Command;
 import lombok.Getter;
 import lombok.Setter;
-import org.poo.fileio.CommerciantInput;
-import org.poo.fileio.ExchangeInput;
-import org.poo.fileio.ObjectInput;
-import org.poo.fileio.UserInput;
-import org.poo.fileio.CommandInput;
+import org.poo.parsers.fileio.CommerciantInput;
+import org.poo.parsers.fileio.ExchangeInput;
+import org.poo.parsers.fileio.ObjectInput;
+import org.poo.parsers.fileio.UserInput;
+import org.poo.parsers.fileio.CommandInput;
 
 import java.util.ArrayList;
 import java.util.HashMap;

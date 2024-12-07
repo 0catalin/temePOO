@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import org.poo.bankGraph.Bank;
 import org.poo.checker.Checker;
 import org.poo.checker.CheckerConstants;
-import org.poo.fileio.ObjectInput;
+import org.poo.parsers.fileio.ObjectInput;
 import org.poo.parsers.CommandParser;
 import org.poo.parsers.InputParser;
 import org.poo.utils.Utils;
@@ -77,7 +77,6 @@ public final class Main {
         ObjectInput inputData = objectMapper.readValue(file, ObjectInput.class);
 
         ArrayNode output = objectMapper.createArrayNode();
-
 
 
         Bank bank = Bank.getInstance();
