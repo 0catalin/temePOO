@@ -30,6 +30,7 @@ public final class PayOnlineVisitor {
         this.account = account;
     }
 
+
     /**
      * simulates an online payment with a one time card and takes care of all the error cases
      * @param card the OneTimeCard which is used for the payment
@@ -60,6 +61,8 @@ public final class PayOnlineVisitor {
         }
     }
 
+
+
     /**
      * simulates an online payment with a regular card and takes care of all the error cases
      * @param card the regular card which is used for the payment
@@ -70,11 +73,11 @@ public final class PayOnlineVisitor {
             user.getTranzactions().add(insufficientFunds());
             account.getReportsClassic().add(insufficientFunds());
         } else if (card.getStatus().equals("frozen")) {
-            user.getTranzactions().add(blockedOrFrozenError("frozen"));
-            account.getReportsClassic().add(blockedOrFrozenError("frozen"));
+            user.getTranzactions().add(frozenError());
+            account.getReportsClassic().add(frozenError());
         } else if (account.getBalance() - amount < account.getMinBalance()) {
-            user.getTranzactions().add(blockedOrFrozenError("frozen"));
-            account.getReportsClassic().add(blockedOrFrozenError("frozen"));
+            user.getTranzactions().add(frozenError());
+            account.getReportsClassic().add(frozenError());
             card.setStatus("frozen");
         } else {
             account.setBalance(account.getBalance() - amount);
@@ -85,13 +88,17 @@ public final class PayOnlineVisitor {
         }
     }
 
-    private ObjectNode blockedOrFrozenError(final String error) {
+
+
+    private ObjectNode frozenError() {
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode errorNode = mapper.createObjectNode();
         errorNode.put("timestamp", timestamp);
-        errorNode.put("description", "The card is " + error);
+        errorNode.put("description", "The card is frozen");
         return errorNode;
     }
+
+
 
     private ObjectNode insufficientFunds() {
         ObjectMapper mapper = new ObjectMapper();
@@ -100,6 +107,8 @@ public final class PayOnlineVisitor {
         finalNode.put("description", "Insufficient funds");
         return finalNode;
     }
+
+
 
     private ObjectNode oneTimeCardCreatedOrDestroyed(final Card card, final String message) {
         ObjectMapper mapper = new ObjectMapper();
@@ -111,6 +120,8 @@ public final class PayOnlineVisitor {
         finalNode.put("timestamp", timestamp);
         return finalNode;
     }
+
+
 
     private ObjectNode successfulPayment() {
         ObjectMapper mapper = new ObjectMapper();

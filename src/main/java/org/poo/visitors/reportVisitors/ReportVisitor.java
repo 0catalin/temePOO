@@ -20,6 +20,8 @@ public final class ReportVisitor implements Visitor {
     private int endTimestamp;
     private int timestamp;
     private String iban;
+
+
     public ReportVisitor(final int startTimestamp, final int endTimestamp,
                          final int timestamp, final String iban) {
 
@@ -28,6 +30,7 @@ public final class ReportVisitor implements Visitor {
         this.timestamp = timestamp;
         this.iban = iban;
     }
+
 
     /**
      * only takes classic account tranzactions based on the start and end timestamps
@@ -42,6 +45,8 @@ public final class ReportVisitor implements Visitor {
         addToOutput(tranzactions, account);
     }
 
+
+
     /**
      * only takes savings account tranzactions based on the start and end timestamps
      * @param account savings account
@@ -55,6 +60,8 @@ public final class ReportVisitor implements Visitor {
 
         addToOutput(tranzactions, account);
     }
+
+
 
     private void addToOutput(final List<ObjectNode> tranzactions, final Account account) {
         ObjectMapper mapper = new ObjectMapper();

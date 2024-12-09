@@ -19,6 +19,10 @@ public final class AddFunds implements Command {
         iban = commandInput.getAccount();
     }
 
+
+    /**
+     * adds funds to the account, if the account is not found it doesn't do anything
+     */
     @Override
     public void execute() {
         try {

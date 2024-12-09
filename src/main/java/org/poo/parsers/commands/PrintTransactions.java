@@ -14,11 +14,18 @@ import org.poo.parsers.fileio.CommandInput;
 public final class PrintTransactions implements Command {
     private String email;
     private int timestamp;
+
+
     public PrintTransactions(final CommandInput commandInput) {
         email = commandInput.getEmail();
         timestamp = commandInput.getTimestamp();
     }
 
+
+    /**
+     * iterates through all the transactions of an user
+     * and adds them into an arrayNode added to the output
+     */
     @Override
     public void execute() {
         try {

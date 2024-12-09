@@ -21,6 +21,8 @@ public final class PayOnline implements Command {
     private String commerciant;
     private String email;
 
+
+
     public PayOnline(final CommandInput commandInput) {
         timestamp = commandInput.getTimestamp();
         email = commandInput.getEmail();
@@ -30,6 +32,12 @@ public final class PayOnline implements Command {
         cardNumber = commandInput.getCardNumber();
     }
 
+
+
+    /**
+     * if the card and user are found and the card is in the user's accounts and the card
+     * has more than 0 balance a visitor instance is created and the card accepts the visitor
+     */
     @Override
     public void execute() {
         try {
@@ -53,6 +61,8 @@ public final class PayOnline implements Command {
 
     }
 
+
+
     private void cardNotFound() {
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode finalNode = mapper.createObjectNode();
@@ -64,10 +74,5 @@ public final class PayOnline implements Command {
         finalNode.put("timestamp", timestamp);
         Bank.getInstance().getOutput().add(finalNode);
     }
-
-
-
-
-
 
 }

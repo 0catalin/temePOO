@@ -14,11 +14,16 @@ public final class DeleteCard implements Command {
     private String cardNumber;
     private int timestamp;
 
+
     public DeleteCard(final CommandInput commandInput) {
         timestamp = commandInput.getTimestamp();
         cardNumber = commandInput.getCardNumber();
     }
 
+
+    /**
+     * it searches for the account and if it is found it deletes it
+     */
     @Override
     public void execute() {
         try {
@@ -34,6 +39,8 @@ public final class DeleteCard implements Command {
         }
 
     }
+
+
 
     private ObjectNode successfulDeletion(final String iban, final String email) {
         ObjectMapper mapper = new ObjectMapper();

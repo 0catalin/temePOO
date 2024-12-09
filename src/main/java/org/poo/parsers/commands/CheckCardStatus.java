@@ -15,11 +15,17 @@ public final class CheckCardStatus implements Command {
     private String cardNumber;
     private int timestamp;
 
+
     public CheckCardStatus(final CommandInput commandInput) {
         timestamp = commandInput.getTimestamp();
         cardNumber = commandInput.getCardNumber();
     }
 
+
+
+    /**
+     * checks the card status if the account is found
+     */
     @Override
     public void execute() {
         try {
@@ -35,6 +41,8 @@ public final class CheckCardStatus implements Command {
         }
     }
 
+
+
     private void cardNotFoundError() {
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode error = mapper.createObjectNode();
@@ -47,6 +55,8 @@ public final class CheckCardStatus implements Command {
         Bank.getInstance().getOutput().add(error);
     }
 
+
+
     private ObjectNode cardFrozenError() {
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode node = mapper.createObjectNode();
@@ -54,6 +64,8 @@ public final class CheckCardStatus implements Command {
         node.put("description", "The card is frozen");
         return node;
     }
+
+
 
     private ObjectNode cardStatusWarning() {
         ObjectMapper mapper = new ObjectMapper();

@@ -13,11 +13,16 @@ public final class SetMinimumBalance implements Command {
     private String iban;
     private double minBalance;
 
+
     public SetMinimumBalance(final CommandInput commandInput) {
         iban = commandInput.getAccount();
         minBalance = commandInput.getAmount();
     }
 
+
+    /**
+     * if the account is valid the min balance is set
+     */
     @Override
     public void execute() {
         try {

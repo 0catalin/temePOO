@@ -22,6 +22,11 @@ public final class ChangeInterestRate implements Command {
         interestRate = commandInput.getInterestRate();
     }
 
+
+
+    /**
+     * changes the interest if the account's type is savings and if it is found
+     */
     @Override
     public void execute() {
          try {
@@ -40,6 +45,8 @@ public final class ChangeInterestRate implements Command {
 
     }
 
+
+
     private ObjectNode savingsAccountError() {
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode node = mapper.createObjectNode();
@@ -51,6 +58,8 @@ public final class ChangeInterestRate implements Command {
         node.put("timestamp", timestamp);
         return node;
     }
+
+
 
     private ObjectNode successSet() {
         ObjectMapper mapper = new ObjectMapper();

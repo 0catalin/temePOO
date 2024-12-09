@@ -21,10 +21,16 @@ public final class AddClassicAccount implements Command {
         timestamp = commandInput.getTimestamp();
     }
 
+
+
+    /**
+     * creates a classic account if the user email is valid and
+     * adds it to the account list and transactions
+     */
     @Override
     public void execute() {
-        ClassicAccount classicAccount = new ClassicAccount(currency);
         try {
+            ClassicAccount classicAccount = new ClassicAccount(currency);
             User user = Bank.getInstance().getUserByEmail(email);
             user.getAccounts().add(classicAccount);
             user.getTranzactions().add(addToUsersTranzactions());
@@ -35,6 +41,8 @@ public final class AddClassicAccount implements Command {
         }
 
     }
+
+
 
     private ObjectNode addToUsersTranzactions() {
         ObjectMapper mapper = new ObjectMapper();

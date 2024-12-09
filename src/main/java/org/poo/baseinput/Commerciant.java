@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 @Getter
 @Setter
+
 /**
  * class designed to store an input commerciant
  */
@@ -14,6 +15,7 @@ public final class Commerciant {
     private int id;
     private String description;
     private ArrayList<String> commerciants;
+
     public Commerciant(final CommerciantInput commerciantInput) {
         id = commerciantInput.getId();
         description = commerciantInput.getDescription();

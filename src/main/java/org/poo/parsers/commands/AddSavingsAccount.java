@@ -23,6 +23,11 @@ public final class AddSavingsAccount implements Command {
         interestRate = commandInput.getInterestRate();
     }
 
+
+    /**
+     * creates a savings account if the user email is
+     * valid and adds it to the account list and transactions
+     */
     @Override
     public void execute() {
         try {
@@ -36,6 +41,8 @@ public final class AddSavingsAccount implements Command {
 
         }
     }
+
+
 
     private ObjectNode addToUsersTranzactions() {
         ObjectMapper mapper = new ObjectMapper();

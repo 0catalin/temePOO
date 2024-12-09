@@ -17,12 +17,18 @@ public final class SetAlias implements Command {
     private String email;
     private String alias;
 
+
     public SetAlias(final CommandInput commandInput) {
         email = commandInput.getEmail();
         iban = commandInput.getAccount();
         alias = commandInput.getAlias();
     }
 
+
+
+    /**
+     * if the account and user are valid the alias is set
+     */
     @Override
     public void execute() {
         try {

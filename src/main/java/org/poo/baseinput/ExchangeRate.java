@@ -5,6 +5,7 @@ import org.poo.parsers.fileio.ExchangeInput;
 
 @Getter
 @Setter
+
 /**
  * class designed to store an input exchange rate
  */

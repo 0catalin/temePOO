@@ -20,6 +20,11 @@ public final class AddInterest implements Command {
         iban = commandInput.getAccount();
     }
 
+
+
+    /**
+     * collects the interest money if the account's type is savings if the account is found
+     */
     @Override
     public void execute() {
         try {
@@ -35,6 +40,8 @@ public final class AddInterest implements Command {
         }
 
     }
+
+
 
     private ObjectNode savingsAccountError() {
         ObjectMapper mapper = new ObjectMapper();

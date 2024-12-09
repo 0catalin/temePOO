@@ -20,12 +20,18 @@ public final class CreateCard implements Command {
     private String email;
     private int timestamp;
 
+
     public CreateCard(final CommandInput commandInput) {
         timestamp = commandInput.getTimestamp();
         email = commandInput.getEmail();
         iban = commandInput.getAccount();
     }
 
+
+
+    /**
+     * if the account and users are found a card is created and added to the account's cards
+     */
     @Override
     public void execute() {
         try {
@@ -44,6 +50,8 @@ public final class CreateCard implements Command {
 
     }
 
+
+
     private ObjectNode addToUsersTranzactions(final Card card) {
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode output = mapper.createObjectNode();
@@ -52,7 +60,6 @@ public final class CreateCard implements Command {
         output.put("card", card.getCardNumber());
         output.put("cardHolder", email);
         output.put("account", iban);
-
         return output;
     }
 

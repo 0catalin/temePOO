@@ -20,6 +20,7 @@ public final class SplitPayment implements Command {
     private String currency;
     private List<String> accountsForSplit;
 
+
     public SplitPayment(final CommandInput commandInput) {
         amount = commandInput.getAmount();
         timestamp = commandInput.getTimestamp();
@@ -27,10 +28,16 @@ public final class SplitPayment implements Command {
         accountsForSplit = commandInput.getAccounts();
     }
 
+
+    /**
+     * all the accounts, ibans and users are added into lists. the method
+     * checks if the ibans are correct at first, if everything is okay
+     * the accounts have transactions added and balances decreased
+     */
     @Override
     public void execute() {
-        ArrayList<Account> accountList = new ArrayList<Account>();
-        ArrayList<User> userList = new ArrayList<User>();
+        ArrayList<Account> accountList = new ArrayList<>();
+        ArrayList<User> userList = new ArrayList<>();
         for (String iban : accountsForSplit) {
             accountList.add(Bank.getInstance().getAccountByIBAN(iban));
             userList.add(Bank.getInstance().getUserByIBAN(iban));
@@ -63,6 +70,8 @@ public final class SplitPayment implements Command {
             }
         }
     }
+
+
 
     private ObjectNode splitPayment() {
         ObjectMapper mapper = new ObjectMapper();

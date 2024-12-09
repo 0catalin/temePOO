@@ -17,12 +17,19 @@ public final class DeleteAccount implements Command {
     private String email;
     private int timestamp;
 
+
     public DeleteAccount(final CommandInput commandInput) {
         timestamp = commandInput.getTimestamp();
         email = commandInput.getEmail();
         iban = commandInput.getAccount();
     }
 
+
+
+    /**
+     * if the account and user are found it checks whether it has 0 balance,
+     * if it does, it is deleted and if not it is not deleted and it prints error
+     */
     @Override
     public void execute() {
         try {
@@ -44,6 +51,8 @@ public final class DeleteAccount implements Command {
         }
     }
 
+
+
     private void deleteSuccess() {
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode finalNode = mapper.createObjectNode();
@@ -55,6 +64,8 @@ public final class DeleteAccount implements Command {
         finalNode.put("timestamp", timestamp);
         Bank.getInstance().getOutput().add(finalNode);
     }
+
+
 
     private void deleteFailure() {
         ObjectMapper mapper = new ObjectMapper();
@@ -68,6 +79,8 @@ public final class DeleteAccount implements Command {
         finalNode.put("timestamp", timestamp);
         Bank.getInstance().getOutput().add(finalNode);
     }
+
+
 
     private ObjectNode deleteFundsRemaining() {
         ObjectMapper mapper = new ObjectMapper();

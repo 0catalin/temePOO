@@ -1,25 +1,17 @@
 package org.poo.accounts;
 
 import org.poo.visitors.reportVisitors.Visitor;
-import org.poo.utils.Utils;
-
-import java.util.ArrayList;
 
 
-
+/**
+ * class designed to extend Account class, representing a savings account entity
+ */
 public final class SavingsAccount extends Account {
     private double interestRate;
     public SavingsAccount(final String currency, final double interestRate) {
-        setCurrency(currency);
+        super(currency);
         this.interestRate = interestRate;
-        setBalance(0);
-        setCards(new ArrayList<>());
-        setAlias("");
-        setIban(Utils.generateIBAN());
         setType("savings");
-        setSpendingReports(new ArrayList<>());
-        setReportsSavings(new ArrayList<>());
-        setReportsClassic(new ArrayList<>());
     }
 
     public double getInterestRate() {

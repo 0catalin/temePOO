@@ -24,6 +24,7 @@ public final class SpendingsReportVisitor implements Visitor {
     private int startTimestamp;
     private int endTimestamp;
 
+
     public SpendingsReportVisitor(final String iban, final int timestamp,
                                   final int startTimestamp, final int endTimestamp) {
         this.iban = iban;
@@ -31,9 +32,12 @@ public final class SpendingsReportVisitor implements Visitor {
         this.startTimestamp = startTimestamp;
         this.endTimestamp = endTimestamp;
     }
+
+
     /**
      * takes classic account tranzactions based on the start and end timestamps
      * creates the commerciants ArrayList by initially using a HashMap
+     * sorts the commerciants ArrayList as well
      * @param account classic account
      */
     public void visit(final ClassicAccount account) {
@@ -74,6 +78,9 @@ public final class SpendingsReportVisitor implements Visitor {
 
         addToOutput(tranzactions, account, commerciants);
     }
+
+
+
     /**
      * adds an error to the output ArrayNode
      * @param account savings account
@@ -81,6 +88,8 @@ public final class SpendingsReportVisitor implements Visitor {
     public void visit(final SavingsAccount account) {
         Bank.getInstance().getOutput().add(spendingsReportOnSavingsAccountError());
     }
+
+
 
     private void addToOutput(final List<ObjectNode> tranzactions, final Account account,
                              final List<ObjectNode> commerciants) {
@@ -109,6 +118,8 @@ public final class SpendingsReportVisitor implements Visitor {
         node.put("timestamp", timestamp);
         Bank.getInstance().getOutput().add(node);
     }
+
+
 
     private ObjectNode spendingsReportOnSavingsAccountError() {
         ObjectMapper mapper = new ObjectMapper();

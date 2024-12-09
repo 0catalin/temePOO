@@ -24,6 +24,7 @@ import java.util.Collections;
 
 @Getter
 @Setter
+
 /**
  * Singleton class designed to have the main classes as fields for all the operations
  */
@@ -42,6 +43,8 @@ public final class Bank {
     }
     private Bank() { }
 
+
+
     /**
      * method that reapplies parameters on every test
      * @param parser the parser with the input information
@@ -54,6 +57,8 @@ public final class Bank {
         exchangeRatesList = parser.getExchangeRatesList();
         output = outputNode;
     }
+
+
 
     /**
      * method that finds a user by the corresponding email
@@ -68,6 +73,8 @@ public final class Bank {
         }
         throw new UserNotFoundException("");
     }
+
+
 
     /**
      * method that finds an account by the corresponding email
@@ -85,6 +92,8 @@ public final class Bank {
         throw new AccountNotFoundException("");
     }
 
+
+
     /**
      * method that finds a user by the corresponding iban
      * @param iban
@@ -100,6 +109,8 @@ public final class Bank {
         }
         throw new UserNotFoundException("");
     }
+
+
 
     /**
      * method that finds an account by the corresponding iban or alias
@@ -117,6 +128,8 @@ public final class Bank {
         }
         throw new AccountNotFoundException("");
     }
+
+
 
     /**
      * method that finds an account by the corresponding card id
@@ -136,6 +149,8 @@ public final class Bank {
         throw new AccountNotFoundException("");
     }
 
+
+
     /**
      * method that finds a card by the corresponding card id
      * @param cardNumber
@@ -154,6 +169,8 @@ public final class Bank {
         throw new CardNotFoundException("");
     }
 
+
+
     /**
      * method that finds a user by the corresponding account
      * @param account
@@ -167,6 +184,8 @@ public final class Bank {
         }
         throw new UserNotFoundException("");
     }
+
+
 
     /**
      * The method iterates over the exchangeRates that were previously added in O(n) complexity
@@ -200,7 +219,6 @@ public final class Bank {
                     exchangeRatesList.add(exchangeRate);
                 }
             }
-
 
             if (currentCurrency.equals(to)) {
                 ExchangeRate exchangeRate = new ExchangeRate(from, currentRate, to);

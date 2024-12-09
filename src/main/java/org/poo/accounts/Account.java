@@ -2,6 +2,7 @@ package org.poo.accounts;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.Getter;
 import lombok.Setter;
+import org.poo.utils.Utils;
 import org.poo.visitors.reportVisitors.Visitor;
 import org.poo.accounts.cards.Card;
 
@@ -26,6 +27,18 @@ public abstract class Account {
     private ArrayList<ObjectNode> reportsClassic;
 
     private static final int WARNING_LIMIT = 30;
+
+
+    public Account(final String currency) {
+        setCurrency(currency);
+        setBalance(0);
+        setCards(new ArrayList<>());
+        setAlias("");
+        setIban(Utils.generateIBAN());
+        setSpendingReports(new ArrayList<>());
+        setReportsSavings(new ArrayList<>());
+        setReportsClassic(new ArrayList<>());
+    }
 
     /**
      * iterates through the account cards and returns the corresponding card

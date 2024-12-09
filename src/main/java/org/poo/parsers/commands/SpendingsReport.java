@@ -19,6 +19,7 @@ public final class SpendingsReport implements Command {
     private String iban;
     private int timestamp;
 
+
     public SpendingsReport(final CommandInput commandInput) {
         iban = commandInput.getAccount();
         endTimestamp = commandInput.getEndTimestamp();
@@ -26,6 +27,11 @@ public final class SpendingsReport implements Command {
         timestamp = commandInput.getTimestamp();
     }
 
+
+
+    /**
+     * if the account is found a visitor is initialized and the account accepts it
+     */
     @Override
     public void execute() {
         try {
@@ -34,11 +40,13 @@ public final class SpendingsReport implements Command {
                         startTimestamp, endTimestamp);
             account.accept(visitor);
         } catch (AccountNotFoundException e) {
-            userNotFound(Bank.getInstance().getOutput());
+            accountNotFound(Bank.getInstance().getOutput());
         }
     }
 
-    private void userNotFound(final ArrayNode output) {
+
+
+    private void accountNotFound(final ArrayNode output) {
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode node = mapper.createObjectNode();
         node.put("command", "spendingsReport");

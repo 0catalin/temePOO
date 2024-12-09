@@ -20,6 +20,10 @@ public final class PrintUsers implements Command {
         timestamp = input.getTimestamp();
     }
 
+
+    /**
+     * adds the users and their info to an objectNode put into the output node
+     */
     @Override
     public void execute() {
         ObjectMapper mapper = new ObjectMapper();
@@ -33,6 +37,7 @@ public final class PrintUsers implements Command {
     }
 
 
+
     private ArrayNode makeUsersArray() {
         ObjectMapper mapper = new ObjectMapper();
         ArrayNode usersArray = mapper.createArrayNode();
@@ -41,6 +46,7 @@ public final class PrintUsers implements Command {
         }
         return usersArray;
     }
+
 
 
     private ObjectNode convertUserToJson(final User user) {
@@ -53,6 +59,8 @@ public final class PrintUsers implements Command {
         return userObject;
     }
 
+
+
     private ArrayNode makeAccountsArray(final User user) {
         ObjectMapper mapper = new ObjectMapper();
         ArrayNode accountsArray = mapper.createArrayNode();
@@ -61,6 +69,8 @@ public final class PrintUsers implements Command {
         }
         return accountsArray;
     }
+
+
 
     private ObjectNode convertAccountToJson(final Account account) {
         ObjectMapper mapper = new ObjectMapper();
@@ -73,6 +83,8 @@ public final class PrintUsers implements Command {
         return accountObject;
     }
 
+
+
     private ArrayNode makeCardsArray(final Account account) {
         ObjectMapper mapper = new ObjectMapper();
         ArrayNode cardsArray = mapper.createArrayNode();
@@ -81,6 +93,8 @@ public final class PrintUsers implements Command {
         }
         return cardsArray;
     }
+
+
 
     private ObjectNode convertCardToJson(final Card card) {
         ObjectMapper mapper = new ObjectMapper();

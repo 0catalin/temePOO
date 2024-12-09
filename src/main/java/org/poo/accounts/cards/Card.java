@@ -14,11 +14,20 @@ public abstract class Card {
     private String cardNumber;
     private String status;
 
+    public Card() {
+        status = "active";
+        cardNumber = Utils.generateCardNumber();
+    }
+
+
     /**
      * accepts a visitor that does different operations on different types of cards
      * @param visitor a visitor which does a payment based on the type of card
      */
+
+
     public abstract void accept(PayOnlineVisitor visitor);
+
 
     /**
      * updates card id by generating it with Utils class

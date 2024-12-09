@@ -19,6 +19,7 @@ public final class SendMoney implements Command {
     private String description;
     private String receiver;
 
+
     public SendMoney(final CommandInput commandInput) {
         timestamp = commandInput.getTimestamp();
         amount = commandInput.getAmount();
@@ -27,6 +28,12 @@ public final class SendMoney implements Command {
         receiver = commandInput.getReceiver();
     }
 
+
+    /**
+     * gets the accounts and if they are valid checks whether
+     * the sender has enough balance, and if he does multiple transactions
+     * are added to their accounts and the balances are set afterwards
+     */
     @Override
     public void execute() {
         try {
@@ -64,6 +71,8 @@ public final class SendMoney implements Command {
         }
     }
 
+
+
     private ObjectNode addToSendersTranzactions(final Account accountSender,
                                                 final Account accountReceiver) {
         ObjectMapper mapper = new ObjectMapper();
@@ -76,6 +85,8 @@ public final class SendMoney implements Command {
         output.put("transferType", "sent");
         return output;
     }
+
+
 
     private ObjectNode addToReceiversTranzactions(final Account accountSender,
                                                   final Account accountReceiver) {
@@ -91,6 +102,8 @@ public final class SendMoney implements Command {
         output.put("transferType", "received");
         return output;
     }
+
+
 
     private ObjectNode insufficientFunds() {
         ObjectMapper mapper = new ObjectMapper();

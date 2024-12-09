@@ -19,12 +19,19 @@ public final class CreateOneTimeCard implements Command {
     private String email;
     private int timestamp;
 
+
     public CreateOneTimeCard(final CommandInput commandInput) {
         timestamp = commandInput.getTimestamp();
         email = commandInput.getEmail();
         iban = commandInput.getAccount();
     }
 
+
+
+    /**
+     * if the account and users are found a one time
+     * card is created and added to the account's cards
+     */
     @Override
     public void execute() {
         try {
@@ -41,6 +48,8 @@ public final class CreateOneTimeCard implements Command {
 
         }
     }
+
+
 
     private ObjectNode addToUsersTranzactions(final Card card) {
         ObjectMapper mapper = new ObjectMapper();
