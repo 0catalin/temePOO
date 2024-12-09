@@ -1,5 +1,6 @@
 package org.poo.parsers.commands;
 
+import org.poo.exceptions.CommandNotFoundException;
 import org.poo.parsers.fileio.CommandInput;
 
 /**
@@ -71,6 +72,6 @@ public abstract class CommandFactory {
         if (commandInput.getCommand().equals("splitPayment")) {
             return new SplitPayment(commandInput);
         }
-        return null;
+        throw new CommandNotFoundException("Invalid command");
     }
 }

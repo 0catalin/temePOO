@@ -98,10 +98,11 @@ I have developed a complex banking system capable of managing users, accounts, a
 
 ## Error Handling
 
-Error handling is implemented through custom exceptions in the `Bank` class's search functions:
+Error handling is implemented through custom exceptions in the `Bank` class's search functions and the `CommandFactory`:
 - `AccountNotFoundException`
 - `CardNotFoundException`
 - `UserNotFoundException`
+- `CommandNotFoundException`
 
 These exceptions ensure that invalid operations are caught and handled gracefully.
 
@@ -120,3 +121,12 @@ These exceptions ensure that invalid operations are caught and handled gracefull
 ## Conclusion
 
 This system demonstrates a comprehensive and structured approach to managing a complex banking ecosystem while adhering to best practices in software design and implementation.
+
+
+## Feedback
+
+1. Create the assignment in time next time, please
+2. Add the corresponding output so that we know what to do (especially the error cases)
+3. Expand on the explaining of the project requirements
+4. Be more active on the Forum
+5. Announce everyone when a change with the checker/tests happens on Teams
