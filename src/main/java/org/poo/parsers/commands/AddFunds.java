@@ -1,6 +1,6 @@
 package org.poo.parsers.commands;
 
-import org.poo.bankGraph.Bank;
+import org.poo.bankPair.Bank;
 import org.poo.accounts.Account;
 import org.poo.exceptions.AccountNotFoundException;
 import org.poo.parsers.fileio.CommandInput;

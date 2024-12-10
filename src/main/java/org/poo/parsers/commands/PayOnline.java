@@ -2,7 +2,7 @@ package org.poo.parsers.commands;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.poo.bankGraph.Bank;
+import org.poo.bankPair.Bank;
 import org.poo.exceptions.CardNotFoundException;
 import org.poo.exceptions.UserNotFoundException;
 import org.poo.visitors.PayOnlineVisitor;

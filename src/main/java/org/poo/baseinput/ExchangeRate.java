@@ -26,9 +26,4 @@ public final class ExchangeRate {
         rate = 1 / exchangeRate.getRate();
     }
 
-    public ExchangeRate(final String from, final double rate, final String to) {
-        this.from = from;
-        this.to = to;
-        this.rate = rate;
-    }
 }

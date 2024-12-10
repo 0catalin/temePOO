@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.poo.accounts.Account;
 import org.poo.accounts.ClassicAccount;
 import org.poo.accounts.SavingsAccount;
-import org.poo.bankGraph.Bank;
+import org.poo.bankPair.Bank;
 
 
 import java.util.ArrayList;

@@ -69,32 +69,38 @@ I have developed a complex banking system capable of managing users, accounts, a
 
 ---
 
-## Currency Graph
+## Currency Conversion Algorithm
 
 ### Key Features
 
-1. **Direct Lookup**:
-    - Initially attempts to find the exchange rate in `exchangeRatesList`, a pre-initialized list of known exchange rates.
-    - Ensures quick results for directly mapped currency pairs.
+- **Direct Lookup**:
+   - Retrieves exchange rates directly from `exchangeRatesList` for quick access and adds them to a HashMap for O(1) time complexity.
 
-2. **Graph-Based Search**:
-    - Performs a Breadth-First Search (BFS) if no direct match is found.
-    - Dynamically explores the graph to ensure all possible paths to the target currency are considered.
+- **Graph-Based DFS Search**:
+   - If no direct rate is found, it recursively explores all paths to find indirect conversions, while adding the traversed nodes to the HashMap.
 
-3. **Dynamic Updates**:
-    - Adds reverse exchange rates and intermediary paths dynamically during BFS.
-    - Enhances the completeness of `exchangeRatesList` for future queries.
+- **Efficient Updates**:
+   - New exchange rates are added only if they do not already exist, optimizing both time and memory usage.
 
-4. **Cycle Prevention**:
-    - Uses a `visited` set during BFS to prevent revisiting nodes, avoiding infinite loops and redundant calculations.
+- **Scalability**:
+   - Efficiently handles large currency sets with minimal recomputations, as all rates are calculated initially and stored in a HashMap for fast lookups.
 
-5. **Efficiency**:
-    - Ensures exchange rates are only added to `exchangeRatesList` if they do not already exist, preventing duplication and optimizing memory usage.
+- **Graceful Fallback**:
+   - Returns `-1` if no conversion path exists between two currencies.
 
-6. **Graceful Fallback**:
-    - If no valid exchange path exists, the method returns `-1` as a sentinel value, indicating that the exchange is not possible.
 
----
+### How It Works
+
+1. **Initialize**: Collect all unique currencies.
+2. **Populate Costs**: For each currency pair, attempt to find an exchange rate using DFS.
+3. **DFS Search**: Recursively explore possible exchange paths, updating rates as new paths are found.
+4. **Bidirectional Updates**: Store both `from->to` and `to->from` rates for each pair.
+
+### Optimizations
+
+- **Cycle Prevention** ensures no redundant calculations.
+- **Efficient Updates** prevent duplication in the `costs` map.
+- **Scalable** for large sets of currencies with minimal performance hit.
 
 ## Error Handling
 
@@ -105,16 +111,6 @@ Error handling is implemented through custom exceptions in the `Bank` class's se
 - `CommandNotFoundException`
 
 These exceptions ensure that invalid operations are caught and handled gracefully.
-
----
-
-## Potential Improvements
-
-1. **Enhanced Data Structures**:
-    - Using a `Map` instead of an `ArrayList` for the `exchangeRatesList` field would improve lookup efficiency and overall performance.
-
-2. **Scalability**:
-    - Introducing additional optimizations in graph traversal, such as weighted pathfinding, could improve performance for larger datasets.
 
 ---
 

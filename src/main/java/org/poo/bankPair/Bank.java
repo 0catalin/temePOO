@@ -1,11 +1,10 @@
-package org.poo.bankGraph;
+package org.poo.bankPair;
 
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import lombok.Getter;
 import lombok.Setter;
 import org.poo.accounts.Account;
 import org.poo.baseinput.Commerciant;
-import org.poo.baseinput.ExchangeRate;
 import org.poo.baseinput.User;
 import org.poo.accounts.cards.Card;
 import org.poo.exceptions.AccountNotFoundException;
@@ -14,13 +13,7 @@ import org.poo.exceptions.UserNotFoundException;
 import org.poo.parsers.InputParser;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
-import java.util.Queue;
-import java.util.Set;
-import java.util.HashSet;
-import java.util.Collections;
 
 @Getter
 @Setter
@@ -30,9 +23,8 @@ import java.util.Collections;
  */
 public final class Bank {
     private ArrayList<Commerciant> commerciants;
-    private Map<String, List<Edge>> exchangeRates;
+    private Map<Pair, Double> costs;
     private ArrayList<User> users;
-    private ArrayList<ExchangeRate> exchangeRatesList;
     private ArrayNode output;
     private static Bank instance = null;
     static {
@@ -52,9 +44,8 @@ public final class Bank {
      */
     public void applyParams(final InputParser parser, final ArrayNode outputNode) {
         commerciants = parser.getCommerciants();
-        exchangeRates = parser.getGraph();
         users = parser.getUsers();
-        exchangeRatesList = parser.getExchangeRatesList();
+        costs = parser.getCosts();
         output = outputNode;
     }
 
@@ -188,57 +179,16 @@ public final class Bank {
 
 
     /**
-     * The method iterates over the exchangeRates that were previously added in O(n) complexity
-     * If it isn't found like that, it runs dfs and adds all the nodes which are not contained into
-     * the found exchange rates
+     * The method just checks the Map which contains all the costs and returns the cost
      * @param from currency from which we want to convert
      * @param to currency to which we want to convert
      * @return the conversion rate
      */
     public double findExchangeRate(final String from, final String to) {
-        for (ExchangeRate exchangeRate : exchangeRatesList) {
-            if (exchangeRate.getFrom().equals(from) && exchangeRate.getTo().equals(to)) {
-                return exchangeRate.getRate();
-            }
-        }
-        Queue<Pair<String, Double>> queue = new LinkedList<>();
-        Set<String> visited = new HashSet<>();
-
-        queue.add(new Pair<>(from, 1.0));
-        while (!queue.isEmpty()) {
-            Pair<String, Double> current = queue.poll();
-            String currentCurrency = current.getKey();
-            double currentRate = current.getValue();
-
-            if (!from.equals(currentCurrency)) {
-                ExchangeRate exchangeRate = new ExchangeRate(from, currentRate, currentCurrency);
-                ExchangeRate reverseExchangeRate = new ExchangeRate(exchangeRate);
-
-                if (!exchangeRatesList.contains(reverseExchangeRate)) {
-                    exchangeRatesList.add(reverseExchangeRate);
-                    exchangeRatesList.add(exchangeRate);
-                }
-            }
-
-            if (currentCurrency.equals(to)) {
-                ExchangeRate exchangeRate = new ExchangeRate(from, currentRate, to);
-                exchangeRatesList.add(exchangeRate);
-                exchangeRatesList.add(new ExchangeRate(exchangeRate));
-                return currentRate;
-            }
-
-            if (!visited.contains(currentCurrency)) {
-                visited.add(currentCurrency);
-                List<Edge> neighbors;
-                if (exchangeRates.containsKey(currentCurrency)) {
-                    neighbors = exchangeRates.get(currentCurrency);
-                } else {
-                    neighbors = Collections.emptyList();
-                }
-                for (Edge edge : neighbors) {
-                    queue.add(new Pair<>(edge.getTo(), currentRate * edge.getRate()));
-                }
-            }
+        if (from.equals(to)) {
+            return 1.0;
+        } else if (costs.containsKey(new Pair(from, to))) {
+            return costs.get(new Pair(from, to));
         }
         return -1;
     }

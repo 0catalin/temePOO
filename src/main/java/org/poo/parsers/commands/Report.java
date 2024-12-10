@@ -7,7 +7,7 @@ import org.poo.exceptions.AccountNotFoundException;
 import org.poo.visitors.reportVisitors.ReportVisitor;
 import org.poo.visitors.reportVisitors.Visitor;
 import org.poo.accounts.Account;
-import org.poo.bankGraph.Bank;
+import org.poo.bankPair.Bank;
 import org.poo.parsers.fileio.CommandInput;
 
 /**

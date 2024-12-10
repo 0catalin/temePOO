@@ -4,7 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.poo.accounts.Account;
 import org.poo.accounts.SavingsAccount;
-import org.poo.bankGraph.Bank;
+import org.poo.bankPair.Bank;
 import org.poo.exceptions.AccountNotFoundException;
 import org.poo.parsers.fileio.CommandInput;
 
