@@ -53,7 +53,7 @@ public final class Bank {
 
     /**
      * method that finds a user by the corresponding email
-     * @param email
+     * @param email the email given
      * @return the corresponding user or exception if not found
      */
     public User getUserByEmail(final String email) {
@@ -69,7 +69,7 @@ public final class Bank {
 
     /**
      * method that finds an account by the corresponding email
-     * @param iban
+     * @param iban the iban given
      * @return the corresponding account or exception if not found
      */
     public Account getAccountByIBAN(final String iban) {
@@ -87,7 +87,7 @@ public final class Bank {
 
     /**
      * method that finds a user by the corresponding iban
-     * @param iban
+     * @param iban the iban given
      * @return the corresponding user or exception if not found
      */
     public User getUserByIBAN(final String iban) {
@@ -105,7 +105,7 @@ public final class Bank {
 
     /**
      * method that finds an account by the corresponding iban or alias
-     * @param ibanOrAlias
+     * @param ibanOrAlias the iban or alias given
      * @return the corresponding account or exception if not found
      */
     public Account getAccountByIBANOrAlias(final String ibanOrAlias) {
@@ -124,7 +124,7 @@ public final class Bank {
 
     /**
      * method that finds an account by the corresponding card id
-     * @param cardNumber
+     * @param cardNumber the card id given
      * @return the corresponding account or exception if not found
      */
     public Account getAccountByCardNumber(final String cardNumber) {
@@ -144,7 +144,7 @@ public final class Bank {
 
     /**
      * method that finds a card by the corresponding card id
-     * @param cardNumber
+     * @param cardNumber the card id given
      * @return the corresponding card or exception if not found
      */
     public Card getCardByCardNumber(final String cardNumber) {
@@ -164,7 +164,7 @@ public final class Bank {
 
     /**
      * method that finds a user by the corresponding account
-     * @param account
+     * @param account the account given
      * @return the corresponding user or exception if not found
      */
     public User getUserByAccount(final Account account) {
