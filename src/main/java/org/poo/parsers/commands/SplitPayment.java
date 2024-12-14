@@ -36,8 +36,8 @@ public final class SplitPayment implements Command {
      */
     @Override
     public void execute() {
-        ArrayList<Account> accountList = new ArrayList<>();
-        ArrayList<User> userList = new ArrayList<>();
+        ArrayList<Account> accountList = new ArrayList<Account>();
+        ArrayList<User> userList = new ArrayList<User>();
         for (String iban : accountsForSplit) {
             accountList.add(Bank.getInstance().getAccountByIBAN(iban));
             userList.add(Bank.getInstance().getUserByIBAN(iban));

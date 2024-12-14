@@ -50,7 +50,7 @@ public final class SpendingsReportVisitor implements Visitor {
         }).collect(Collectors.toList());
 
 
-        Map<String, Double> commerciantTotals = new LinkedHashMap<>();
+        Map<String, Double> commerciantTotals = new LinkedHashMap<String, Double>();
         if  (tranzactions.size() > 0) {
             for (ObjectNode tranzaction : tranzactions) {
 
@@ -63,7 +63,7 @@ public final class SpendingsReportVisitor implements Visitor {
         }
 
 
-        List<ObjectNode> commerciants = new ArrayList<>();
+        List<ObjectNode> commerciants = new ArrayList<ObjectNode>();
         for (Map.Entry<String, Double> entry : commerciantTotals.entrySet()) {
             ObjectNode commerciantNode = mapper.createObjectNode();
             commerciantNode.put("commerciant", entry.getKey());

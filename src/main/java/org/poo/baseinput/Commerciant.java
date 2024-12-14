@@ -19,7 +19,7 @@ public final class Commerciant {
     public Commerciant(final CommerciantInput commerciantInput) {
         id = commerciantInput.getId();
         description = commerciantInput.getDescription();
-        commerciants = new ArrayList<>();
+        commerciants = new ArrayList<String>();
         for (String commerciant : commerciantInput.getCommerciants()) {
             commerciants.add(commerciant);
         }

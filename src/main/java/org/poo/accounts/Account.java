@@ -32,12 +32,12 @@ public abstract class Account {
     public Account(final String currency) {
         setCurrency(currency);
         setBalance(0);
-        setCards(new ArrayList<>());
+        setCards(new ArrayList<Card>());
         setAlias("");
         setIban(Utils.generateIBAN());
-        setSpendingReports(new ArrayList<>());
-        setReportsSavings(new ArrayList<>());
-        setReportsClassic(new ArrayList<>());
+        setSpendingReports(new ArrayList<ObjectNode>());
+        setReportsSavings(new ArrayList<ObjectNode>());
+        setReportsClassic(new ArrayList<ObjectNode>());
     }
 
     /**

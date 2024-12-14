@@ -35,11 +35,11 @@ public final class InputParser {
         private ArrayList<ExchangeRate> exchangeRatesList;
 
         public InputParser(final ObjectInput input) {
-            commands = new ArrayList<>();
-            commerciants = new ArrayList<>();
-            costs = new HashMap<>();
-            users = new ArrayList<>();
-            exchangeRatesList = new ArrayList<>();
+            commands = new ArrayList<Command>();
+            commerciants = new ArrayList<Commerciant>();
+            costs = new HashMap<Pair, Double>();
+            users = new ArrayList<User>();
+            exchangeRatesList = new ArrayList<ExchangeRate>();
 
 
             for (UserInput userInput : input.getUsers()) {

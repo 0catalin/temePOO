@@ -27,7 +27,7 @@ public final class User {
         firstName = userInput.getFirstName();
         lastName = userInput.getLastName();
         email = userInput.getEmail();
-        tranzactions = new ArrayList<>();
-        accounts = new ArrayList<>();
+        tranzactions = new ArrayList<ObjectNode>();
+        accounts = new ArrayList<Account>();
     }
 }
