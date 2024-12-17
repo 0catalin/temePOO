@@ -19,10 +19,11 @@ import java.util.stream.Collectors;
  * Class implementing visitor interface, visiting 2 types of accounts
  */
 public final class SpendingsReportVisitor implements Visitor {
-    private String iban;
-    private int timestamp;
-    private int startTimestamp;
-    private int endTimestamp;
+
+    private final String iban;
+    private final int timestamp;
+    private final int startTimestamp;
+    private final int endTimestamp;
 
 
     public SpendingsReportVisitor(final String iban, final int timestamp,
@@ -51,7 +52,7 @@ public final class SpendingsReportVisitor implements Visitor {
 
 
         Map<String, Double> commerciantTotals = new LinkedHashMap<String, Double>();
-        if  (tranzactions.size() > 0) {
+        if  (!tranzactions.isEmpty()) {
             for (ObjectNode tranzaction : tranzactions) {
 
                 String commerciant = tranzaction.get("commerciant").asText();

@@ -12,8 +12,9 @@ import org.poo.parsers.fileio.CommandInput;
  * class implementing the add interest command
  */
 public final class AddInterest implements Command {
-    private String iban;
-    private int timestamp;
+
+    private final String iban;
+    private final int timestamp;
 
     public AddInterest(final CommandInput commandInput) {
         timestamp = commandInput.getTimestamp();
@@ -35,7 +36,7 @@ public final class AddInterest implements Command {
             } else {
                 Bank.getInstance().getOutput().add(savingsAccountError());
             }
-        } catch (AccountNotFoundException e) {
+        } catch (AccountNotFoundException ignored) {
 
         }
 

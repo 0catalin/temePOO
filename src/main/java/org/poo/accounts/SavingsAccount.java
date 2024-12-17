@@ -7,7 +7,9 @@ import org.poo.visitors.reportVisitors.Visitor;
  * class designed to extend Account class, representing a savings account entity
  */
 public final class SavingsAccount extends Account {
+
     private double interestRate;
+
     public SavingsAccount(final String currency, final double interestRate) {
         super(currency);
         this.interestRate = interestRate;

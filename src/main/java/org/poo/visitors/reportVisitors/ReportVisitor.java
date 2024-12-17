@@ -16,10 +16,10 @@ import java.util.stream.Collectors;
  */
 public final class ReportVisitor implements Visitor {
 
-    private int startTimestamp;
-    private int endTimestamp;
-    private int timestamp;
-    private String iban;
+    private final int startTimestamp;
+    private final int endTimestamp;
+    private final int timestamp;
+    private final String iban;
 
 
     public ReportVisitor(final int startTimestamp, final int endTimestamp,

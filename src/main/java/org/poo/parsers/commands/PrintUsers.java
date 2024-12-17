@@ -15,7 +15,9 @@ import org.poo.parsers.fileio.CommandInput;
  */
 
 public final class PrintUsers implements Command {
-    private int timestamp;
+
+    private final int timestamp;
+
     public PrintUsers(final CommandInput input) {
         timestamp = input.getTimestamp();
     }

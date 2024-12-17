@@ -11,6 +11,7 @@ import org.poo.utils.Utils;
  * represents a card
  */
 public abstract class Card {
+
     private String cardNumber;
     private String status;
 

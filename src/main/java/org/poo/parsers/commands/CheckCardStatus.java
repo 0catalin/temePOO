@@ -12,8 +12,9 @@ import org.poo.parsers.fileio.CommandInput;
  * class implementing the check card status command
  */
 public final class CheckCardStatus implements Command {
-    private String cardNumber;
-    private int timestamp;
+
+    private final String cardNumber;
+    private final int timestamp;
 
 
     public CheckCardStatus(final CommandInput commandInput) {

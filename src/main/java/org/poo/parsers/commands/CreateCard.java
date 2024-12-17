@@ -16,9 +16,10 @@ import org.poo.parsers.fileio.CommandInput;
  * class implementing the create card command
  */
 public final class CreateCard implements Command {
-    private String iban;
-    private String email;
-    private int timestamp;
+
+    private final String iban;
+    private final String email;
+    private final int timestamp;
 
 
     public CreateCard(final CommandInput commandInput) {
@@ -44,7 +45,7 @@ public final class CreateCard implements Command {
                 Bank.getInstance().getAccountByIBAN(iban)
                         .getReportsClassic().add(addToUsersTranzactions(card));
                 }
-        } catch (AccountNotFoundException | UserNotFoundException e) {
+        } catch (AccountNotFoundException | UserNotFoundException ignored) {
 
         }
 

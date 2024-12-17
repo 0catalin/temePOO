@@ -22,17 +22,21 @@ import java.util.Map;
  * Singleton class designed to have the main classes as fields for all the operations
  */
 public final class Bank {
+
     private ArrayList<Commerciant> commerciants;
     private Map<Pair, Double> costs;
     private ArrayList<User> users;
     private ArrayNode output;
     private static Bank instance = null;
+
     static {
         instance = new Bank();
     }
+
     public static Bank getInstance() {
         return instance;
     }
+
     private Bank() { }
 
 

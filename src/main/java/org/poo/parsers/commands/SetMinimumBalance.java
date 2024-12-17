@@ -10,8 +10,9 @@ import org.poo.parsers.fileio.CommandInput;
  * class implementing the set minimum balance command
  */
 public final class SetMinimumBalance implements Command {
-    private String iban;
-    private double minBalance;
+
+    private final String iban;
+    private final double minBalance;
 
 
     public SetMinimumBalance(final CommandInput commandInput) {
@@ -28,7 +29,7 @@ public final class SetMinimumBalance implements Command {
         try {
             Account account = Bank.getInstance().getAccountByIBAN(iban);
             account.setMinBalance(minBalance);
-        } catch (AccountNotFoundException e) {
+        } catch (AccountNotFoundException ignored) {
 
         }
     }

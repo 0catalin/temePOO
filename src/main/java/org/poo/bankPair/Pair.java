@@ -6,6 +6,7 @@ import java.util.Objects;
  * a pair class for finding the cost
  */
 public final class Pair {
+
     private final String from;
     private final String to;
 

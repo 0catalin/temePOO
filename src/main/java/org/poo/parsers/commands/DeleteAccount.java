@@ -13,9 +13,10 @@ import org.poo.parsers.fileio.CommandInput;
  * class implementing the delete account command
  */
 public final class DeleteAccount implements Command {
-    private String iban;
-    private String email;
-    private int timestamp;
+
+    private final String iban;
+    private final String email;
+    private final int timestamp;
 
 
     public DeleteAccount(final CommandInput commandInput) {

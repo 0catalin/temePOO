@@ -9,6 +9,7 @@ import org.poo.visitors.reportVisitors.Visitor;
  * class designed to extend Account class, representing a classic account entity
  */
 public final class ClassicAccount extends Account {
+
     public ClassicAccount(final String currency) {
         super(currency);
         setType("classic");

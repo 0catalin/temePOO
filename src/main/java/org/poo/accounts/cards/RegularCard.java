@@ -8,7 +8,6 @@ import org.poo.visitors.PayOnlineVisitor;
  */
 public final class RegularCard extends Card {
 
-
     public RegularCard() {
         super();
     }

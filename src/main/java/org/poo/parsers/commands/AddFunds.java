@@ -11,8 +11,9 @@ import org.poo.parsers.fileio.CommandInput;
  * class implementing the add funds command
  */
 public final class AddFunds implements Command {
-    private String iban;
-    private double amount;
+
+    private final String iban;
+    private final double amount;
 
     public AddFunds(final CommandInput commandInput) {
         amount = commandInput.getAmount();
@@ -28,7 +29,7 @@ public final class AddFunds implements Command {
         try {
             Account account = Bank.getInstance().getAccountByIBAN(iban);
             account.setBalance(account.getBalance() + amount);
-        } catch (AccountNotFoundException e) {
+        } catch (AccountNotFoundException ignored) {
 
         }
     }

@@ -11,8 +11,9 @@ import org.poo.parsers.fileio.CommandInput;
  * class implementing the delete card command
  */
 public final class DeleteCard implements Command {
-    private String cardNumber;
-    private int timestamp;
+
+    private final String cardNumber;
+    private final int timestamp;
 
 
     public DeleteCard(final CommandInput commandInput) {
@@ -34,7 +35,7 @@ public final class DeleteCard implements Command {
                     .getTranzactions().add(successfulDeletion(iban, email));
             account.getReportsClassic().add(successfulDeletion(iban, email));
             account.getCards().remove(account.getCardByCardNumber(cardNumber));
-        } catch (AccountNotFoundException e) {
+        } catch (AccountNotFoundException ignored) {
 
         }
 

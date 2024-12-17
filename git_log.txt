@@ -1,0 +1,131 @@
+commit 438352b638d6e055198cf60821b834c7dcde7711
+Author: 0catalin <andrewcatalyno@gmail.com>
+Date:   Sat Dec 14 23:29:17 2024 +0200
+
+    changed the raw types
+
+commit 3ad3ef706fd43b505ede08b10cf866ca35c87419
+Author: 0catalin <andrewcatalyno@gmail.com>
+Date:   Tue Dec 10 22:08:36 2024 +0200
+
+    completed some javadocs
+
+commit ef4fa7d735f26ceb3be896e26923c0c57b237918
+Author: 0catalin <andrewcatalyno@gmail.com>
+Date:   Tue Dec 10 21:55:16 2024 +0200
+
+    changed the implementation a bit
+
+commit 88194cf709ee74254c0dc90bd31daf9f2e64223e
+Author: 0catalin <andrewcatalyno@gmail.com>
+Date:   Tue Dec 10 00:17:26 2024 +0200
+
+    added another exception and README
+
+commit 0887e84747d3e0d3995d3d878db511762bbd2e19
+Author: 0catalin <andrewcatalyno@gmail.com>
+Date:   Mon Dec 9 21:51:04 2024 +0200
+
+    made README
+
+commit 386f113e9238748df923e1d816f62c23ea056c49
+Author: 0catalin <andrewcatalyno@gmail.com>
+Date:   Mon Dec 9 19:09:42 2024 +0200
+
+    some minor refactoring
+
+commit 32be45bcf1d93e5a0af5ae2d7d8e863460402e65
+Author: 0catalin <andrewcatalyno@gmail.com>
+Date:   Sat Dec 7 21:10:44 2024 +0200
+
+    some random refactoring and package organizing
+
+commit 81c764bf223e963d929809d2ebe578b238bb28ba
+Author: 0catalin <andrewcatalyno@gmail.com>
+Date:   Sat Dec 7 13:21:00 2024 +0200
+
+    added all javadocs
+
+commit 093333af6be3574b8e5aa1c1f14ca072383f823b
+Author: 0catalin <andrewcatalyno@gmail.com>
+Date:   Sat Dec 7 11:11:22 2024 +0200
+
+    handeled exceptions properly and solved some javadocs
+
+commit abebf6b2725772dcc4d011541b300cd188177a19
+Author: 0catalin <andrewcatalyno@gmail.com>
+Date:   Sat Dec 7 01:47:15 2024 +0200
+
+    done some more refactoring
+
+commit c144c6b4dbf5753ef863c40d6bf34a456ba0577d
+Author: 0catalin <andrewcatalyno@gmail.com>
+Date:   Fri Dec 6 23:22:41 2024 +0200
+
+    done some refactoring
+
+commit 79447a91dee612efb76339dd2ce86e4e670acd30
+Author: 0catalin <andrewcatalyno@gmail.com>
+Date:   Fri Dec 6 15:55:55 2024 +0200
+
+    changed to more POO version
+
+commit 99407c5e0c661e47144f022b8d8c6cbe231ebdbd
+Author: 0catalin <andrewcatalyno@gmail.com>
+Date:   Thu Dec 5 12:58:33 2024 +0200
+
+    changed implementation after ref change
+
+commit 9ae938bc333f26a9a20a0b51b651c4882b0964da
+Author: 0catalin <andrewcatalyno@gmail.com>
+Date:   Thu Dec 5 11:36:22 2024 +0200
+
+    done all functions the teste do not check everything
+
+commit f52fda83523d7310960d9bb0afbf727e971ecdfb
+Author: 0catalin <andrewcatalyno@gmail.com>
+Date:   Thu Dec 5 01:17:36 2024 +0200
+
+    passing most tests
+
+commit b5b3d08abc3fa2008d922603122aa0e0be4997e0
+Author: 0catalin <andrewcatalyno@gmail.com>
+Date:   Wed Dec 4 17:13:15 2024 +0200
+
+    made more functions, have to save and move the tranzactions field
+
+commit 1b896a292a4daffd827fbd9a79481bfc8d3e0d07
+Author: 0catalin <andrewcatalyno@gmail.com>
+Date:   Tue Dec 3 00:34:22 2024 +0200
+
+    efficientized graph, added some Tranzactions and errors plus functionalities
+
+commit 128cc4564a160aec14ca27c3855946cebe64d636
+Author: 0catalin <andrewcatalyno@gmail.com>
+Date:   Sun Dec 1 20:55:16 2024 +0200
+
+    made the paying functions work
+
+commit 40dd1a05678efa24ecc4728808627f3908df1bd4
+Author: 0catalin <andrewcatalyno@gmail.com>
+Date:   Sun Dec 1 00:49:43 2024 +0200
+
+    added first 4 functions
+
+commit 2b579efc8288415eb7f80b9f8b3fbe4767e18831
+Author: 0catalin <andrewcatalyno@gmail.com>
+Date:   Sun Dec 1 00:47:23 2024 +0200
+
+    made the first 4 functions
+
+commit 9a01e59bc938c2ca113ca4154f4ba5cdbcc4baf0
+Author: 0catalin <andrewcatalyno@gmail.com>
+Date:   Fri Nov 29 23:20:21 2024 +0200
+
+    added a structure for the project
+
+commit 0fb218b30881be9dad1ae0884fb6fb663801f8fc
+Author: 0catalin <andrewcatalyno@gmail.com>
+Date:   Thu Nov 28 00:19:38 2024 +0200
+
+    adding original repository

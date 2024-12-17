@@ -13,12 +13,12 @@ import org.poo.accounts.cards.RegularCard;
  * Visitor which simulates an online card payment based on the type of card
  */
 public final class PayOnlineVisitor {
-    private double amount;
-    private int timestamp;
-    private String commerciant;
-    private Account account;
-    private final String cardDestroyed = "The card has been destroyed";
-    private final String cardCreated = "New card created";
+
+    private final double amount;
+    private final int timestamp;
+    private final String commerciant;
+    private final Account account;
+
 
 
     public PayOnlineVisitor(final double amount, final int timestamp,
@@ -51,13 +51,16 @@ public final class PayOnlineVisitor {
             account.getReportsClassic().add(successfulPayment());
             account.getSpendingReports().add(successfulPayment());
 
-            user.getTranzactions().add(oneTimeCardCreatedOrDestroyed(card, cardDestroyed));
-            account.getReportsClassic().add(oneTimeCardCreatedOrDestroyed(card, cardDestroyed));
+            user.getTranzactions().add(oneTimeCardCreatedOrDestroyed(card,
+                    "The card has been destroyed"));
+            account.getReportsClassic().add(oneTimeCardCreatedOrDestroyed(card,
+                    "The card has been destroyed"));
 
             card.updateCardNumber();
 
-            user.getTranzactions().add(oneTimeCardCreatedOrDestroyed(card, cardCreated));
-            account.getReportsClassic().add(oneTimeCardCreatedOrDestroyed(card, cardCreated));
+            user.getTranzactions().add(oneTimeCardCreatedOrDestroyed(card, "New card created"));
+            account.getReportsClassic().add(oneTimeCardCreatedOrDestroyed(card,
+                    "New card created"));
         }
     }
 

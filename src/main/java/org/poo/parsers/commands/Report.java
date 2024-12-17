@@ -15,10 +15,11 @@ import org.poo.parsers.fileio.CommandInput;
  */
 
 public final class Report implements Command {
-    private int startTimestamp;
-    private int endTimestamp;
-    private String iban;
-    private int timestamp;
+
+    private final int startTimestamp;
+    private final int endTimestamp;
+    private final String iban;
+    private final int timestamp;
 
 
     public Report(final CommandInput commandInput) {

@@ -14,12 +14,13 @@ import org.poo.parsers.fileio.CommandInput;
  * class implementing the pay online command
  */
 public final class PayOnline implements Command {
-    private String cardNumber;
-    private double amount;
-    private int timestamp;
-    private String currency;
-    private String commerciant;
-    private String email;
+
+    private final String cardNumber;
+    private final double amount;
+    private final int timestamp;
+    private final String currency;
+    private final String commerciant;
+    private final String email;
 
 
 
@@ -47,15 +48,15 @@ public final class PayOnline implements Command {
             if (!user.getAccounts().contains(account)) {
                 cardNotFound();
             } else if (account.getBalance() != 0) {
-                amount = amount * Bank.getInstance()
+                double paymentAmount = amount * Bank.getInstance()
                         .findExchangeRate(currency, account.getCurrency());
-                PayOnlineVisitor visitor = new PayOnlineVisitor(amount, timestamp,
+                PayOnlineVisitor visitor = new PayOnlineVisitor(paymentAmount, timestamp,
                         commerciant, account);
                 card.accept(visitor);
             }
         } catch (CardNotFoundException e) {
             cardNotFound();
-        } catch (UserNotFoundException e) {
+        } catch (UserNotFoundException ignored) {
 
         }
 

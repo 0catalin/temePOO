@@ -12,10 +12,12 @@ import org.poo.parsers.fileio.CommandInput;
  * class implementing the add savings account command
  */
 public final class AddSavingsAccount implements Command {
-    private String email;
-    private String currency;
-    private int timestamp;
-    private double interestRate;
+
+    private final String email;
+    private final String currency;
+    private final int timestamp;
+    private final double interestRate;
+
     public AddSavingsAccount(final CommandInput commandInput) {
         email = commandInput.getEmail();
         currency = commandInput.getCurrency();
@@ -37,7 +39,7 @@ public final class AddSavingsAccount implements Command {
             user.getTranzactions().add(addToUsersTranzactions());
             Bank.getInstance().getAccountByIBAN(savingsAccount.getIban())
                     .getReportsClassic().add(addToUsersTranzactions());
-        } catch (UserNotFoundException e) {
+        } catch (UserNotFoundException ignored) {
 
         }
     }

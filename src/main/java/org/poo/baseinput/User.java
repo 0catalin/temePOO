@@ -17,6 +17,7 @@ import java.util.ArrayList;
  */
 
 public final class User {
+
     private String firstName;
     private String lastName;
     private String email;

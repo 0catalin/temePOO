@@ -13,10 +13,10 @@ import org.poo.parsers.fileio.CommandInput;
  * class implementing the set alias command
  */
 public final class SetAlias implements Command {
-    private String iban;
-    private String email;
-    private String alias;
 
+    private final String iban;
+    private final String email;
+    private final String alias;
 
     public SetAlias(final CommandInput commandInput) {
         email = commandInput.getEmail();
@@ -37,7 +37,7 @@ public final class SetAlias implements Command {
             if (user.getAccounts().contains(account)) {
                 account.setAlias(alias);
             }
-        } catch (UserNotFoundException | AccountNotFoundException e) {
+        } catch (UserNotFoundException | AccountNotFoundException ignored) {
 
         }
     }

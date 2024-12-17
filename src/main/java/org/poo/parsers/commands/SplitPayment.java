@@ -15,10 +15,11 @@ import java.util.List;
  * class implementing the split payment command
  */
 public final class SplitPayment implements Command {
-    private double amount;
-    private int timestamp;
-    private String currency;
-    private List<String> accountsForSplit;
+
+    private final double amount;
+    private final int timestamp;
+    private final String currency;
+    private final List<String> accountsForSplit;
 
 
     public SplitPayment(final CommandInput commandInput) {

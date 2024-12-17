@@ -13,11 +13,12 @@ import org.poo.parsers.fileio.CommandInput;
  * class implementing the send money command
  */
 public final class SendMoney implements Command {
-    private double amount;
-    private int timestamp;
-    private String iban;
-    private String description;
-    private String receiver;
+
+    private final double amount;
+    private final int timestamp;
+    private final String iban;
+    private final String description;
+    private final String receiver;
 
 
     public SendMoney(final CommandInput commandInput) {
@@ -66,7 +67,7 @@ public final class SendMoney implements Command {
                         accountReceiver.getCurrency()));
 
             }
-        } catch (AccountNotFoundException e) {
+        } catch (AccountNotFoundException ignored) {
 
         }
     }
@@ -81,7 +82,7 @@ public final class SendMoney implements Command {
         output.put("description", description);
         output.put("senderIBAN", iban);
         output.put("receiverIBAN", accountReceiver.getIban());
-        output.put("amount", "" + amount + " " + accountSender.getCurrency());
+        output.put("amount", amount + " " + accountSender.getCurrency());
         output.put("transferType", "sent");
         return output;
     }
@@ -96,7 +97,7 @@ public final class SendMoney implements Command {
         output.put("description", description);
         output.put("senderIBAN", iban);
         output.put("receiverIBAN", accountReceiver.getIban());
-        output.put("amount", "" + amount * Bank.getInstance().
+        output.put("amount", +amount * Bank.getInstance().
                 findExchangeRate(accountSender.getCurrency(),
                 accountReceiver.getCurrency()) + " " + accountReceiver.getCurrency());
         output.put("transferType", "received");

@@ -12,6 +12,7 @@ import java.util.ArrayList;
  * class designed to store an input commerciant
  */
 public final class Commerciant {
+
     private int id;
     private String description;
     private ArrayList<String> commerciants;

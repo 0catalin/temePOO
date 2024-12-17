@@ -15,9 +15,10 @@ import org.poo.parsers.fileio.CommandInput;
  * class implementing the creating of one time card command
  */
 public final class CreateOneTimeCard implements Command {
-    private String iban;
-    private String email;
-    private int timestamp;
+
+    private final String iban;
+    private final String email;
+    private final int timestamp;
 
 
     public CreateOneTimeCard(final CommandInput commandInput) {
@@ -44,7 +45,7 @@ public final class CreateOneTimeCard implements Command {
                         .getReportsClassic().add(addToUsersTranzactions(oneTimeCard));
                 account.getCards().add(oneTimeCard);
             }
-        } catch (AccountNotFoundException | UserNotFoundException e) {
+        } catch (AccountNotFoundException | UserNotFoundException ignored) {
 
         }
     }

@@ -28,6 +28,7 @@ import java.util.Set;
  * class used for parsing the input and storing it in objects
  */
 public final class InputParser {
+
         private ArrayList<Command> commands;
         private ArrayList<Commerciant> commerciants;
         private Map<Pair, Double> costs;
@@ -92,8 +93,8 @@ public final class InputParser {
     /**
      * recursive method to find the exchange rate between two currencies
      * @param fromInitial initial cost to be stored for every function call
-     * @param from the from currency
-     * @param to the to currency
+     * @param from the currency from which it is converted
+     * @param to the currency which it is converted to
      * @param visited an ArrayList to keep track of the visited nodes
      * @param currentRate the current calculated rate
      * @return the exchange rate between the 2 currencies

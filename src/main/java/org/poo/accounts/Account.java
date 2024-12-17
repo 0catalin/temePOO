@@ -15,6 +15,7 @@ import java.util.ArrayList;
  * represents an account
  */
 public abstract class Account {
+
     private String currency;
     private double minBalance = 0;
     private String alias;

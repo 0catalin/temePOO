@@ -12,8 +12,9 @@ import org.poo.parsers.fileio.CommandInput;
  * class implementing the print transactions command
  */
 public final class PrintTransactions implements Command {
-    private String email;
-    private int timestamp;
+
+    private final String email;
+    private final int timestamp;
 
 
     public PrintTransactions(final CommandInput commandInput) {
@@ -40,7 +41,7 @@ public final class PrintTransactions implements Command {
             transaction.set("output", outputNode);
             transaction.put("timestamp", timestamp);
             Bank.getInstance().getOutput().add(transaction);
-        } catch (UserNotFoundException e) {
+        } catch (UserNotFoundException ignored) {
 
         }
 

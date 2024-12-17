@@ -12,9 +12,10 @@ import org.poo.parsers.fileio.CommandInput;
  * class implementing the change interest rate command
  */
 public final class ChangeInterestRate implements Command {
-    private String iban;
-    private int timestamp;
-    private double interestRate;
+
+    private final String iban;
+    private final int timestamp;
+    private final double interestRate;
 
     public ChangeInterestRate(final CommandInput commandInput) {
         timestamp = commandInput.getTimestamp();
@@ -39,7 +40,7 @@ public final class ChangeInterestRate implements Command {
              } else {
                  Bank.getInstance().getOutput().add(savingsAccountError());
              }
-         } catch (AccountNotFoundException e) {
+         } catch (AccountNotFoundException ignored) {
 
          }
 

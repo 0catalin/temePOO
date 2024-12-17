@@ -12,9 +12,11 @@ import org.poo.parsers.fileio.CommandInput;
  * class implementing the add classic account command
  */
 public final class AddClassicAccount implements Command {
-    private String email;
-    private String currency;
-    private int timestamp;
+
+    private final String email;
+    private final String currency;
+    private final int timestamp;
+
     public AddClassicAccount(final CommandInput commandInput) {
         email = commandInput.getEmail();
         currency = commandInput.getCurrency();
@@ -36,7 +38,7 @@ public final class AddClassicAccount implements Command {
             user.getTranzactions().add(addToUsersTranzactions());
             Bank.getInstance().getAccountByIBAN(classicAccount.getIban())
                     .getReportsClassic().add(addToUsersTranzactions());
-        } catch (UserNotFoundException e) {
+        } catch (UserNotFoundException ignored) {
 
         }
 
