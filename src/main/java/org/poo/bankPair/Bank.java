@@ -9,6 +9,7 @@ import org.poo.baseinput.User;
 import org.poo.accounts.cards.Card;
 import org.poo.exceptions.AccountNotFoundException;
 import org.poo.exceptions.CardNotFoundException;
+import org.poo.exceptions.CommerciantNotFoundException;
 import org.poo.exceptions.UserNotFoundException;
 import org.poo.parsers.InputParser;
 
@@ -195,6 +196,24 @@ public final class Bank {
             return costs.get(new Pair(from, to));
         }
         return -1;
+    }
+
+    public Commerciant getCommerciantByName(String name) {
+        for (Commerciant commerciant : commerciants) {
+            if (commerciant.getCommerciant().equals(name)) {
+                return commerciant;
+            }
+        }
+        throw new CommerciantNotFoundException(""); // might have to return null here or handle more cases
+    }
+
+    public Commerciant getCommerciantByIban (String iban) {
+        for (Commerciant commerciant : commerciants) {
+            if (commerciant.getAccount().equals(iban)) {
+                return commerciant;
+            }
+        }
+        throw new CommerciantNotFoundException("");
     }
 
 }

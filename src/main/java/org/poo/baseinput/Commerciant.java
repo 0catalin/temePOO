@@ -12,17 +12,17 @@ import java.util.ArrayList;
  * class designed to store an input commerciant
  */
 public final class Commerciant {
-
+    private String commerciant;
     private int id;
-    private String description;
-    private ArrayList<String> commerciants;
+    private String account;
+    private String type;
+    private String cashbackStrategy;
 
     public Commerciant(final CommerciantInput commerciantInput) {
+        commerciant = commerciantInput.getCommerciant();
         id = commerciantInput.getId();
-        description = commerciantInput.getDescription();
-        commerciants = new ArrayList<String>();
-        for (String commerciant : commerciantInput.getCommerciants()) {
-            commerciants.add(commerciant);
-        }
+        account = commerciantInput.getAccount();
+        type = commerciantInput.getType();
+        cashbackStrategy = commerciantInput.getCashbackStrategy();
     }
 }

@@ -42,8 +42,14 @@ public final class DeleteAccount implements Command {
                         .getTranzactions().add(deleteFundsRemaining());
                 account.getReportsClassic().add(deleteFundsRemaining());
             } else if (user.getAccounts().contains(account)) {
-                user.getAccounts().remove(account);
-                deleteSuccess();
+                if (!user.getClassicAccounts().contains(account)) {
+                    user.getAccounts().remove(account);
+                    deleteSuccess();
+                } else {
+                    user.getClassicAccounts().remove(account);
+                    user.getAccounts().remove(account);
+                    deleteSuccess();
+                }
             } else {
                 deleteFailure();
             }

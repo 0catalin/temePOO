@@ -35,6 +35,7 @@ public final class AddClassicAccount implements Command {
             ClassicAccount classicAccount = new ClassicAccount(currency);
             User user = Bank.getInstance().getUserByEmail(email);
             user.getAccounts().add(classicAccount);
+            user.getClassicAccounts().add(classicAccount);
             user.getTranzactions().add(addToUsersTranzactions());
             Bank.getInstance().getAccountByIBAN(classicAccount.getIban())
                     .getReportsClassic().add(addToUsersTranzactions());

@@ -2,6 +2,8 @@ package org.poo.accounts;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.Getter;
 import lombok.Setter;
+import org.poo.DiscountInfo;
+import org.poo.baseinput.Commerciant;
 import org.poo.utils.Utils;
 import org.poo.visitors.reportVisitors.Visitor;
 import org.poo.accounts.cards.Card;
@@ -26,7 +28,7 @@ public abstract class Account {
     private ArrayList<ObjectNode> spendingReports;
     private ArrayList<ObjectNode> reportsSavings;
     private ArrayList<ObjectNode> reportsClassic;
-
+    private DiscountInfo discountInfo;
     private static final int WARNING_LIMIT = 30;
 
 
@@ -39,6 +41,7 @@ public abstract class Account {
         setSpendingReports(new ArrayList<ObjectNode>());
         setReportsSavings(new ArrayList<ObjectNode>());
         setReportsClassic(new ArrayList<ObjectNode>());
+        setDiscountInfo(new DiscountInfo());
     }
 
     /**
@@ -53,6 +56,54 @@ public abstract class Account {
             }
         }
         return null;
+    }
+
+    public double getSpendingCashBack (Commerciant commerciant, String servicePlan) {
+        if (!commerciant.getCashbackStrategy().equals("spendingThreshold")) {
+            return 0;
+        }
+        if (discountInfo.getSpendingThreshold() >= 100 && discountInfo.getSpendingThreshold() < 300) {
+            if (servicePlan.equals("standard") || servicePlan.equals("student")) {
+                return 0.001;
+            } else if (servicePlan.equals("silver")) {
+                return 0.003;
+            } else if (servicePlan.equals("gold")) {
+                return 0.005;
+            }
+        } else if (discountInfo.getSpendingThreshold() >= 300 && discountInfo.getSpendingThreshold() < 500) {
+            if (servicePlan.equals("standard") || servicePlan.equals("student")) {
+                return 0.002;
+            } else if (servicePlan.equals("silver")) {
+                return 0.004;
+            } else if (servicePlan.equals("gold")) {
+                return 0.0055;
+            }
+        } else if (discountInfo.getSpendingThreshold() >= 500) {
+            if (servicePlan.equals("standard") || servicePlan.equals("student")) {
+                return 0.0025;
+            } else if (servicePlan.equals("silver")) {
+                return 0.005;
+            } else if (servicePlan.equals("gold")) {
+                return 0.007;
+            }
+        }
+        return 1;
+
+    }
+    public double getTransactionCashback (Commerciant commerciant) {
+        if (commerciant.getType().equals("Food") && discountInfo.isFoodCashback()) {
+            discountInfo.setFoodCashback(false);
+            return 0.02;
+        }
+        if (commerciant.getType().equals("Clothes") && discountInfo.isClothesCashback()) {
+            discountInfo.setClothesCashback(false);
+            return 0.05;
+        }
+        if (commerciant.getType().equals("Tech") && discountInfo.isTechCashback()) {
+            discountInfo.setTechCashback(false);
+            return 0.1;
+        }
+        return 0;
     }
 
     /**

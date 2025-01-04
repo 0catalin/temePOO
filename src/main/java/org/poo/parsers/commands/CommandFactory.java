@@ -72,6 +72,13 @@ public abstract class CommandFactory {
         if (commandInput.getCommand().equals("splitPayment")) {
             return new SplitPayment(commandInput);
         }
-        throw new CommandNotFoundException("Invalid command");
+        if (commandInput.getCommand().equals("withdrawSavings")) {
+            return new WithdrawSavings(commandInput);
+        }
+        if (commandInput.getCommand().equals("upgradePlan")) {
+            return new UpgradePlan(commandInput);
+        }
+        return new PrintUsers(commandInput);
+        // throw new CommandNotFoundException("Invalid command");
     }
 }

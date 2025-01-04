@@ -4,9 +4,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.poo.bankPair.Bank;
 import org.poo.accounts.Account;
+import org.poo.baseinput.Commerciant;
 import org.poo.baseinput.User;
 import org.poo.exceptions.AccountNotFoundException;
+import org.poo.exceptions.CommerciantNotFoundException;
 import org.poo.parsers.fileio.CommandInput;
+import org.poo.strategies.Strategy;
+import org.poo.strategies.StrategyFactory;
 
 
 /**
@@ -14,11 +18,12 @@ import org.poo.parsers.fileio.CommandInput;
  */
 public final class SendMoney implements Command {
 
-    private final double amount;
+    private double amount;
     private final int timestamp;
     private final String iban;
     private final String description;
     private final String receiver;
+    private final String email;
 
 
     public SendMoney(final CommandInput commandInput) {
@@ -27,6 +32,7 @@ public final class SendMoney implements Command {
         iban = commandInput.getAccount();
         description = commandInput.getDescription();
         receiver = commandInput.getReceiver();
+        email = commandInput.getEmail();
     }
 
 
@@ -41,14 +47,49 @@ public final class SendMoney implements Command {
             Account accountSender = Bank.getInstance().getAccountByIBAN(iban);
             Account accountReceiver = Bank.getInstance().getAccountByIBANOrAlias(receiver);
             User userSender = Bank.getInstance().getUserByIBAN(iban);
+            Commerciant commerciant = Bank.getInstance().getCommerciantByIban(receiver);
+
+
+            if (accountSender.getBalance() < amount * userSender.getPlanMultiplier(amount * Bank.getInstance().findExchangeRate(accountSender.getCurrency(), "RON"))) {
+
+                Bank.getInstance().getUserByIBAN(accountSender.getIban())
+                        .getTranzactions().add(insufficientFunds());
+                accountSender.getReportsClassic().add(insufficientFunds());
+            } else {
+                double cashback = 0;
+                cashback += accountSender.getTransactionCashback(commerciant) * amount;
+                cashback += accountSender.getSpendingCashBack(commerciant, userSender.getServicePlan()) * amount;
+                amount = amount * userSender.getPlanMultiplier(amount * Bank.getInstance().findExchangeRate(accountSender.getCurrency(), "RON"));
+                Strategy strategy = StrategyFactory.createStrategy(commerciant, accountSender, amount);
+                strategy.execute();
+                System.out.println(cashback);
+
+
+                userSender.getTranzactions()
+                        .add(addToSendersTranzactions(accountSender, accountReceiver));
+                accountSender.getReportsClassic()
+                        .add(addToSendersTranzactions(accountSender, accountReceiver));
+                accountSender.setBalance(accountSender.getBalance() - amount);
+
+                accountSender.setBalance(accountSender.getBalance() + cashback);
+
+            }
+
+
+        } catch (AccountNotFoundException ignored) {
+
+        } catch (CommerciantNotFoundException e) {
+
+
+            Account accountSender = Bank.getInstance().getAccountByIBAN(iban);
+            Account accountReceiver = Bank.getInstance().getAccountByIBANOrAlias(receiver);
+            User userSender = Bank.getInstance().getUserByIBAN(iban);
             if (accountSender.getBalance() < amount) {
 
                 Bank.getInstance().getUserByIBAN(accountSender.getIban())
                         .getTranzactions().add(insufficientFunds());
                 accountSender.getReportsClassic().add(insufficientFunds());
-
             } else {
-
                 userSender.getTranzactions()
                         .add(addToSendersTranzactions(accountSender, accountReceiver));
                 accountSender.getReportsClassic()
@@ -65,12 +106,12 @@ public final class SendMoney implements Command {
                 accountReceiver.setBalance(accountReceiver.getBalance()
                         + amount * Bank.getInstance().findExchangeRate(accountSender.getCurrency(),
                         accountReceiver.getCurrency()));
-
             }
-        } catch (AccountNotFoundException ignored) {
-
         }
     }
+
+
+
 
 
 

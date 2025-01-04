@@ -37,10 +37,7 @@ public final class PayOnlineVisitor {
      */
     public void visit(final OneTimeCard card) {
         User user = Bank.getInstance().getUserByIBAN(account.getIban());
-        if (account.getBalance() < amount) {
-            user.getTranzactions().add(insufficientFunds());
-            account.getReportsClassic().add(insufficientFunds());
-        } else if (account.getBalance() - amount < account.getMinBalance()) {
+        if (account.getBalance() - amount < account.getMinBalance()) {
             user.getTranzactions().add(insufficientFunds());
             account.getReportsClassic().add(insufficientFunds());
             card.setStatus("frozen");
@@ -72,10 +69,7 @@ public final class PayOnlineVisitor {
      */
     public void visit(final RegularCard card) {
         User user = Bank.getInstance().getUserByIBAN(account.getIban());
-        if (account.getBalance() < amount) {
-            user.getTranzactions().add(insufficientFunds());
-            account.getReportsClassic().add(insufficientFunds());
-        } else if (card.getStatus().equals("frozen")) {
+        if (card.getStatus().equals("frozen")) {
             user.getTranzactions().add(frozenError());
             account.getReportsClassic().add(frozenError());
         } else if (account.getBalance() - amount < account.getMinBalance()) {

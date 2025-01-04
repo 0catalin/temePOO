@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.poo.accounts.Account;
 import org.poo.bankPair.Bank;
 import org.poo.baseinput.User;
+import org.poo.exceptions.AccountNotFoundException;
 import org.poo.parsers.fileio.CommandInput;
 
 import java.util.ArrayList;
@@ -37,38 +38,42 @@ public final class SplitPayment implements Command {
      */
     @Override
     public void execute() {
-        ArrayList<Account> accountList = new ArrayList<Account>();
-        ArrayList<User> userList = new ArrayList<User>();
-        for (String iban : accountsForSplit) {
-            accountList.add(Bank.getInstance().getAccountByIBAN(iban));
-            userList.add(Bank.getInstance().getUserByIBAN(iban));
-        }
-        String problemIban = "";
-        double eachAmount = amount / accountList.size(); // amount per each
-        for (Account account : accountList) {
-            if (account.getBalance() - eachAmount * Bank.getInstance()
-                    .findExchangeRate(currency, account.getCurrency()) < account.getMinBalance()) {
-                problemIban = account.getIban();
+        try {
+            ArrayList<Account> accountList = new ArrayList<Account>();
+            ArrayList<User> userList = new ArrayList<User>();
+            for (String iban : accountsForSplit) {
+                accountList.add(Bank.getInstance().getAccountByIBAN(iban));
+                userList.add(Bank.getInstance().getUserByIBAN(iban));
             }
-        }
-        if (problemIban.isEmpty()) {
-            for (int i = 0; i < accountList.size(); i++) {
-                userList.get(i).getTranzactions().add(splitPayment());
-                accountList.get(i).getReportsClassic().add(splitPayment());
+            String problemIban = "";
+            double eachAmount = amount / accountList.size(); // amount per each
+            for (Account account : accountList) {
+                if (account.getBalance() - eachAmount * Bank.getInstance()
+                        .findExchangeRate(currency, account.getCurrency()) < account.getMinBalance()) {
+                    problemIban = account.getIban();
+                }
+            }
+            if (problemIban.isEmpty()) {
+                for (int i = 0; i < accountList.size(); i++) {
+                    userList.get(i).getTranzactions().add(splitPayment());
+                    accountList.get(i).getReportsClassic().add(splitPayment());
 
-                Bank.getInstance().getAccountByIBAN(accountsForSplit.get(i))
-                        .setBalance(accountList.get(i).getBalance()
-                                - eachAmount * Bank.getInstance()
-                                .findExchangeRate(currency, accountList.get(i).getCurrency()));
+                    Bank.getInstance().getAccountByIBAN(accountsForSplit.get(i))
+                            .setBalance(accountList.get(i).getBalance()
+                                    - eachAmount * Bank.getInstance()
+                                    .findExchangeRate(currency, accountList.get(i).getCurrency()));
+                }
+            } else {
+                ObjectNode node = splitPayment();
+                node.put("error", "Account " + problemIban
+                        + " has insufficient funds for a split payment.");
+                for (int i = 0; i < userList.size(); i++) {
+                    userList.get(i).getTranzactions().add(node);
+                    accountList.get(i).getReportsClassic().add(node);
+                }
             }
-        } else {
-            ObjectNode node = splitPayment();
-            node.put("error", "Account " + problemIban
-                    +  " has insufficient funds for a split payment.");
-            for (int i = 0; i < userList.size(); i++) {
-                userList.get(i).getTranzactions().add(node);
-                accountList.get(i).getReportsClassic().add(node);
-            }
+        } catch (AccountNotFoundException e) {
+
         }
     }
 

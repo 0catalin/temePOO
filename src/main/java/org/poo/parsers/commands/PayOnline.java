@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.poo.bankPair.Bank;
 import org.poo.exceptions.CardNotFoundException;
 import org.poo.exceptions.UserNotFoundException;
+import org.poo.strategies.Strategy;
+import org.poo.strategies.StrategyFactory;
 import org.poo.visitors.PayOnlineVisitor;
 import org.poo.accounts.Account;
 import org.poo.baseinput.User;
@@ -42,17 +44,30 @@ public final class PayOnline implements Command {
     @Override
     public void execute() {
         try {
+            double cashback = 0;
             Card card = Bank.getInstance().getCardByCardNumber(cardNumber);
             User user = Bank.getInstance().getUserByEmail(email);
             Account account = Bank.getInstance().getAccountByCardNumber(cardNumber);
+            double paymentAmount = amount * Bank.getInstance()
+                    .findExchangeRate(currency, account.getCurrency());
             if (!user.getAccounts().contains(account)) {
                 cardNotFound();
             } else if (account.getBalance() != 0) {
-                double paymentAmount = amount * Bank.getInstance()
-                        .findExchangeRate(currency, account.getCurrency());
-                PayOnlineVisitor visitor = new PayOnlineVisitor(paymentAmount, timestamp,
-                        commerciant, account);
-                card.accept(visitor);
+                if (account.getBalance() < paymentAmount * user.getPlanMultiplier(paymentAmount * Bank.getInstance().findExchangeRate(account.getCurrency(), "RON"))) {
+                    user.getTranzactions().add(insufficientFunds());
+                    account.getReportsClassic().add(insufficientFunds());
+                } else { // TODO MIGHT NEED TO ADD THE CASE WHERE THE BAL IS GREATER THAN MINBAL
+                    cashback += account.getTransactionCashback(Bank.getInstance().getCommerciantByName(commerciant)) * paymentAmount;
+                    cashback += account.getSpendingCashBack(Bank.getInstance().getCommerciantByName(commerciant), user.getServicePlan()) * paymentAmount;
+                    paymentAmount *= user.getPlanMultiplier(paymentAmount * Bank.getInstance().findExchangeRate(account.getCurrency(), "RON"));
+                    Strategy strategy = StrategyFactory.createStrategy(Bank.getInstance().getCommerciantByName(commerciant), account, paymentAmount);
+                    strategy.execute();
+                    System.out.println(paymentAmount);
+                    PayOnlineVisitor visitor = new PayOnlineVisitor(paymentAmount, timestamp,
+                            commerciant, account);
+                    card.accept(visitor);
+                    account.setBalance(account.getBalance() + cashback);
+                }
             }
         } catch (CardNotFoundException e) {
             cardNotFound();
@@ -63,6 +78,14 @@ public final class PayOnline implements Command {
     }
 
 
+
+    private ObjectNode insufficientFunds() {
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode finalNode = mapper.createObjectNode();
+        finalNode.put("timestamp", timestamp);
+        finalNode.put("description", "Insufficient funds");
+        return finalNode;
+    }
 
     private void cardNotFound() {
         ObjectMapper mapper = new ObjectMapper();
