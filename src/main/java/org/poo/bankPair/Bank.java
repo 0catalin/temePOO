@@ -7,11 +7,9 @@ import org.poo.accounts.Account;
 import org.poo.baseinput.Commerciant;
 import org.poo.baseinput.User;
 import org.poo.accounts.cards.Card;
-import org.poo.exceptions.AccountNotFoundException;
-import org.poo.exceptions.CardNotFoundException;
-import org.poo.exceptions.CommerciantNotFoundException;
-import org.poo.exceptions.UserNotFoundException;
+import org.poo.exceptions.*;
 import org.poo.parsers.InputParser;
+import org.poo.splitPayment.SplitPaymentInfo;
 
 import java.util.ArrayList;
 import java.util.Map;
@@ -28,6 +26,7 @@ public final class Bank {
     private Map<Pair, Double> costs;
     private ArrayList<User> users;
     private ArrayNode output;
+    private ArrayList<SplitPaymentInfo> splitPayments;
 
     private static Bank instance = null;
 
@@ -53,6 +52,7 @@ public final class Bank {
         users = parser.getUsers();
         costs = parser.getCosts();
         output = outputNode;
+        splitPayments = new ArrayList<SplitPaymentInfo>();
     }
 
 
@@ -70,6 +70,7 @@ public final class Bank {
         }
         throw new UserNotFoundException("");
     }
+
 
 
 
@@ -218,6 +219,27 @@ public final class Bank {
             }
         }
         throw new CommerciantNotFoundException("");
+    }
+
+    public String getEmailByIban(final String iban) {
+        for (User user : users) {
+            for (Account account : user.getAccounts()) {
+                if (account.getIban().equals(iban)) {
+                    return user.getEmail();
+                }
+            }
+        }
+        throw new EmailNotFoundException("");
+    }
+
+
+    public SplitPaymentInfo getSplitPaymentByTypeAndEmail(final String email, final String type) {
+        for (SplitPaymentInfo splitPaymentInfo : splitPayments) {
+            if (splitPaymentInfo.isRightType(type, email)) {
+                return splitPaymentInfo;
+            }
+        }
+        throw new PaymentInfoNotFoundException("");
     }
 
 }

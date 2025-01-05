@@ -84,6 +84,12 @@ public abstract class CommandFactory {
         if (commandInput.getCommand().equals("cashWithdrawal")) {
             return new CashWithdrawal(commandInput);
         }
+        if (commandInput.getCommand().equals("rejectSplitPayment")) {
+            return new RejectSplitPayment(commandInput);
+        }
+        if (commandInput.getCommand().equals("acceptSplitPayment")) {
+            return new AcceptSplitPayment(commandInput);
+        }
         return new PrintUsers(commandInput);
         // throw new CommandNotFoundException("Invalid command");
     }

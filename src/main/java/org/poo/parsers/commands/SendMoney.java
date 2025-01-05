@@ -44,7 +44,6 @@ public final class SendMoney implements Command {
     @Override
     public void execute() {
         try {
-
             Account accountSender = Bank.getInstance().getAccountByIBAN(iban);
 
             Account accountReceiver = Bank.getInstance().getAccountByIBANOrAlias(receiver);
