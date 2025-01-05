@@ -15,7 +15,7 @@ import java.util.List;
 /**
  * class implementing the split payment command
  */
-public final class SplitPayment implements Command {
+public final class EqualSplitPayment implements Command {
 
     private final double amount;
     private final int timestamp;
@@ -23,7 +23,7 @@ public final class SplitPayment implements Command {
     private final List<String> accountsForSplit;
 
 
-    public SplitPayment(final CommandInput commandInput) {
+    public EqualSplitPayment(final CommandInput commandInput) {
         amount = commandInput.getAmount();
         timestamp = commandInput.getTimestamp();
         currency = commandInput.getCurrency();

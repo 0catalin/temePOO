@@ -31,7 +31,7 @@ public class WithdrawSavings implements Command{
             if (!user.isUserOldEnough()) {
                 user.getTranzactions().add(ageTooLow());
             } else if (user.getClassicAccounts().isEmpty()) {
-                // no classic accounts
+                user.getTranzactions().add(noClassicAccount());
             } else if (!account.getType().equals("savings")) {
                 // account not of type savings
             } else {
@@ -56,6 +56,14 @@ public class WithdrawSavings implements Command{
         ObjectNode output = mapper.createObjectNode();
         output.put("timestamp", timestamp);
         output.put("description", "You don't have the minimum age required.");
+        return output;
+    }
+
+    private ObjectNode noClassicAccount() {
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode output = mapper.createObjectNode();
+        output.put("description", "You do not have a classic account.");
+        output.put("timestamp", timestamp);
         return output;
     }
 }

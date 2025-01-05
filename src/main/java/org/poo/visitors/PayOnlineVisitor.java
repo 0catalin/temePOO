@@ -18,16 +18,18 @@ public final class PayOnlineVisitor {
     private final int timestamp;
     private final String commerciant;
     private final Account account;
+    private final double prevAmount;
 
 
 
     public PayOnlineVisitor(final double amount, final int timestamp,
-                            final String commerciant, final Account account) {
+                            final String commerciant, final Account account, double prevAmount) {
 
         this.amount = amount;
         this.timestamp = timestamp;
         this.commerciant = commerciant;
         this.account = account;
+        this.prevAmount = prevAmount;
     }
 
 
@@ -125,7 +127,7 @@ public final class PayOnlineVisitor {
         ObjectNode finalNode = mapper.createObjectNode();
         finalNode.put("timestamp", timestamp);
         finalNode.put("description", "Card payment");
-        finalNode.put("amount", amount);
+        finalNode.put("amount", prevAmount);
         finalNode.put("commerciant", commerciant);
         return finalNode;
     }

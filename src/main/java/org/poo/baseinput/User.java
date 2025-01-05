@@ -54,12 +54,12 @@ public final class User {
         if (servicePlan.equals("student") || servicePlan.equals("gold")) {
             return 1;
         } else if (servicePlan.equals("standard")) {
-            return 1.02;
+            return 1.002;
         } else if (servicePlan.equals("silver")) {
             if (amount < 500) {
                 return 1;
             } else {
-                return 1.01;
+                return 1.001;
             }
         }
         return 10000;

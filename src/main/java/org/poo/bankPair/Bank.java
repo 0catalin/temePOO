@@ -28,6 +28,7 @@ public final class Bank {
     private Map<Pair, Double> costs;
     private ArrayList<User> users;
     private ArrayNode output;
+
     private static Bank instance = null;
 
     static {
@@ -114,6 +115,9 @@ public final class Bank {
      * @return the corresponding account or exception if not found
      */
     public Account getAccountByIBANOrAlias(final String ibanOrAlias) {
+        if (ibanOrAlias.equals("")) {
+            throw new AccountNotFoundException("");
+        }
         for (User user : users) {
             for (Account account : user.getAccounts()) {
                 if (account.getIban().equals(ibanOrAlias)

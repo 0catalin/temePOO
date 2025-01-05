@@ -22,9 +22,6 @@ public class UpgradePlan implements Command{
 
     public void execute() {
         try {
-            if (iban.equals("RO90POOB5450777208072365")) {
-                int i = 2;
-            }
             Account account = Bank.getInstance().getAccountByIBAN(iban);
             User user = Bank.getInstance().getUserByAccount(account);
             if (user.getServicePlan().equals(newType)) {
@@ -33,11 +30,13 @@ public class UpgradePlan implements Command{
 
             } else if (newType.equals("student") || newType.equals("standard")) {
                 // nu stiu daca e nevoie aici
-            } else if (Bank.getInstance().findExchangeRate("RON", account.getCurrency()) * getUpgardeCost(user.getServicePlan(), newType) > account.getBalance() - account.getMinBalance()) {
+            } else if (Bank.getInstance().findExchangeRate("RON", account.getCurrency()) * getUpgradeCost(user.getServicePlan(), newType) > account.getBalance() - account.getMinBalance()) {
 
             } else {
-                account.setBalance(account.getBalance() - Bank.getInstance().findExchangeRate("RON", account.getCurrency()) * getUpgardeCost(user.getServicePlan(), newType));
+                account.setBalance(account.getBalance() - Bank.getInstance().findExchangeRate("RON", account.getCurrency()) * getUpgradeCost(user.getServicePlan(), newType));
+                user.setServicePlan(newType);
                 user.getTranzactions().add(addToSendersTranzactions());
+
             }
         } catch (AccountNotFoundException e) {
 
@@ -45,8 +44,8 @@ public class UpgradePlan implements Command{
     }
 
 
-    private double getUpgardeCost(String initial, String last) {
-        if (last.equals("gold") || initial.equals("silver")) {
+    private double getUpgradeCost(String initial, String last) {
+        if (last.equals("gold") && initial.equals("silver")) {
             return 250;
         }
         if (last.equals("gold")) {

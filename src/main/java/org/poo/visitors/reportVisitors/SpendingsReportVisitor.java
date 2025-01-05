@@ -99,7 +99,7 @@ public final class SpendingsReportVisitor implements Visitor {
         node.put("command", "spendingsReport");
         ObjectNode tranzaction = mapper.createObjectNode();
         tranzaction.put("IBAN", iban);
-        tranzaction.put("balance", account.getBalance());
+        tranzaction.put("balance", Math.round(account.getBalance() * 100.0) / 100.0);
         tranzaction.put("currency", account.getCurrency());
         ArrayNode transactions = mapper.createArrayNode();
         if (transactions != null) {

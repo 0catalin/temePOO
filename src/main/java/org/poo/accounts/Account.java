@@ -87,7 +87,7 @@ public abstract class Account {
                 return 0.007;
             }
         }
-        return 1;
+        return 0;
 
     }
     public double getTransactionCashback (Commerciant commerciant) {

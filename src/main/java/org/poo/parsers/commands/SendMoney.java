@@ -44,7 +44,9 @@ public final class SendMoney implements Command {
     @Override
     public void execute() {
         try {
+
             Account accountSender = Bank.getInstance().getAccountByIBAN(iban);
+
             Account accountReceiver = Bank.getInstance().getAccountByIBANOrAlias(receiver);
             User userSender = Bank.getInstance().getUserByIBAN(iban);
             Commerciant commerciant = Bank.getInstance().getCommerciantByIban(receiver);
@@ -56,28 +58,28 @@ public final class SendMoney implements Command {
                         .getTranzactions().add(insufficientFunds());
                 accountSender.getReportsClassic().add(insufficientFunds());
             } else {
-                double cashback = 0;
-                cashback += accountSender.getTransactionCashback(commerciant) * amount;
-                cashback += accountSender.getSpendingCashBack(commerciant, userSender.getServicePlan()) * amount;
-                amount = amount * userSender.getPlanMultiplier(amount * Bank.getInstance().findExchangeRate(accountSender.getCurrency(), "RON"));
-                Strategy strategy = StrategyFactory.createStrategy(commerciant, accountSender, amount);
-                strategy.execute();
-                System.out.println(cashback);
+                //double cashback = 0;
+                //cashback += accountSender.getTransactionCashback(commerciant) * amount;
+
+                double newAmount = amount * userSender.getPlanMultiplier(amount * Bank.getInstance().findExchangeRate(accountSender.getCurrency(), "RON"));
+                //Strategy strategy = StrategyFactory.createStrategy(commerciant, accountSender, newAmount);
+                //strategy.execute();
+                //cashback += accountSender.getSpendingCashBack(commerciant, userSender.getServicePlan()) * amount;
 
 
                 userSender.getTranzactions()
                         .add(addToSendersTranzactions(accountSender, accountReceiver));
                 accountSender.getReportsClassic()
                         .add(addToSendersTranzactions(accountSender, accountReceiver));
-                accountSender.setBalance(accountSender.getBalance() - amount);
+                accountSender.setBalance(accountSender.getBalance() - newAmount);
 
-                accountSender.setBalance(accountSender.getBalance() + cashback);
+                //accountSender.setBalance(accountSender.getBalance() + cashback);
 
             }
 
 
-        } catch (AccountNotFoundException ignored) {
-
+        } catch (AccountNotFoundException e) {
+            Bank.getInstance().getOutput().add(userNotFound());
         } catch (CommerciantNotFoundException e) {
 
 
@@ -101,8 +103,8 @@ public final class SendMoney implements Command {
                         .add(addToReceiversTranzactions(accountSender, accountReceiver));
                 accountReceiver.getReportsClassic()
                         .add(addToReceiversTranzactions(accountSender, accountReceiver));
-
-                accountSender.setBalance(accountSender.getBalance() - amount);
+                double extraAmount = amount * userSender.getPlanMultiplier(amount * Bank.getInstance().findExchangeRate(accountSender.getCurrency(), "RON"));
+                accountSender.setBalance(accountSender.getBalance() - extraAmount);
                 accountReceiver.setBalance(accountReceiver.getBalance()
                         + amount * Bank.getInstance().findExchangeRate(accountSender.getCurrency(),
                         accountReceiver.getCurrency()));
@@ -153,6 +155,18 @@ public final class SendMoney implements Command {
         finalNode.put("timestamp", timestamp);
         finalNode.put("description", "Insufficient funds");
         return finalNode;
+    }
+
+    private ObjectNode userNotFound() {
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode output = mapper.createObjectNode();
+        output.put("command", "sendMoney");
+        ObjectNode outputNode = mapper.createObjectNode();
+        outputNode.put("description", "User not found");
+        outputNode.put("timestamp", timestamp);
+        output.set("output", outputNode);
+        output.put("timestamp", timestamp);
+        return output;
     }
 
 }
