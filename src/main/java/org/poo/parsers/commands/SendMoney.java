@@ -85,7 +85,7 @@ public final class SendMoney implements Command {
             Account accountSender = Bank.getInstance().getAccountByIBAN(iban);
             Account accountReceiver = Bank.getInstance().getAccountByIBANOrAlias(receiver);
             User userSender = Bank.getInstance().getUserByIBAN(iban);
-            if (accountSender.getBalance() < amount) {
+            if (accountSender.getBalance() < amount * userSender.getPlanMultiplier(amount * Bank.getInstance().findExchangeRate(accountSender.getCurrency(), "RON"))) {
 
                 Bank.getInstance().getUserByIBAN(accountSender.getIban())
                         .getTranzactions().add(insufficientFunds());

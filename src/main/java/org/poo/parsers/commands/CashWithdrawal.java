@@ -32,7 +32,7 @@ public class CashWithdrawal implements Command {
             if (card.getStatus().equals("frozen")) {
 
             } else if (amount * Bank.getInstance().findExchangeRate("RON", account.getCurrency()) * user.getPlanMultiplier(amount) > account.getBalance()) {
-
+                user.getTranzactions().add(insufficientFunds());
             } else if (amount * Bank.getInstance().findExchangeRate("RON", account.getCurrency()) * user.getPlanMultiplier(amount) > account.getBalance() - account.getMinBalance()) {
 
             } else {
@@ -42,7 +42,7 @@ public class CashWithdrawal implements Command {
 
             }
         } catch (UserNotFoundException e) {
-
+            Bank.getInstance().getOutput().add(userNotFound());
         } catch (CardNotFoundException e) {
             Bank.getInstance().getOutput().add(cardNotFound());
         }
@@ -66,6 +66,26 @@ public class CashWithdrawal implements Command {
         outputNode.put("description", "Card not found");
         outputNode.put("timestamp", timestamp);
         output.set("output", outputNode);
+        output.put("timestamp", timestamp);
+        return output;
+    }
+
+    private ObjectNode userNotFound() {
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode output = mapper.createObjectNode();
+        output.put("command", "cashWithdrawal");
+        ObjectNode outputNode = mapper.createObjectNode();
+        outputNode.put("description", "User not found");
+        outputNode.put("timestamp", timestamp);
+        output.set("output", outputNode);
+        output.put("timestamp", timestamp);
+        return output;
+    }
+
+    private ObjectNode insufficientFunds() {
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode output = mapper.createObjectNode();
+        output.put("description", "Insufficient funds");
         output.put("timestamp", timestamp);
         return output;
     }

@@ -127,7 +127,7 @@ public final class PayOnlineVisitor {
         ObjectNode finalNode = mapper.createObjectNode();
         finalNode.put("timestamp", timestamp);
         finalNode.put("description", "Card payment");
-        finalNode.put("amount", prevAmount);
+        finalNode.put("amount", Math.round(prevAmount * 100) / 100.0);
         finalNode.put("commerciant", commerciant);
         return finalNode;
     }

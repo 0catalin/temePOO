@@ -43,39 +43,41 @@ public final class PayOnline implements Command {
      */
     @Override
     public void execute() {
-        try {
+        if (amount != 0) {
+            try {
 
-            double cashback = 0;
-            Card card = Bank.getInstance().getCardByCardNumber(cardNumber);
-            User user = Bank.getInstance().getUserByEmail(email);
-            Account account = Bank.getInstance().getAccountByCardNumber(cardNumber);
+                double cashback = 0;
+                Card card = Bank.getInstance().getCardByCardNumber(cardNumber);
+                User user = Bank.getInstance().getUserByEmail(email);
+                Account account = Bank.getInstance().getAccountByCardNumber(cardNumber);
 
-            double paymentAmount = amount * Bank.getInstance()
-                    .findExchangeRate(currency, account.getCurrency());
-            amount = paymentAmount;
-            if (!user.getAccounts().contains(account)) {
-                cardNotFound();
-            } else if (account.getBalance() != 0) {
-                if (account.getBalance() < paymentAmount * user.getPlanMultiplier(paymentAmount * Bank.getInstance().findExchangeRate(account.getCurrency(), "RON"))) {
-                    user.getTranzactions().add(insufficientFunds());
-                    account.getReportsClassic().add(insufficientFunds());
-                } else { // TODO MIGHT NEED TO ADD THE CASE WHERE THE BAL IS GREATER THAN MINBAL
-                    cashback += account.getTransactionCashback(Bank.getInstance().getCommerciantByName(commerciant)) * paymentAmount;
-                    paymentAmount *= user.getPlanMultiplier(paymentAmount * Bank.getInstance().findExchangeRate(account.getCurrency(), "RON"));
-                    Strategy strategy = StrategyFactory.createStrategy(Bank.getInstance().getCommerciantByName(commerciant), account, paymentAmount);
-                    strategy.execute();
-                    PayOnlineVisitor visitor = new PayOnlineVisitor(paymentAmount, timestamp,
-                            commerciant, account, amount);
-                    card.accept(visitor);
-                    cashback += account.getSpendingCashBack(Bank.getInstance().getCommerciantByName(commerciant), user.getServicePlan()) * amount;
-                    account.setBalance(account.getBalance() + cashback);
+                double paymentAmount = amount * Bank.getInstance()
+                        .findExchangeRate(currency, account.getCurrency());
+                amount = paymentAmount;
+                if (!user.getAccounts().contains(account)) {
+                    cardNotFound();
+                } else if (account.getBalance() != 0) {
+                    if (account.getBalance() < paymentAmount * user.getPlanMultiplier(paymentAmount * Bank.getInstance().findExchangeRate(account.getCurrency(), "RON"))) {
+                        user.getTranzactions().add(insufficientFunds());
+                        account.getReportsClassic().add(insufficientFunds());
+                    } else { // TODO MIGHT NEED TO ADD THE CASE WHERE THE BAL IS GREATER THAN MINBAL
+                        cashback += account.getTransactionCashback(Bank.getInstance().getCommerciantByName(commerciant)) * paymentAmount;
+                        paymentAmount *= user.getPlanMultiplier(paymentAmount * Bank.getInstance().findExchangeRate(account.getCurrency(), "RON"));
+                        Strategy strategy = StrategyFactory.createStrategy(Bank.getInstance().getCommerciantByName(commerciant), account, paymentAmount);
+                        strategy.execute();
+                        PayOnlineVisitor visitor = new PayOnlineVisitor(paymentAmount, timestamp,
+                                commerciant, account, amount);
+                        card.accept(visitor);
+                        cashback += account.getSpendingCashBack(Bank.getInstance().getCommerciantByName(commerciant), user.getServicePlan()) * amount;
+                        account.setBalance(account.getBalance() + cashback);
 
+                    }
                 }
-            }
-        } catch (CardNotFoundException e) {
-            cardNotFound();
-        } catch (UserNotFoundException ignored) {
+            } catch (CardNotFoundException e) {
+                cardNotFound();
+            } catch (UserNotFoundException ignored) {
 
+            }
         }
 
     }
