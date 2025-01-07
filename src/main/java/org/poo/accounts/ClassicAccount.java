@@ -33,7 +33,7 @@ public final class ClassicAccount extends Account {
      * @return the Card object corresponding to ID
      */
     public Card getCardByCardNumber(final String cardNumber) {
-        for (Card card : cards) {
+        for (Card card : getCards()) {
             if (card.getCardNumber().equals(cardNumber)) {
                 return card;
             }

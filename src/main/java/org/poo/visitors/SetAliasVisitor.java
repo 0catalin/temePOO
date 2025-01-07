@@ -15,6 +15,7 @@ public class SetAliasVisitor implements Visitor {
 
     public SetAliasVisitor(User user, String alias, String email, int timestamp, String iban) {
 
+        this.user = user;
         this.alias = alias;
         this.email = email;
         this.timestamp = timestamp;

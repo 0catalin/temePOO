@@ -4,6 +4,7 @@ import org.poo.accounts.Account;
 import org.poo.accounts.BusinessAccount;
 import org.poo.bankPair.Bank;
 import org.poo.parsers.fileio.CommandInput;
+import org.poo.visitors.ChangeSpendingLimitVisitor;
 
 public class ChangeSpendingLimit implements Command {
 
@@ -21,6 +22,8 @@ public class ChangeSpendingLimit implements Command {
 
     public void execute() {
         Account account = Bank.getInstance().getAccountByIBAN(iban);
-        ((BusinessAccount)account).changeSpendingLimit(amount, email);
+        ChangeSpendingLimitVisitor visitor = new ChangeSpendingLimitVisitor(amount, email);
+        account.accept(visitor);
+
     }
 }

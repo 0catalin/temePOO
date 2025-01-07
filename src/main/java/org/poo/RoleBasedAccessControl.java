@@ -14,11 +14,10 @@ public class RoleBasedAccessControl {
     ArrayList<String> typesOfUsers;
     HashMap<String, ArrayList<String>> roleToPermissions;
     HashMap<String, String> emailToRoleMap;
-    HashMap<String, Double> emailToSpendingLimitMap;
-    HashMap<String, Double> emailToDepositLimitMap;
 
 
-    public RoleBasedAccessControl(String ownerEmail, double limit) {
+
+    public RoleBasedAccessControl(String ownerEmail) {
         typesOfUsers = new ArrayList<String>();
         typesOfUsers.addAll(Arrays.asList("owner", "manager", "employee"));
         roleToPermissions = new HashMap<String, ArrayList<String>>();
@@ -38,18 +37,12 @@ public class RoleBasedAccessControl {
         emailToRoleMap = new HashMap<String, String>();
         emailToRoleMap.put(ownerEmail, "owner");
 
-        emailToDepositLimitMap = new HashMap<String, Double>();
-        emailToSpendingLimitMap = new HashMap<String, Double>();
 
-        emailToDepositLimitMap.put(ownerEmail, limit);
-        emailToSpendingLimitMap.put(ownerEmail, limit);
     }
 
 
-    public void addEmail(String email, String typeOfUser, double limit) {
+    public void addEmail(String email, String typeOfUser) {
         emailToRoleMap.put(email, typeOfUser);
-        emailToDepositLimitMap.put(email, limit);
-        emailToSpendingLimitMap.put(email, limit);
     }
 
     public boolean hasPermissions(String email, String permission) {

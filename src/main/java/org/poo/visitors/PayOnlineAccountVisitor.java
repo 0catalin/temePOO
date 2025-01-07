@@ -2,6 +2,7 @@ package org.poo.visitors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.poo.SpendingUserInfo;
 import org.poo.accounts.BusinessAccount;
 import org.poo.accounts.ClassicAccount;
 import org.poo.accounts.SavingsAccount;
@@ -55,6 +56,7 @@ public class PayOnlineAccountVisitor implements Visitor {
                             strategy.execute();
                             cashback += account.getSpendingCashBack(Bank.getInstance().getCommerciantByName(commerciant), user.getServicePlan()) * amount;
                             account.setBalance(account.getBalance() + cashback);
+
                         }
                     }
                 }
@@ -69,6 +71,7 @@ public class PayOnlineAccountVisitor implements Visitor {
         double paymentAmount = amount * Bank.getInstance()
                 .findExchangeRate(currency, account.getCurrency());
         amount = paymentAmount;
+        double initialBalance = account.getBalance();
 
 
         if (!account.getEmailToCards().containsKey(email)) {
@@ -77,7 +80,7 @@ public class PayOnlineAccountVisitor implements Visitor {
             if (account.getBalance() - account.getMinBalance() < paymentAmount * user.getPlanMultiplier(paymentAmount * Bank.getInstance().findExchangeRate(account.getCurrency(), "RON"))) {
 
             } else {
-                if (account.getRbac().getEmailToSpendingLimitMap().get(email) > paymentAmount * user.getPlanMultiplier(paymentAmount * Bank.getInstance().findExchangeRate(account.getCurrency(), "RON"))) {
+                if (account.getSpendingLimit() > paymentAmount * user.getPlanMultiplier(paymentAmount * Bank.getInstance().findExchangeRate(account.getCurrency(), "RON"))) {
                     cashback += account.getTransactionCashback(Bank.getInstance().getCommerciantByName(commerciant)) * paymentAmount;
                     paymentAmount *= user.getPlanMultiplier(paymentAmount * Bank.getInstance().findExchangeRate(account.getCurrency(), "RON"));
                     PayOnlineVisitor visitor = new PayOnlineVisitor(paymentAmount, timestamp,
@@ -87,6 +90,7 @@ public class PayOnlineAccountVisitor implements Visitor {
                         strategy.execute();
                         cashback += account.getSpendingCashBack(Bank.getInstance().getCommerciantByName(commerciant), user.getServicePlan()) * amount;
                         account.setBalance(account.getBalance() + cashback);
+                        account.getSpendingUserInfos().add(new SpendingUserInfo(0, initialBalance - account.getBalance(), email, timestamp));
                     }
                 } else {
                     // this is for when it is above the spending limit

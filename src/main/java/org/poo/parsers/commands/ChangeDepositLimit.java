@@ -19,7 +19,16 @@ public class ChangeDepositLimit implements Command {
     }
 
     public void execute() {
-        Account account = Bank.getInstance().getAccountByIBAN(iban);
-        ((BusinessAccount)account).changeDepositLimit(amount, email);
+        BusinessAccount account = (BusinessAccount) Bank.getInstance().getAccountByIBAN(iban);
+
+        if (!account.getEmailToCards().containsKey(email)) {
+
+        } else if (!account.getRbac().hasPermissions(email, "changeDepositLimit")) {
+
+        } else if (amount < 0) {
+
+        } else {
+            account.setDepositLimit(amount);
+        }
     }
 }

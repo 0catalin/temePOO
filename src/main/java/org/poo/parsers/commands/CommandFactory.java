@@ -104,6 +104,9 @@ public abstract class CommandFactory {
         if (commandInput.getCommand().equals("changeDepositLimit")) {
             return new ChangeDepositLimit(commandInput);
         }
+        if (commandInput.getCommand().equals("businessReport") && commandInput.getType().equals("transaction")) {
+            return new BusinessReportTransaction(commandInput);
+        }
         return new PrintUsers(commandInput);
         // throw new CommandNotFoundException("Invalid command");
     }

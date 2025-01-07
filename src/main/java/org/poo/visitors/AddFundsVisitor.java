@@ -1,5 +1,6 @@
 package org.poo.visitors;
 
+import org.poo.SpendingUserInfo;
 import org.poo.accounts.BusinessAccount;
 import org.poo.accounts.ClassicAccount;
 import org.poo.accounts.SavingsAccount;
@@ -9,10 +10,12 @@ public class AddFundsVisitor implements Visitor {
 
     private String email;
     private double amount;
+    private int timestamp;
 
-    public AddFundsVisitor(double amount, String email) {
+    public AddFundsVisitor(double amount, String email, int timestamp) {
         this.amount = amount;
         this.email = email;
+        this.timestamp = timestamp;
     }
 
 
@@ -28,10 +31,12 @@ public class AddFundsVisitor implements Visitor {
 
         } else if (!account.getRbac().hasPermissions(email, "addFunds")) {
 
-        } else if (account.getRbac().getEmailToDepositLimitMap().get(email) < amount) {
+        } else if (account.getDepositLimit() > amount) {
 
         } else {
             account.setBalance(account.getBalance() + amount);
+
+            account.getSpendingUserInfos().add(new SpendingUserInfo(amount, 0, email, timestamp));
         }
     }
 
