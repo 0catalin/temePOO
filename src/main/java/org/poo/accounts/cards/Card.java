@@ -27,7 +27,7 @@ public abstract class Card {
      */
 
 
-    public abstract void accept(PayOnlineVisitor visitor);
+    public abstract boolean accept(PayOnlineVisitor visitor);
 
 
     /**

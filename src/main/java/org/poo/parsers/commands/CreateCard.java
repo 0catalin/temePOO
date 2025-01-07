@@ -10,6 +10,7 @@ import org.poo.accounts.cards.RegularCard;
 import org.poo.exceptions.AccountNotFoundException;
 import org.poo.exceptions.UserNotFoundException;
 import org.poo.parsers.fileio.CommandInput;
+import org.poo.visitors.CreateCardVisitor;
 
 
 /**
@@ -39,11 +40,13 @@ public final class CreateCard implements Command {
             Account account = Bank.getInstance().getAccountByIBAN(iban);
             User user = Bank.getInstance().getUserByEmail(email);
             if (user.getAccounts().contains(account)) {
-                Card card = new RegularCard();
-                account.getCards().add(card);
-                user.getTranzactions().add(addToUsersTranzactions(card));
-                Bank.getInstance().getAccountByIBAN(iban)
-                        .getReportsClassic().add(addToUsersTranzactions(card));
+                CreateCardVisitor visitor = new CreateCardVisitor(email, timestamp, user, iban);
+                account.accept(visitor);
+                //Card card = new RegularCard();
+                //account.getCards().add(card);
+//                user.getTranzactions().add(addToUsersTranzactions(card));
+//                Bank.getInstance().getAccountByIBAN(iban)
+//                        .getReportsClassic().add(addToUsersTranzactions(card));
                 }
         } catch (AccountNotFoundException | UserNotFoundException ignored) {
 
@@ -53,15 +56,6 @@ public final class CreateCard implements Command {
 
 
 
-    private ObjectNode addToUsersTranzactions(final Card card) {
-        ObjectMapper mapper = new ObjectMapper();
-        ObjectNode output = mapper.createObjectNode();
-        output.put("timestamp", timestamp);
-        output.put("description", "New card created");
-        output.put("card", card.getCardNumber());
-        output.put("cardHolder", email);
-        output.put("account", iban);
-        return output;
-    }
+
 
 }

@@ -10,6 +10,8 @@ import org.poo.accounts.cards.OneTimeCard;
 import org.poo.exceptions.AccountNotFoundException;
 import org.poo.exceptions.UserNotFoundException;
 import org.poo.parsers.fileio.CommandInput;
+import org.poo.visitors.CreateCardVisitor;
+import org.poo.visitors.CreateOneTimeCardVisitor;
 
 /**
  * class implementing the creating of one time card command
@@ -39,11 +41,13 @@ public final class CreateOneTimeCard implements Command {
             Account account = Bank.getInstance().getAccountByIBAN(iban);
             User user = Bank.getInstance().getUserByEmail(email);
             if (user.getAccounts().contains(account)) {
-                Card oneTimeCard = new OneTimeCard();
-                user.getTranzactions().add(addToUsersTranzactions(oneTimeCard));
-                Bank.getInstance().getAccountByIBAN(iban)
-                        .getReportsClassic().add(addToUsersTranzactions(oneTimeCard));
-                account.getCards().add(oneTimeCard);
+                CreateOneTimeCardVisitor visitor = new CreateOneTimeCardVisitor(email, timestamp, user, iban);
+                account.accept(visitor);
+//                Card oneTimeCard = new OneTimeCard();
+//                user.getTranzactions().add(addToUsersTranzactions(oneTimeCard));
+//                Bank.getInstance().getAccountByIBAN(iban)
+//                        .getReportsClassic().add(addToUsersTranzactions(oneTimeCard));
+//                account.getCards().add(oneTimeCard);
             }
         } catch (AccountNotFoundException | UserNotFoundException ignored) {
 
@@ -52,14 +56,5 @@ public final class CreateOneTimeCard implements Command {
 
 
 
-    private ObjectNode addToUsersTranzactions(final Card card) {
-        ObjectMapper mapper = new ObjectMapper();
-        ObjectNode output = mapper.createObjectNode();
-        output.put("account", iban);
-        output.put("card", card.getCardNumber());
-        output.put("cardHolder", email);
-        output.put("description", "New card created");
-        output.put("timestamp", timestamp);
-        return output;
-    }
+
 }

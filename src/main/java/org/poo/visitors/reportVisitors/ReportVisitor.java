@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.poo.accounts.Account;
+import org.poo.accounts.BusinessAccount;
 import org.poo.accounts.ClassicAccount;
 import org.poo.accounts.SavingsAccount;
 import org.poo.bankPair.Bank;
@@ -59,6 +60,13 @@ public final class ReportVisitor implements Visitor {
         }).collect(Collectors.toList());
 
         addToOutput(tranzactions, account);
+    }
+
+
+    public void visit(BusinessAccount account) {
+
+
+
     }
 
 

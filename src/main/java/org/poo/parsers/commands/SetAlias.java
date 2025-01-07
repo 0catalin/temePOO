@@ -7,6 +7,7 @@ import org.poo.baseinput.User;
 import org.poo.exceptions.AccountNotFoundException;
 import org.poo.exceptions.UserNotFoundException;
 import org.poo.parsers.fileio.CommandInput;
+import org.poo.visitors.SetAliasVisitor;
 
 
 /**
@@ -17,11 +18,13 @@ public final class SetAlias implements Command {
     private final String iban;
     private final String email;
     private final String alias;
+    private final int timestamp;
 
     public SetAlias(final CommandInput commandInput) {
         email = commandInput.getEmail();
         iban = commandInput.getAccount();
         alias = commandInput.getAlias();
+        timestamp = commandInput.getTimestamp();
     }
 
 
@@ -34,9 +37,13 @@ public final class SetAlias implements Command {
         try {
             Account account = Bank.getInstance().getAccountByIBAN(iban);
             User user = Bank.getInstance().getUserByEmail(email);
-            if (user.getAccounts().contains(account)) {
-                account.setAlias(alias);
-            }
+
+            SetAliasVisitor visitor = new SetAliasVisitor(user, alias, email, timestamp, iban);
+            account.accept(visitor);
+
+//            if (user.getAccounts().contains(account)) {
+//                account.setAlias(alias);
+//            }
         } catch (UserNotFoundException | AccountNotFoundException ignored) {
 
         }

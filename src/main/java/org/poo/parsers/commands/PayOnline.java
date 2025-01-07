@@ -4,9 +4,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.poo.bankPair.Bank;
 import org.poo.exceptions.CardNotFoundException;
+import org.poo.exceptions.CommerciantNotFoundException;
 import org.poo.exceptions.UserNotFoundException;
 import org.poo.strategies.Strategy;
 import org.poo.strategies.StrategyFactory;
+import org.poo.visitors.PayOnlineAccountVisitor;
 import org.poo.visitors.PayOnlineVisitor;
 import org.poo.accounts.Account;
 import org.poo.baseinput.User;
@@ -46,36 +48,42 @@ public final class PayOnline implements Command {
         if (amount != 0) {
             try {
 
-                double cashback = 0;
+
                 Card card = Bank.getInstance().getCardByCardNumber(cardNumber);
                 User user = Bank.getInstance().getUserByEmail(email);
                 Account account = Bank.getInstance().getAccountByCardNumber(cardNumber);
 
-                double paymentAmount = amount * Bank.getInstance()
-                        .findExchangeRate(currency, account.getCurrency());
-                amount = paymentAmount;
-                if (!user.getAccounts().contains(account)) {
-                    cardNotFound();
-                } else if (account.getBalance() != 0) {
-                    if (account.getBalance() < paymentAmount * user.getPlanMultiplier(paymentAmount * Bank.getInstance().findExchangeRate(account.getCurrency(), "RON"))) {
-                        user.getTranzactions().add(insufficientFunds());
-                        account.getReportsClassic().add(insufficientFunds());
-                    } else { // TODO MIGHT NEED TO ADD THE CASE WHERE THE BAL IS GREATER THAN MINBAL
-                        cashback += account.getTransactionCashback(Bank.getInstance().getCommerciantByName(commerciant)) * paymentAmount;
-                        paymentAmount *= user.getPlanMultiplier(paymentAmount * Bank.getInstance().findExchangeRate(account.getCurrency(), "RON"));
-                        Strategy strategy = StrategyFactory.createStrategy(Bank.getInstance().getCommerciantByName(commerciant), account, paymentAmount);
-                        strategy.execute();
-                        PayOnlineVisitor visitor = new PayOnlineVisitor(paymentAmount, timestamp,
-                                commerciant, account, amount);
-                        card.accept(visitor);
-                        cashback += account.getSpendingCashBack(Bank.getInstance().getCommerciantByName(commerciant), user.getServicePlan()) * amount;
-                        account.setBalance(account.getBalance() + cashback);
+                PayOnlineAccountVisitor visitor = new PayOnlineAccountVisitor(cardNumber, amount, timestamp, currency, commerciant, email);
+                account.accept(visitor);
 
-                    }
-                }
+//                double cashback = 0;
+//                double paymentAmount = amount * Bank.getInstance()
+//                        .findExchangeRate(currency, account.getCurrency());
+//                amount = paymentAmount;
+//                if (!user.getAccounts().contains(account)) {
+//                    cardNotFound();
+//                } else if (account.getBalance() != 0) {
+//                    if (account.getBalance() < paymentAmount * user.getPlanMultiplier(paymentAmount * Bank.getInstance().findExchangeRate(account.getCurrency(), "RON"))) {
+//                        user.getTranzactions().add(insufficientFunds());
+//                        account.getReportsClassic().add(insufficientFunds());
+//                    } else { // TODO MIGHT NEED TO ADD THE CASE WHERE THE BAL IS GREATER THAN MINBAL
+//                        cashback += account.getTransactionCashback(Bank.getInstance().getCommerciantByName(commerciant)) * paymentAmount;
+//                        paymentAmount *= user.getPlanMultiplier(paymentAmount * Bank.getInstance().findExchangeRate(account.getCurrency(), "RON"));
+//                        Strategy strategy = StrategyFactory.createStrategy(Bank.getInstance().getCommerciantByName(commerciant), account, paymentAmount);
+//                        strategy.execute();
+//                        PayOnlineVisitor visitor = new PayOnlineVisitor(paymentAmount, timestamp,
+//                                commerciant, account, amount); // asta pusa cu 2 randuri mai sus
+//                        card.accept(visitor); // si asta, ultimele 4 se intampla doar daca returneaza True acceptul
+//                        cashback += account.getSpendingCashBack(Bank.getInstance().getCommerciantByName(commerciant), user.getServicePlan()) * amount;
+//                        account.setBalance(account.getBalance() + cashback);
+
+//                    }
+//                }
             } catch (CardNotFoundException e) {
                 cardNotFound();
             } catch (UserNotFoundException ignored) {
+
+            } catch (CommerciantNotFoundException e) {
 
             }
         }

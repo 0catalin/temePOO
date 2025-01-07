@@ -1,5 +1,6 @@
 package org.poo.parsers.commands;
 
+import org.poo.accounts.BusinessAccount;
 import org.poo.exceptions.CommandNotFoundException;
 import org.poo.parsers.fileio.CommandInput;
 
@@ -26,6 +27,10 @@ public abstract class CommandFactory {
         if (commandInput.getCommand().equals("addAccount")
                 && commandInput.getAccountType().equals("savings")) {
             return new AddSavingsAccount(commandInput);
+        }
+        if (commandInput.getCommand().equals("addAccount")
+                && commandInput.getAccountType().equals("business")) {
+            return new AddBusinessAccount(commandInput);
         }
         if (commandInput.getCommand().equals("addFunds")) {
             return new AddFunds(commandInput);
@@ -89,6 +94,15 @@ public abstract class CommandFactory {
         }
         if (commandInput.getCommand().equals("acceptSplitPayment")) {
             return new AcceptSplitPayment(commandInput);
+        }
+        if (commandInput.getCommand().equals("addNewBusinessAssociate")) {
+            return new AddNewBusinessAssociate(commandInput);
+        }
+        if (commandInput.getCommand().equals("changeSpendingLimit")) {
+            return new ChangeSpendingLimit(commandInput);
+        }
+        if (commandInput.getCommand().equals("changeDepositLimit")) {
+            return new ChangeDepositLimit(commandInput);
         }
         return new PrintUsers(commandInput);
         // throw new CommandNotFoundException("Invalid command");

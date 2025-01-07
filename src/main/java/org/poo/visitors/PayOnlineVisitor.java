@@ -37,12 +37,13 @@ public final class PayOnlineVisitor {
      * simulates an online payment with a one time card and takes care of all the error cases
      * @param card the OneTimeCard which is used for the payment
      */
-    public void visit(final OneTimeCard card) {
+    public boolean visit(final OneTimeCard card) {
         User user = Bank.getInstance().getUserByIBAN(account.getIban());
         if (account.getBalance() - amount < account.getMinBalance()) {
             user.getTranzactions().add(insufficientFunds());
             account.getReportsClassic().add(insufficientFunds());
             card.setStatus("frozen");
+            return false;
         } else {
             account.setBalance(account.getBalance() - amount);
 
@@ -60,6 +61,7 @@ public final class PayOnlineVisitor {
             user.getTranzactions().add(oneTimeCardCreatedOrDestroyed(card, "New card created"));
             account.getReportsClassic().add(oneTimeCardCreatedOrDestroyed(card,
                     "New card created"));
+            return true;
         }
     }
 
@@ -69,21 +71,24 @@ public final class PayOnlineVisitor {
      * simulates an online payment with a regular card and takes care of all the error cases
      * @param card the regular card which is used for the payment
      */
-    public void visit(final RegularCard card) {
+    public boolean visit(final RegularCard card) {
         User user = Bank.getInstance().getUserByIBAN(account.getIban());
         if (card.getStatus().equals("frozen")) {
             user.getTranzactions().add(frozenError());
             account.getReportsClassic().add(frozenError());
+            return false;
         } else if (account.getBalance() - amount < account.getMinBalance()) {
             user.getTranzactions().add(frozenError());
             account.getReportsClassic().add(frozenError());
             card.setStatus("frozen");
+            return false;
         } else {
             account.setBalance(account.getBalance() - amount);
 
             user.getTranzactions().add(successfulPayment());
             account.getReportsClassic().add(successfulPayment());
             account.getSpendingReports().add(successfulPayment());
+            return true;
         }
     }
 

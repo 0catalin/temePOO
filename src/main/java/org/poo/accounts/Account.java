@@ -22,7 +22,6 @@ public abstract class Account {
     private double minBalance = 0;
     private String alias;
     private String iban;
-    private ArrayList<Card> cards;
     private double balance;
     private String type;
     private ArrayList<ObjectNode> spendingReports;
@@ -30,33 +29,31 @@ public abstract class Account {
     private ArrayList<ObjectNode> reportsClassic;
     private DiscountInfo discountInfo;
     private static final int WARNING_LIMIT = 30;
+    private ArrayList<Card> cards;
 
 
     public Account(final String currency) {
         setCurrency(currency);
         setBalance(0);
-        setCards(new ArrayList<Card>());
         setAlias("");
         setIban(Utils.generateIBAN());
         setSpendingReports(new ArrayList<ObjectNode>());
         setReportsSavings(new ArrayList<ObjectNode>());
         setReportsClassic(new ArrayList<ObjectNode>());
         setDiscountInfo(new DiscountInfo());
+        setCards(new ArrayList<Card>());
     }
+
+
 
     /**
      * iterates through the account cards and returns the corresponding card
      * @param cardNumber the card id
      * @return the Card object corresponding to ID
      */
-    public Card getCardByCardNumber(final String cardNumber) {
-        for (Card card : cards) {
-            if (card.getCardNumber().equals(cardNumber)) {
-                return card;
-            }
-        }
-        return null;
-    }
+    public abstract Card getCardByCardNumber(final String cardNumber);
+
+
 
     public double getSpendingCashBack (Commerciant commerciant, String servicePlan) {
         if (!commerciant.getCashbackStrategy().equals("spendingThreshold")) {

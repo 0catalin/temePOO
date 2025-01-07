@@ -1,5 +1,6 @@
 package org.poo.visitors.reportVisitors;
 
+import org.poo.accounts.BusinessAccount;
 import org.poo.accounts.ClassicAccount;
 import org.poo.accounts.SavingsAccount;
 
@@ -18,4 +19,8 @@ public interface Visitor {
      * @param account the classic account
      */
     void visit(ClassicAccount account);
+
+
+
+    void visit(BusinessAccount account);
 }
