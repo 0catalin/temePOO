@@ -235,7 +235,7 @@ public final class Bank {
 
     public SplitPaymentInfo getSplitPaymentByTypeAndEmail(final String email, final String type) {
         for (SplitPaymentInfo splitPaymentInfo : splitPayments) {
-            if (splitPaymentInfo.isRightType(type, email)) {
+            if (splitPaymentInfo.isRightType(type, email) && !splitPaymentInfo.getObserver().hasAcceptedAllHisAccounts(email)) {
                 return splitPaymentInfo;
             }
         }

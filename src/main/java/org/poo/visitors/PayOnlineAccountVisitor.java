@@ -68,10 +68,11 @@ public class PayOnlineAccountVisitor implements Visitor {
         Card card = Bank.getInstance().getCardByCardNumber(cardNumber);
         User user = Bank.getInstance().getUserByEmail(email);
         double cashback = 0;
+        double initialAmount = amount;
         double paymentAmount = amount * Bank.getInstance()
                 .findExchangeRate(currency, account.getCurrency());
         amount = paymentAmount;
-        double initialBalance = account.getBalance();
+        //double initialBalance = account.getBalance();
 
 
         if (!account.getEmailToCards().containsKey(email)) {
@@ -90,7 +91,8 @@ public class PayOnlineAccountVisitor implements Visitor {
                         strategy.execute();
                         cashback += account.getSpendingCashBack(Bank.getInstance().getCommerciantByName(commerciant), user.getServicePlan()) * amount;
                         account.setBalance(account.getBalance() + cashback);
-                        account.getSpendingUserInfos().add(new SpendingUserInfo(0, initialBalance - account.getBalance(), email, timestamp));
+                        account.getSpendingUserInfos().add(new SpendingUserInfo(0, amount, email, timestamp));
+                        user.checkFivePayments(amount);
                     }
                 } else {
                     // this is for when it is above the spending limit

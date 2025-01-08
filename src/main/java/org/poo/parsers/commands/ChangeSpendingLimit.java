@@ -22,7 +22,7 @@ public class ChangeSpendingLimit implements Command {
 
     public void execute() {
         Account account = Bank.getInstance().getAccountByIBAN(iban);
-        ChangeSpendingLimitVisitor visitor = new ChangeSpendingLimitVisitor(amount, email);
+        ChangeSpendingLimitVisitor visitor = new ChangeSpendingLimitVisitor(amount, email, timestamp);
         account.accept(visitor);
 
     }

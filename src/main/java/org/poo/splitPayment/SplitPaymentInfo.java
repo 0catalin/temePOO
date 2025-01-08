@@ -64,6 +64,7 @@ public class SplitPaymentInfo {
                 if (account.getBalance() - eachAmount * Bank.getInstance()
                         .findExchangeRate(currency, account.getCurrency()) < account.getMinBalance()) {
                     problemIban = account.getIban();
+                    break;
                 }
             }
             if (problemIban.isEmpty()) {
@@ -100,7 +101,7 @@ public class SplitPaymentInfo {
         successNode.put("description",
                 "Split payment of " + String.format("%.2f", amount) + " " + currency);
         successNode.put("currency", currency);
-        successNode.put("amount", Math.round(amount * 100 / accountsForSplit.size()) / 100.0);
+        successNode.put("amount", amount / accountsForSplit.size());
         ArrayNode accountsNode = mapper.createArrayNode();
         for (String iban : accountsForSplit) {
             accountsNode.add(iban);
@@ -108,6 +109,12 @@ public class SplitPaymentInfo {
         successNode.set("involvedAccounts", accountsNode);
         successNode.put("splitPaymentType", splitPaymentType);
         return successNode;
+    }
+
+    public ObjectNode rejectNode() {
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode node = mapper.createObjectNode();
+        return node;
     }
 
 }

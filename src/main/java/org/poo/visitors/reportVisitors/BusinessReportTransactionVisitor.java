@@ -33,10 +33,10 @@ public class BusinessReportTransactionVisitor implements Visitor {
 
         ObjectNode outputNode = mapper.createObjectNode();
         outputNode.put("IBAN", iban);
-        outputNode.put("balance", (double) Math.round(account.getBalance()));
+        outputNode.put("balance", account.getBalance());
         outputNode.put("currency", account.getCurrency());
         outputNode.put("spending limit", account.getSpendingLimit());
-        outputNode.put("deposit limit", Math.round(account.getDepositLimit() * 100) / 100.0);
+        outputNode.put("deposit limit", account.getDepositLimit());
         outputNode.put("statistics type", "transaction");
 
 
@@ -55,8 +55,8 @@ public class BusinessReportTransactionVisitor implements Visitor {
                     totalSpent += spendingUserInfo.getSpent();
                 }
             }
-            employeeNode.put("spent", (double) Math.round(spent));
-            employeeNode.put("deposited", (double) Math.round(deposited));
+            employeeNode.put("spent", spent);
+            employeeNode.put("deposited", deposited);
 
             employeesNode.add(employeeNode);
         }
@@ -75,8 +75,8 @@ public class BusinessReportTransactionVisitor implements Visitor {
                     totalSpent += spendingUserInfo.getSpent();
                 }
             }
-            managerNode.put("spent", (double) Math.round(spent));
-            managerNode.put("deposited", (double) Math.round(deposited));
+            managerNode.put("spent", spent);
+            managerNode.put("deposited", deposited);
 
             managersNode.add(managerNode);
         }
@@ -87,8 +87,8 @@ public class BusinessReportTransactionVisitor implements Visitor {
 
 
 
-        outputNode.put("total spent", (double) Math.round(totalSpent));
-        outputNode.put("total deposited", (double) Math.round(totalDeposited));
+        outputNode.put("total spent", totalSpent);
+        outputNode.put("total deposited", totalDeposited);
 
 
         commandObject.put("output", outputNode);

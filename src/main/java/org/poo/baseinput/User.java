@@ -27,6 +27,7 @@ public final class User {
     private ArrayList<ObjectNode> tranzactions;
     private ArrayList<Account> accounts;
     private ArrayList<Account> classicAccounts;
+    private int numberOfPaymentsForGold;
 
     public User(final UserInput userInput) {
         firstName = userInput.getFirstName();
@@ -42,6 +43,7 @@ public final class User {
         } else {
             servicePlan = "standard";
         }
+        numberOfPaymentsForGold = 0;
 
     }
 
@@ -97,6 +99,16 @@ public final class User {
         }
         return true;
 
+    }
+
+
+    public void checkFivePayments(double amount) {
+        if (servicePlan.equals("silver") && amount >= 300) {
+            numberOfPaymentsForGold++;
+        }
+        if (numberOfPaymentsForGold == 5) {
+            servicePlan = "gold";
+        }
     }
 
 

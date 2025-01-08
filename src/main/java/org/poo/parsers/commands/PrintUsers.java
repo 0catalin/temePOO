@@ -78,7 +78,7 @@ public final class PrintUsers implements Command {
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode accountObject = mapper.createObjectNode();
         accountObject.put("IBAN", account.getIban());
-        accountObject.put("balance", Math.round(account.getBalance() * 100.0) / 100.0);
+        accountObject.put("balance", account.getBalance());
         accountObject.put("currency", account.getCurrency());
         accountObject.put("type", account.getType());
         accountObject.set("cards", makeCardsArray(account));

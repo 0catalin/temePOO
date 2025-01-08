@@ -25,10 +25,12 @@ public class PayAllObserver {
         return true;
     }
 
+
+    // daca userul are contul nu e suficient, trebuie si sa nu fie acceptat de dinainte
     private void acceptValue(String email) {
         for (String iban : acceptMap.keySet()) {
             try {
-                if (Bank.getInstance().getUserByIBAN(iban).getEmail().equals(email)) {
+                if (Bank.getInstance().getUserByIBAN(iban).getEmail().equals(email) && !acceptMap.get(iban)) {
                     acceptMap.put(iban, true);
                     break;
                 }
@@ -37,5 +39,19 @@ public class PayAllObserver {
             }
         }
 
+    }
+
+    public boolean hasAcceptedAllHisAccounts(String email) {
+        for (String iban : acceptMap.keySet()) {
+            try {
+                if (Bank.getInstance().getUserByIBAN(iban).getEmail().equals(email) && !acceptMap.get(iban)) {
+                    return false;
+                }
+
+            } catch (UserNotFoundException ignored) {
+                return true;
+            }
+        }
+        return true;
     }
 }

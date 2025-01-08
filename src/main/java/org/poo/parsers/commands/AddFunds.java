@@ -32,9 +32,6 @@ public final class AddFunds implements Command {
     @Override
     public void execute() {
         try {
-            if (email.equals("Christophe-Adrien_Coulon@outlook.fr")) {
-                int i = 1;
-            }
             Account account = Bank.getInstance().getAccountByIBAN(iban);
             AddFundsVisitor visitor = new AddFundsVisitor(amount, email, timestamp);
             account.accept(visitor);

@@ -45,6 +45,7 @@ public class BusinessAccount extends Account {
         managers = new ArrayList<UserInfo>();
         employees = new ArrayList<UserInfo>();
         spendingUserInfos = new ArrayList<SpendingUserInfo>();
+        setType("business");
 
 
     }

@@ -40,6 +40,7 @@ public class SplitPaymentInfoNonEqual extends SplitPaymentInfo {
             for (Account account : accountList) {
                 if (account.getBalance() - amountsList.get(accountList.indexOf(account)) < account.getMinBalance()) {
                     problemIban = account.getIban();
+                    break;
                 }
             }
             if (problemIban.isEmpty()) {
@@ -97,5 +98,27 @@ public class SplitPaymentInfoNonEqual extends SplitPaymentInfo {
         successNode.set("involvedAccounts", accountsNode);
         successNode.put("splitPaymentType", getSplitPaymentType());
         return successNode;
+    }
+
+    public ObjectNode rejectNode() {
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode rejectNode = mapper.createObjectNode();
+        ArrayNode amountForUsersNode = mapper.createArrayNode();
+        for (Double amount : amountsForUsers) {
+            amountForUsersNode.add(amount);
+        }
+        rejectNode.set("amountForUsers", amountForUsersNode);
+        rejectNode.put("currency", getCurrency());
+        rejectNode.put("description", "Split payment of " + String.format("%.2f", getAmount()) + " " + getCurrency());
+        rejectNode.put("error", "One user rejected the payment.");
+        ArrayNode involvedAccountsNode = mapper.createArrayNode();
+        for (String iban : getAccountsForSplit()) {
+            involvedAccountsNode.add(iban);
+        }
+        rejectNode.set("involvedAccounts", involvedAccountsNode);
+        rejectNode.put("splitPaymentType", getSplitPaymentType());
+        rejectNode.put("timestamp", getTimestamp());
+        return rejectNode;
+
     }
 }

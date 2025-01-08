@@ -18,7 +18,7 @@ import org.poo.strategies.StrategyFactory;
  */
 public final class SendMoney implements Command {
 
-    private double amount;
+    private final double amount;
     private final int timestamp;
     private final String iban;
     private final String description;
@@ -71,7 +71,7 @@ public final class SendMoney implements Command {
                 accountSender.getReportsClassic()
                         .add(addToSendersTranzactions(accountSender, accountReceiver));
                 accountSender.setBalance(accountSender.getBalance() - newAmount);
-
+                userSender.checkFivePayments(amount);
                 //accountSender.setBalance(accountSender.getBalance() + cashback);
 
             }
@@ -95,6 +95,8 @@ public final class SendMoney implements Command {
                         .add(addToSendersTranzactions(accountSender, accountReceiver));
                 accountSender.getReportsClassic()
                         .add(addToSendersTranzactions(accountSender, accountReceiver));
+
+                userSender.checkFivePayments(amount);
 
                 User userReceiver = Bank.getInstance().getUserByAccount(accountReceiver);
 
