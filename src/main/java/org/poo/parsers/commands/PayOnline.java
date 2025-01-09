@@ -45,6 +45,9 @@ public final class PayOnline implements Command {
      */
     @Override
     public void execute() {
+        if (email.equals("Luc_Peron@gmail.fr") && timestamp == 136) {
+            int i = 1;
+        }
         if (amount != 0) {
             try {
 

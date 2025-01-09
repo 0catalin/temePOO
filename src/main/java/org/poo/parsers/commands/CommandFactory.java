@@ -107,7 +107,9 @@ public abstract class CommandFactory {
         if (commandInput.getCommand().equals("businessReport") && commandInput.getType().equals("transaction")) {
             return new BusinessReportTransaction(commandInput);
         }
-        return new PrintUsers(commandInput);
-        // throw new CommandNotFoundException("Invalid command");
+        if (commandInput.getCommand().equals("businessReport") && commandInput.getType().equals("commerciant")) {
+            return new BusinessReportCommerciant(commandInput);
+        }
+         throw new CommandNotFoundException("Invalid command");
     }
 }

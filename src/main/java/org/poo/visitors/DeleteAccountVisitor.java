@@ -58,13 +58,12 @@ public class DeleteAccountVisitor implements Visitor {
             deleteFailure();
             Bank.getInstance().getUserByIBAN(account.getIban())
                     .getTranzactions().add(deleteFundsRemaining());
-            account.getReportsClassic().add(deleteFundsRemaining());
+            account.getReportsSavings().add(deleteFundsRemaining());
         } else if (user.getAccounts().contains(account)) {
             if (!user.getClassicAccounts().contains(account)) {
                 user.getAccounts().remove(account);
                 deleteSuccess();
             } else {
-                user.getClassicAccounts().remove(account);
                 user.getAccounts().remove(account);
                 deleteSuccess();
             }

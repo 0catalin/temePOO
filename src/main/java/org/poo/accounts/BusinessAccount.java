@@ -9,6 +9,7 @@ import org.poo.accounts.cards.Card;
 import org.poo.bankPair.Bank;
 import org.poo.baseinput.User;
 import org.poo.exceptions.CardNotFoundException;
+import org.poo.exceptions.UserNotFoundException;
 import org.poo.visitors.reportVisitors.Visitor;
 
 import java.lang.reflect.Array;
@@ -50,6 +51,20 @@ public class BusinessAccount extends Account {
 
     }
 
+    public double getSpendingLimit(String userEmail) {
+        if (Bank.getInstance().getUserByEmail(userEmail).getAccounts().contains(this) || rbac.getEmailToRoleMap().get(userEmail).equals("manager")) { // de modificat astea 2 cu manager, faci cu permisiuni
+            return 999999999;
+        }
+        return spendingLimit;
+    }
+
+    public double getDepositLimit(String userEmail) {
+        if (Bank.getInstance().getUserByEmail(userEmail).getAccounts().contains(this) || rbac.getEmailToRoleMap().get(userEmail).equals("manager")) {
+            return 999999999;
+        }
+        return depositLimit;
+    }
+
     public void addNewBusinessAssociate(String email, String role) {
         if (emailToCards.containsKey(email)) {
             System.out.println("THE EMAIL HAS ALREADY BEEN ADDED! DO NOT READD!");
@@ -67,19 +82,39 @@ public class BusinessAccount extends Account {
     }
 
 
-    public UserInfo getUserInfo(String email) {
+    public String getNameByEmail(String email) {
         for (UserInfo userInfo : employees) {
             if (userInfo.getEmail().equals(email)) {
-                return userInfo;
+                return userInfo.getUsername();
             }
         }
         for (UserInfo userInfo : managers) {
             if (userInfo.getEmail().equals(email)) {
-                return userInfo;
+                return userInfo.getUsername();
             }
         }
         return null;
     }
+
+    public boolean isUserEmployee(String email) {
+        for (UserInfo userInfo : employees) {
+            if (userInfo.getEmail().equals(email)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isUserManager(String email) {
+        for (UserInfo userInfo : managers) {
+            if (userInfo.getEmail().equals(email)) {
+                return true;
+            }
+
+        }
+        return false;
+    }
+
 
 
 

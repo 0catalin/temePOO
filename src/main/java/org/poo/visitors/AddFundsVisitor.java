@@ -31,12 +31,12 @@ public class AddFundsVisitor implements Visitor {
 
         } else if (!account.getRbac().hasPermissions(email, "addFunds")) {
 
-        } else if (account.getDepositLimit() > amount) {
+        } else if (account.getDepositLimit(email) < amount) {
 
         } else {
             account.setBalance(account.getBalance() + amount);
 
-            account.getSpendingUserInfos().add(new SpendingUserInfo(amount, 0, email, timestamp));
+            account.getSpendingUserInfos().add(new SpendingUserInfo(amount, 0, email, timestamp, null));
         }
     }
 

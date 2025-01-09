@@ -32,16 +32,20 @@ public class WithdrawSavings implements Command{
                 user.getTranzactions().add(ageTooLow());
             } else if (user.getClassicAccounts().isEmpty()) {
                 user.getTranzactions().add(noClassicAccount());
+                account.getReportsSavings().add(noClassicAccount());
             } else if (!account.getType().equals("savings")) {
                 // account not of type savings
             } else {
                 Account accountReceiver = user.getClassicAccounts().get(0);
                 if (account.getBalance() - account.getMinBalance() > amount * Bank.getInstance().findExchangeRate(currency, account.getCurrency())) {
+                    double initialAmount = amount;
                     amount = amount * Bank.getInstance().findExchangeRate(currency, account.getCurrency());
                     account.setBalance(account.getBalance() - amount);
 
                     amount = amount * Bank.getInstance().findExchangeRate(account.getCurrency(), accountReceiver.getCurrency());
                     accountReceiver.setBalance(accountReceiver.getBalance() + amount);
+                    user.getTranzactions().add(savingsWithdrawal(accountReceiver.getIban(), account.getIban(), initialAmount));
+                    user.getTranzactions().add(savingsWithdrawal(accountReceiver.getIban(), account.getIban(), initialAmount));
                 } else {
                     // not enough balance
                 }
@@ -63,6 +67,17 @@ public class WithdrawSavings implements Command{
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode output = mapper.createObjectNode();
         output.put("description", "You do not have a classic account.");
+        output.put("timestamp", timestamp);
+        return output;
+    }
+
+    private ObjectNode savingsWithdrawal(String ibanClassic, String ibanSavings, double amount) {
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode output = mapper.createObjectNode();
+        output.put("amount", amount);
+        output.put("classicAccountIBAN", ibanClassic);
+        output.put("description", "Savings withdrawal");
+        output.put("savingsAccountIBAN", ibanSavings);
         output.put("timestamp", timestamp);
         return output;
     }

@@ -25,7 +25,8 @@ public class UpgradePlan implements Command{
             Account account = Bank.getInstance().getAccountByIBAN(iban);
             User user = Bank.getInstance().getUserByAccount(account);
             if (user.getServicePlan().equals(newType)) {
-
+                account.getReportsSavings().add(alreadyHasPlan(newType));
+                user.getTranzactions().add(alreadyHasPlan(newType));
             } else if (user.getServicePlan().equals("silver") && !newType.equals("gold") || user.getServicePlan().equals("gold")) {
 
             } else if (newType.equals("student") || newType.equals("standard")) {
@@ -36,6 +37,9 @@ public class UpgradePlan implements Command{
                 account.setBalance(account.getBalance() - Bank.getInstance().findExchangeRate("RON", account.getCurrency()) * getUpgradeCost(user.getServicePlan(), newType));
                 user.setServicePlan(newType);
                 user.getTranzactions().add(addToSendersTranzactions());
+                if (account.getType().equals("savings")) {
+                    account.getReportsSavings().add(addToSendersTranzactions());
+                }
 
             }
         } catch (AccountNotFoundException e) {
@@ -85,6 +89,13 @@ public class UpgradePlan implements Command{
         node.put("description", "Insufficient funds");
         node.put("timestamp", timestamp);
         return node;
+    }
 
+    private ObjectNode alreadyHasPlan(String plan) {
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode node = mapper.createObjectNode();
+        node.put("description", "The user already has the " + plan + " plan.");
+        node.put("timestamp", timestamp);
+        return node;
     }
 }

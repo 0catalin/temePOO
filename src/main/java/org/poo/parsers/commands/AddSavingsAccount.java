@@ -32,11 +32,13 @@ public final class AddSavingsAccount implements Command {
      */
     @Override
     public void execute() {
+
         try {
             SavingsAccount savingsAccount = new SavingsAccount(currency, interestRate);
             User user = Bank.getInstance().getUserByEmail(email);
             user.getAccounts().add(savingsAccount);
             user.getTranzactions().add(addToUsersTranzactions());
+            savingsAccount.getReportsSavings().add(addToUsersTranzactions());
             Bank.getInstance().getAccountByIBAN(savingsAccount.getIban())
                     .getReportsClassic().add(addToUsersTranzactions());
         } catch (UserNotFoundException ignored) {
