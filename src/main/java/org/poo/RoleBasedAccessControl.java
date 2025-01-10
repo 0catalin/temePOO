@@ -30,7 +30,7 @@ public class RoleBasedAccessControl {
         managerPermissions.addAll(Arrays.asList("addFunds", "cardPayment",
                 "bankTransfer", "createCard", "deleteAnyCard", "deleteOwnCard"));
         employeePermissions.addAll(Arrays.asList("createCard", "deleteOwnCard",
-                "cardPayment", "bankTransfer"));
+                "cardPayment", "bankTransfer", "addFunds"));
         roleToPermissions.put("owner", ownerPermissions);
         roleToPermissions.put("manager", managerPermissions);
         roleToPermissions.put("employee", employeePermissions);

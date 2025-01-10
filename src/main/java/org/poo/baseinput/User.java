@@ -1,5 +1,6 @@
 package org.poo.baseinput;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.Getter;
 import lombok.Setter;
@@ -102,13 +103,25 @@ public final class User {
     }
 
 
-    public void checkFivePayments(double amount) {
+    public void checkFivePayments(double amount, String iban, int timestamp) {
         if (servicePlan.equals("silver") && amount >= 300) {
             numberOfPaymentsForGold++;
         }
         if (numberOfPaymentsForGold == 5) {
+            numberOfPaymentsForGold++;
             servicePlan = "gold";
+            tranzactions.add(addGoldUpgrade(iban, timestamp));
         }
+    }
+
+    private ObjectNode addGoldUpgrade(String iban, int timestamp) {
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode output = mapper.createObjectNode();
+        output.put("timestamp", timestamp);
+        output.put("description", "Upgrade plan");
+        output.put("accountIBAN", iban);
+        output.put("newPlanType", "gold");
+        return output;
     }
 
 

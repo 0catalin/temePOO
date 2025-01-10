@@ -39,7 +39,7 @@ public class SendMoneyVisitor implements Visitor {
     public void visit(ClassicAccount account) {
         try {
 
-            Account accountSender = Bank.getInstance().getAccountByIBAN(iban);
+            Account accountSender = Bank.getInstance().getAccountByIBANOrAlias(iban);
             Account accountReceiver = Bank.getInstance().getAccountByIBANOrAlias(receiver);
             User userSender = Bank.getInstance().getUserByIBAN(iban);
             if (accountSender.getBalance() < amount * userSender.getPlanMultiplier(amount * Bank.getInstance().findExchangeRate(accountSender.getCurrency(), "RON"))) {
@@ -51,7 +51,7 @@ public class SendMoneyVisitor implements Visitor {
                         .add(addToSendersTranzactions(accountSender, receiver));
                 accountSender.getReportsClassic()
                         .add(addToSendersTranzactions(accountSender, receiver));
-                userSender.checkFivePayments(amount);
+                userSender.checkFivePayments(amount, account.getIban(), timestamp);
 
                 User userReceiver = Bank.getInstance().getUserByAccount(accountReceiver);
 
@@ -66,7 +66,7 @@ public class SendMoneyVisitor implements Visitor {
                         accountReceiver.getCurrency()));
             }
         } catch (AccountNotFoundException e) {
-            Account accountSender = Bank.getInstance().getAccountByIBAN(iban);
+            Account accountSender = Bank.getInstance().getAccountByIBANOrAlias(iban);
 
             User userSender = Bank.getInstance().getUserByIBAN(iban);
 
@@ -93,7 +93,7 @@ public class SendMoneyVisitor implements Visitor {
                     //accountSender.getReportsClassic()
                     //        .add(addToSendersTranzactions(accountSender, accountReceiver));
                     accountSender.setBalance(accountSender.getBalance() - newAmount);
-                    userSender.checkFivePayments(amount);
+                    userSender.checkFivePayments(amount, account.getIban(), timestamp);
                     accountSender.setBalance(accountSender.getBalance() + cashback);
                 }
             } catch (CommerciantNotFoundException ignored) {
@@ -112,9 +112,9 @@ public class SendMoneyVisitor implements Visitor {
 
         } else {
             try {
-                Account accountSender = Bank.getInstance().getAccountByIBAN(iban);
+                Account accountSender = Bank.getInstance().getAccountByIBANOrAlias(iban);
                 Account accountReceiver = Bank.getInstance().getAccountByIBANOrAlias(receiver);
-                User userSender = Bank.getInstance().getUserByIBAN(iban);
+                User userSender = Bank.getInstance().getUserByIBAN(accountSender.getIban());
                 if (accountSender.getBalance() < amount * userSender.getPlanMultiplier(amount * Bank.getInstance().findExchangeRate(accountSender.getCurrency(), "RON"))) {
 
                     Bank.getInstance().getUserByIBAN(accountSender.getIban())
@@ -126,7 +126,7 @@ public class SendMoneyVisitor implements Visitor {
                     accountSender.getReportsClassic()
                             .add(addToSendersTranzactions(accountSender, receiver));
 
-                    userSender.checkFivePayments(amount);
+                    userSender.checkFivePayments(amount, account.getIban(), timestamp);
                     account.getSpendingUserInfos().add(new SpendingUserInfo(0, amount, email, timestamp, null));
 
                     User userReceiver = Bank.getInstance().getUserByAccount(accountReceiver);
@@ -142,8 +142,8 @@ public class SendMoneyVisitor implements Visitor {
                             accountReceiver.getCurrency()));
                 }
             } catch (AccountNotFoundException e) {
-                Account accountSender = Bank.getInstance().getAccountByIBAN(iban);
-                User userSender = Bank.getInstance().getUserByIBAN(iban);
+                Account accountSender = Bank.getInstance().getAccountByIBANOrAlias(iban);
+                User userSender = Bank.getInstance().getUserByIBAN(accountSender.getIban());
 
 
                 try {
@@ -168,7 +168,7 @@ public class SendMoneyVisitor implements Visitor {
                         //accountSender.getReportsClassic()
                         //        .add(addToSendersTranzactions(accountSender, accountReceiver));
                         accountSender.setBalance(accountSender.getBalance() - newAmount);
-                        userSender.checkFivePayments(amount);
+                        userSender.checkFivePayments(amount, account.getIban(), timestamp);
                         account.getSpendingUserInfos().add(new SpendingUserInfo(0, amount, email, timestamp, commerciant.getCommerciant()));
                         accountSender.setBalance(accountSender.getBalance() + cashback);
                     }
@@ -185,7 +185,7 @@ public class SendMoneyVisitor implements Visitor {
     public void visit(SavingsAccount account) {
 
         try {
-            Account accountSender = Bank.getInstance().getAccountByIBAN(iban);
+            Account accountSender = Bank.getInstance().getAccountByIBANOrAlias(iban);
             Account accountReceiver = Bank.getInstance().getAccountByIBANOrAlias(receiver);
             User userSender = Bank.getInstance().getUserByIBAN(iban);
             if (accountSender.getBalance() < amount * userSender.getPlanMultiplier(amount * Bank.getInstance().findExchangeRate(accountSender.getCurrency(), "RON"))) {
@@ -199,7 +199,7 @@ public class SendMoneyVisitor implements Visitor {
                 accountSender.getReportsClassic()
                         .add(addToSendersTranzactions(accountSender, receiver));
 
-                userSender.checkFivePayments(amount);
+                userSender.checkFivePayments(amount, account.getIban(), timestamp);
 
                 User userReceiver = Bank.getInstance().getUserByAccount(accountReceiver);
 
@@ -214,7 +214,7 @@ public class SendMoneyVisitor implements Visitor {
                         accountReceiver.getCurrency()));
             }
         } catch (AccountNotFoundException e) {
-            Account accountSender = Bank.getInstance().getAccountByIBAN(iban);
+            Account accountSender = Bank.getInstance().getAccountByIBANOrAlias(iban);
 
             User userSender = Bank.getInstance().getUserByIBAN(iban);
 
@@ -241,7 +241,7 @@ public class SendMoneyVisitor implements Visitor {
                     //accountSender.getReportsClassic()
                     //        .add(addToSendersTranzactions(accountSender, accountReceiver));
                     accountSender.setBalance(accountSender.getBalance() - newAmount);
-                    userSender.checkFivePayments(amount);
+                    userSender.checkFivePayments(amount, account.getIban(), timestamp);
                     accountSender.setBalance(accountSender.getBalance() + cashback);
                 }
             } catch (CommerciantNotFoundException ignored) {

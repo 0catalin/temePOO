@@ -49,14 +49,14 @@ public final class SendMoney implements Command {
 
         boolean executeFlag = true;
         try {
-            Account accountSender = Bank.getInstance().getAccountByIBAN(iban);
+            Account accountSender = Bank.getInstance().getAccountByIBANOrAlias(iban);
         }  catch (AccountNotFoundException e) {
             Bank.getInstance().getOutput().add(userNotFound());
             executeFlag = false;
         }
 //
         if (executeFlag) {
-            Account accountSender = Bank.getInstance().getAccountByIBAN(iban);
+            Account accountSender = Bank.getInstance().getAccountByIBANOrAlias(iban);
             SendMoneyVisitor visitor = new SendMoneyVisitor(timestamp, iban, description, receiver, email, amount);
             accountSender.accept(visitor);
 

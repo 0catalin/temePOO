@@ -78,6 +78,7 @@ public final class Main {
 
         ArrayNode output = objectMapper.createArrayNode();
 
+
         Bank bank = Bank.getInstance();
         InputParser inputParser = new InputParser(inputData);
 

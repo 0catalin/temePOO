@@ -9,6 +9,7 @@ import org.poo.accounts.BusinessAccount;
 import org.poo.accounts.ClassicAccount;
 import org.poo.accounts.SavingsAccount;
 import org.poo.bankPair.Bank;
+import org.poo.baseinput.User;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -41,12 +42,14 @@ public class BusinessReportCommerciantVisitor implements Visitor {
 
     public void visit(BusinessAccount account) {
 
-//        if (iban.equals("RO69POOB6209498372540635") && timestamp == 162) {
-//            int i = 293;
-//        }
+        User user = Bank.getInstance().getUserByIBAN(iban);
+        if (iban.equals("RO69POOB6209498372540635") && timestamp == 162) {
+            int i = 293;
+        }
 
         List<SpendingUserInfo> spendingUserInfos = new ArrayList<SpendingUserInfo>(account.getSpendingUserInfos());
-        spendingUserInfos = spendingUserInfos.stream().filter(userInfo -> userInfo.getCommerciant() != null && userInfo.getTimestamp() >= startTimestamp && userInfo.getTimestamp() >= endTimestamp).collect(Collectors.toList());
+        spendingUserInfos = spendingUserInfos.stream().filter(userInfo -> userInfo.getCommerciant() != null && userInfo.getTimestamp() >= startTimestamp && userInfo.getTimestamp() <= endTimestamp && !userInfo.getEmail().equals(user.getEmail())).collect(Collectors.toList());
+
         Set<String> commerciantSet = spendingUserInfos.stream().map(SpendingUserInfo::getCommerciant).collect(Collectors.toSet());
         //Set<String> emailSet = spendingUserInfos.stream().map(SpendingUserInfo::getEmail).collect(Collectors.toSet());
         List<String> commerciantList = new ArrayList<String>();
@@ -87,10 +90,10 @@ public class BusinessReportCommerciantVisitor implements Visitor {
             }
             oneCommerciantNode.put("total received", totalreceived);
 
-            Set<String> emailSet = spendingUserInfos.stream().filter(userInfo -> commerciant.equals(userInfo.getCommerciant())).map(SpendingUserInfo::getEmail).collect(Collectors.toSet());
+            List<String> emailList = spendingUserInfos.stream().filter(userInfo -> commerciant.equals(userInfo.getCommerciant())).map(SpendingUserInfo::getEmail).collect(Collectors.toList());
             List<String> managerList = new ArrayList<String>();
             List<String> employeeList = new ArrayList<String>();
-            for (String email : emailSet) {
+            for (String email : emailList) {
                 String name = account.getNameByEmail(email);
                 if (account.isUserEmployee(email)) {
                     employeeList.add(name);

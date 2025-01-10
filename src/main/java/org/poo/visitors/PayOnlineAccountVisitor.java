@@ -36,6 +36,9 @@ public class PayOnlineAccountVisitor implements Visitor {
     public void visit(ClassicAccount account) {
                 Card card = Bank.getInstance().getCardByCardNumber(cardNumber);
                 User user = Bank.getInstance().getUserByEmail(email);
+                if (timestamp == 248) {
+                    int i = 1;
+                }
                 double cashback = 0;
                 double paymentAmount = amount * Bank.getInstance()
                         .findExchangeRate(currency, account.getCurrency());
@@ -56,7 +59,7 @@ public class PayOnlineAccountVisitor implements Visitor {
                             strategy.execute();
                             cashback += account.getSpendingCashBack(Bank.getInstance().getCommerciantByName(commerciant), user.getServicePlan()) * amount;
                             account.setBalance(account.getBalance() + cashback);
-                            user.checkFivePayments(amount * Bank.getInstance().findExchangeRate(account.getCurrency(), "RON"));
+                            user.checkFivePayments(amount * Bank.getInstance().findExchangeRate(account.getCurrency(), "RON"), account.getIban(), timestamp);
                         }
                     }
                 }
@@ -92,7 +95,7 @@ public class PayOnlineAccountVisitor implements Visitor {
                         cashback += account.getSpendingCashBack(Bank.getInstance().getCommerciantByName(commerciant), user.getServicePlan()) * amount;
                         account.setBalance(account.getBalance() + cashback);
                         account.getSpendingUserInfos().add(new SpendingUserInfo(0, amount, email, timestamp, commerciant));
-                        user.checkFivePayments(amount * Bank.getInstance().findExchangeRate(account.getCurrency(), "RON"));
+                        user.checkFivePayments(amount * Bank.getInstance().findExchangeRate(account.getCurrency(), "RON"), account.getIban(), timestamp);
                     }
                 } else {
                     // this is for when it is above the spending limit
@@ -129,7 +132,7 @@ public class PayOnlineAccountVisitor implements Visitor {
                     strategy.execute();
                     cashback += account.getSpendingCashBack(Bank.getInstance().getCommerciantByName(commerciant), user.getServicePlan()) * amount;
                     account.setBalance(account.getBalance() + cashback);
-                    user.checkFivePayments(amount * Bank.getInstance().findExchangeRate(account.getCurrency(), "RON"));
+                    user.checkFivePayments(amount * Bank.getInstance().findExchangeRate(account.getCurrency(), "RON"), account.getIban(), timestamp);
                 }
             }
         }

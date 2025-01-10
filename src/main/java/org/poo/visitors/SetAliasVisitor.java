@@ -40,7 +40,7 @@ public class SetAliasVisitor implements Visitor {
         } else if (!account.getRbac().hasPermissions(user.getEmail(), "setAlias")) {
 
         } else {
-            account.getAliasToCommerciantIban().put(alias, iban);
+            account.setAlias(alias);
         }
     }
 

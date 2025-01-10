@@ -28,6 +28,7 @@ public class AddFundsVisitor implements Visitor {
 
     public void visit(BusinessAccount account) {
         if (!account.getEmailToCards().containsKey(email)) {
+            account.setBalance(account.getBalance() + amount);
 
         } else if (!account.getRbac().hasPermissions(email, "addFunds")) {
 

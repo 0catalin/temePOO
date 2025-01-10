@@ -21,12 +21,12 @@ public class ChangeSpendingLimitVisitor implements Visitor {
     }
 
     public void visit(ClassicAccount account) {
-
+        Bank.getInstance().getOutput().add(notBusinessAccount());
     }
 
 
     public void visit(SavingsAccount account) {
-
+        Bank.getInstance().getOutput().add(notBusinessAccount());
     }
 
 
@@ -48,6 +48,18 @@ public class ChangeSpendingLimitVisitor implements Visitor {
         node.put("command", "changeSpendingLimit");
         ObjectNode outputNode = mapper.createObjectNode();
         outputNode.put("description", "You must be owner in order to change spending limit.");
+        outputNode.put("timestamp", timestamp);
+        node.set("output", outputNode);
+        node.put("timestamp", timestamp);
+        return node;
+    }
+
+    private ObjectNode notBusinessAccount() {
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode node = mapper.createObjectNode();
+        node.put("command", "changeSpendingLimit");
+        ObjectNode outputNode = mapper.createObjectNode();
+        outputNode.put("description", "This is not a business account");
         outputNode.put("timestamp", timestamp);
         node.set("output", outputNode);
         node.put("timestamp", timestamp);

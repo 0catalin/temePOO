@@ -68,7 +68,6 @@ public class BusinessAccount extends Account {
     public void addNewBusinessAssociate(String email, String role) {
         if (emailToCards.containsKey(email)) {
             System.out.println("THE EMAIL HAS ALREADY BEEN ADDED! DO NOT READD!");
-            rbac.addEmail(email, role);
         } else {
             emailToCards.put(email, new ArrayList<>());
             rbac.addEmail(email, role);

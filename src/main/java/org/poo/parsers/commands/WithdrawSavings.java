@@ -36,8 +36,9 @@ public class WithdrawSavings implements Command{
             } else if (!account.getType().equals("savings")) {
                 // account not of type savings
             } else {
+
                 Account accountReceiver = user.getClassicAccounts().get(0);
-                if (account.getBalance() - account.getMinBalance() > amount * Bank.getInstance().findExchangeRate(currency, account.getCurrency())) {
+                if (account.getBalance() >= amount * Bank.getInstance().findExchangeRate(currency, account.getCurrency())) {
                     double initialAmount = amount;
                     amount = amount * Bank.getInstance().findExchangeRate(currency, account.getCurrency());
                     account.setBalance(account.getBalance() - amount);
