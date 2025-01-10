@@ -35,5 +35,6 @@ public abstract class Card {
      */
     public void updateCardNumber() {
         cardNumber = Utils.generateCardNumber();
+
     }
 }

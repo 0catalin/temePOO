@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.Getter;
 import lombok.Setter;
 import org.poo.accounts.Account;
+import org.poo.accounts.cards.Card;
+import org.poo.exceptions.CardNotFoundException;
 import org.poo.parsers.fileio.UserInput;
 
 
@@ -122,6 +124,17 @@ public final class User {
         output.put("accountIBAN", iban);
         output.put("newPlanType", "gold");
         return output;
+    }
+
+    public Card getCardByCardNumber(String cardNumber) {
+        for (Account account : accounts) {
+            for (Card card : account.getCards()) {
+                if (card.getCardNumber().equals(cardNumber)) {
+                    return card;
+                }
+            }
+        }
+        throw new CardNotFoundException("");
     }
 
 

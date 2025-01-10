@@ -21,7 +21,7 @@ public class ChangeSpendingLimit implements Command {
     }
 
     public void execute() {
-        if (timestamp == 437) {
+        if (timestamp == 439) {
             int i = 1;
         }
         Account account = Bank.getInstance().getAccountByIBAN(iban);

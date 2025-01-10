@@ -28,11 +28,14 @@ public class CreateCardVisitor implements Visitor {
 
 
     public void visit(ClassicAccount account) {
-        Card card = new RegularCard();
-        account.getCards().add(card);
-                user.getTranzactions().add(addToUsersTranzactions(card));
-                Bank.getInstance().getAccountByIBAN(iban)
-                        .getReportsClassic().add(addToUsersTranzactions(card));
+        User user = Bank.getInstance().getUserByEmail(email);
+        if (user.getAccounts().contains(account)) {
+            Card card = new RegularCard();
+            account.getCards().add(card);
+            user.getTranzactions().add(addToUsersTranzactions(card));
+            Bank.getInstance().getAccountByIBAN(iban)
+                    .getReportsClassic().add(addToUsersTranzactions(card));
+        }
     }
 
 
@@ -51,11 +54,14 @@ public class CreateCardVisitor implements Visitor {
 
 
     public void visit(SavingsAccount account) {
-        Card card = new RegularCard();
-        account.getCards().add(card);
-        user.getTranzactions().add(addToUsersTranzactions(card));
-        Bank.getInstance().getAccountByIBAN(iban)
-                .getReportsClassic().add(addToUsersTranzactions(card));
+        User user = Bank.getInstance().getUserByEmail(email);
+        if (user.getAccounts().contains(account)) {
+            Card card = new RegularCard();
+            account.getCards().add(card);
+            user.getTranzactions().add(addToUsersTranzactions(card));
+            Bank.getInstance().getAccountByIBAN(iban)
+                    .getReportsClassic().add(addToUsersTranzactions(card));
+        }
     }
 
 

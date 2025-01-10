@@ -27,11 +27,14 @@ public class CreateOneTimeCardVisitor implements Visitor {
     }
 
     public void visit(ClassicAccount account) {
-        Card oneTimeCard = new OneTimeCard();
-        user.getTranzactions().add(addToUsersTranzactions(oneTimeCard));
-        Bank.getInstance().getAccountByIBAN(iban)
-                .getReportsClassic().add(addToUsersTranzactions(oneTimeCard));
-                account.getCards().add(oneTimeCard);
+        User user = Bank.getInstance().getUserByEmail(email);
+        if (user.getAccounts().contains(account)) {
+            Card oneTimeCard = new OneTimeCard();
+            user.getTranzactions().add(addToUsersTranzactions(oneTimeCard));
+            Bank.getInstance().getAccountByIBAN(iban)
+                    .getReportsClassic().add(addToUsersTranzactions(oneTimeCard));
+            account.getCards().add(oneTimeCard);
+        }
     }
 
 
@@ -40,6 +43,7 @@ public class CreateOneTimeCardVisitor implements Visitor {
         Card card = new OneTimeCard();
         if (account.getEmailToCards().containsKey(email)) {
             account.getEmailToCards().get(email).add(card);
+            account.getCards().add(card);
         } else {
 
         }
@@ -48,11 +52,14 @@ public class CreateOneTimeCardVisitor implements Visitor {
 
 
     public void visit(SavingsAccount account) {
-        Card oneTimeCard = new OneTimeCard();
-        user.getTranzactions().add(addToUsersTranzactions(oneTimeCard));
-        Bank.getInstance().getAccountByIBAN(iban)
-                .getReportsClassic().add(addToUsersTranzactions(oneTimeCard));
-        account.getCards().add(oneTimeCard);
+        User user = Bank.getInstance().getUserByEmail(email);
+        if (user.getAccounts().contains(account)) {
+            Card oneTimeCard = new OneTimeCard();
+            user.getTranzactions().add(addToUsersTranzactions(oneTimeCard));
+            Bank.getInstance().getAccountByIBAN(iban)
+                    .getReportsClassic().add(addToUsersTranzactions(oneTimeCard));
+            account.getCards().add(oneTimeCard);
+        }
     }
 
 

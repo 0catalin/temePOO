@@ -37,17 +37,19 @@ public final class CreateCard implements Command {
     @Override
     public void execute() {
         try {
+
             Account account = Bank.getInstance().getAccountByIBAN(iban);
             User user = Bank.getInstance().getUserByEmail(email);
-            if (user.getAccounts().contains(account)) {
-                CreateCardVisitor visitor = new CreateCardVisitor(email, timestamp, user, iban);
-                account.accept(visitor);
+
+            CreateCardVisitor visitor = new CreateCardVisitor(email, timestamp, user, iban);
+            account.accept(visitor);
                 //Card card = new RegularCard();
                 //account.getCards().add(card);
 //                user.getTranzactions().add(addToUsersTranzactions(card));
 //                Bank.getInstance().getAccountByIBAN(iban)
 //                        .getReportsClassic().add(addToUsersTranzactions(card));
-                }
+
+
         } catch (AccountNotFoundException | UserNotFoundException ignored) {
 
         }

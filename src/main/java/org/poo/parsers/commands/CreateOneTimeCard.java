@@ -40,15 +40,15 @@ public final class CreateOneTimeCard implements Command {
         try {
             Account account = Bank.getInstance().getAccountByIBAN(iban);
             User user = Bank.getInstance().getUserByEmail(email);
-            if (user.getAccounts().contains(account)) {
-                CreateOneTimeCardVisitor visitor = new CreateOneTimeCardVisitor(email, timestamp, user, iban);
-                account.accept(visitor);
+
+            CreateOneTimeCardVisitor visitor = new CreateOneTimeCardVisitor(email, timestamp, user, iban);
+            account.accept(visitor);
 //                Card oneTimeCard = new OneTimeCard();
 //                user.getTranzactions().add(addToUsersTranzactions(oneTimeCard));
 //                Bank.getInstance().getAccountByIBAN(iban)
 //                        .getReportsClassic().add(addToUsersTranzactions(oneTimeCard));
 //                account.getCards().add(oneTimeCard);
-            }
+
         } catch (AccountNotFoundException | UserNotFoundException ignored) {
 
         }

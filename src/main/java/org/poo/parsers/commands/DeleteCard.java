@@ -33,9 +33,10 @@ public final class DeleteCard implements Command {
         try {
             Account account = Bank.getInstance().getAccountByCardNumber(cardNumber);
             String iban = account.getIban();
-
-            DeleteCardVisitor visitor = new DeleteCardVisitor(cardNumber, timestamp, email);
-            account.accept(visitor);
+            if (account.getBalance() != 0) {
+                DeleteCardVisitor visitor = new DeleteCardVisitor(cardNumber, timestamp, email);
+                account.accept(visitor);
+            }
 
 //            String email = Bank.getInstance().getUserByIBAN(iban).getEmail();
 //            Bank.getInstance().getUserByIBAN(iban)

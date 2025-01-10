@@ -29,6 +29,7 @@ public class CashWithdrawal implements Command {
             Card card = Bank.getInstance().getCardByCardNumber(cardNumber);
             User user = Bank.getInstance().getUserByEmail(email);
             Account account = Bank.getInstance().getAccountByCardNumber(cardNumber);
+            card = user.getCardByCardNumber(cardNumber);
             if (card.getStatus().equals("frozen")) {
 
             } else if (amount * Bank.getInstance().findExchangeRate("RON", account.getCurrency()) * user.getPlanMultiplier(amount) > account.getBalance()) {
