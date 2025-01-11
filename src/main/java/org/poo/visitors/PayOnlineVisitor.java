@@ -12,7 +12,7 @@ import org.poo.accounts.cards.RegularCard;
 /**
  * Visitor which simulates an online card payment based on the type of card
  */
-public final class PayOnlineVisitor {
+public final class PayOnlineVisitor implements CardVisitor {
 
     private final double amount;
     private final int timestamp;

@@ -2,9 +2,12 @@ package org.poo.parsers.commands;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.poo.accounts.cards.Card;
 import org.poo.bankPair.Bank;
 import org.poo.accounts.Account;
+import org.poo.baseinput.User;
 import org.poo.exceptions.AccountNotFoundException;
+import org.poo.exceptions.CardNotFoundException;
 import org.poo.parsers.fileio.CommandInput;
 import org.poo.visitors.DeleteCardVisitor;
 
@@ -31,8 +34,9 @@ public final class DeleteCard implements Command {
     @Override
     public void execute() {
         try {
+            User user = Bank.getInstance().getUserByEmail(email);
             Account account = Bank.getInstance().getAccountByCardNumber(cardNumber);
-            String iban = account.getIban();
+            Card card = user.getCardByCardNumber(cardNumber);
             if (account.getBalance() == 0) {
                 DeleteCardVisitor visitor = new DeleteCardVisitor(cardNumber, timestamp, email);
                 account.accept(visitor);
@@ -44,6 +48,8 @@ public final class DeleteCard implements Command {
 //            account.getReportsClassic().add(successfulDeletion(iban, email));
 //            account.getCards().remove(account.getCardByCardNumber(cardNumber));
         } catch (AccountNotFoundException ignored) {
+
+        } catch (CardNotFoundException ignored) {
 
         }
 

@@ -1,6 +1,7 @@
 package org.poo.accounts.cards;
 import lombok.Getter;
 import lombok.Setter;
+import org.poo.visitors.CardVisitor;
 import org.poo.visitors.PayOnlineVisitor;
 import org.poo.utils.Utils;
 
@@ -27,7 +28,7 @@ public abstract class Card {
      */
 
 
-    public abstract boolean accept(PayOnlineVisitor visitor);
+    public abstract boolean accept(CardVisitor visitor);
 
 
     /**

@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.poo.accounts.BusinessAccount;
 import org.poo.accounts.ClassicAccount;
 import org.poo.accounts.SavingsAccount;
+import org.poo.accounts.cards.OneTimeCard;
 import org.poo.bankPair.Bank;
 import org.poo.visitors.reportVisitors.Visitor;
 
@@ -21,11 +22,14 @@ public class DeleteCardVisitor implements Visitor {
     }
 
     public void visit(ClassicAccount account) {
-        String email = Bank.getInstance().getUserByIBAN(account.getIban()).getEmail();
-        Bank.getInstance().getUserByIBAN(account.getIban())
-                .getTranzactions().add(successfulDeletion(account.getIban(), email));
-        account.getReportsClassic().add(successfulDeletion(account.getIban(), email));
-        account.getCards().remove(account.getCardByCardNumber(cardNumber));
+        ChangeCardVisitor visitor = new ChangeCardVisitor();
+        if (Bank.getInstance().getCardByCardNumber(cardNumber).accept(visitor)) {
+            String email = Bank.getInstance().getUserByIBAN(account.getIban()).getEmail();
+            Bank.getInstance().getUserByIBAN(account.getIban())
+                    .getTranzactions().add(successfulDeletion(account.getIban(), email));
+            account.getReportsClassic().add(successfulDeletion(account.getIban(), email));
+            account.getCards().remove(account.getCardByCardNumber(cardNumber));
+        }
     }
 
 
@@ -36,8 +40,11 @@ public class DeleteCardVisitor implements Visitor {
         } else if (!account.getEmailToCards().get(email).contains(account.getCardByCardNumber(cardNumber))) {
             // card was not created by the user
             if (!account.getRbac().hasPermissions(email, "deleteAnyCard")) {
-                account.getCards().remove(account.getCardByCardNumber(cardNumber));
-                account.getEmailToCards().get(email).remove(account.getCardByCardNumber(cardNumber));
+                ChangeCardVisitor visitor = new ChangeCardVisitor();
+                if (Bank.getInstance().getCardByCardNumber(cardNumber).accept(visitor)) {
+                    account.getCards().remove(account.getCardByCardNumber(cardNumber));
+                    account.getEmailToCards().get(email).remove(account.getCardByCardNumber(cardNumber));
+                }
 
             } else {
 
@@ -46,8 +53,11 @@ public class DeleteCardVisitor implements Visitor {
         } else {
             // card was created by the user
             if (!account.getRbac().hasPermissions(email, "deleteOwnCard")) {
-                account.getCards().remove(account.getCardByCardNumber(cardNumber));
-                account.getEmailToCards().get(email).remove(account.getCardByCardNumber(cardNumber));
+                ChangeCardVisitor visitor = new ChangeCardVisitor();
+                if (Bank.getInstance().getCardByCardNumber(cardNumber).accept(visitor)) {
+                    account.getCards().remove(account.getCardByCardNumber(cardNumber));
+                    account.getEmailToCards().get(email).remove(account.getCardByCardNumber(cardNumber));
+                }
             } else {
 
             }
@@ -57,11 +67,14 @@ public class DeleteCardVisitor implements Visitor {
 
 
     public void visit(SavingsAccount account) {
-        String email = Bank.getInstance().getUserByIBAN(account.getIban()).getEmail();
-        Bank.getInstance().getUserByIBAN(account.getIban())
-                .getTranzactions().add(successfulDeletion(account.getIban(), email));
-        account.getReportsClassic().add(successfulDeletion(account.getIban(), email));
-        account.getCards().remove(account.getCardByCardNumber(cardNumber));
+        ChangeCardVisitor visitor = new ChangeCardVisitor();
+        if (Bank.getInstance().getCardByCardNumber(cardNumber).accept(visitor)) {
+            String email = Bank.getInstance().getUserByIBAN(account.getIban()).getEmail();
+            Bank.getInstance().getUserByIBAN(account.getIban())
+                    .getTranzactions().add(successfulDeletion(account.getIban(), email));
+            account.getReportsClassic().add(successfulDeletion(account.getIban(), email));
+            account.getCards().remove(account.getCardByCardNumber(cardNumber));
+        }
     }
 
 
