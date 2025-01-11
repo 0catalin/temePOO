@@ -33,7 +33,7 @@ public final class DeleteCard implements Command {
         try {
             Account account = Bank.getInstance().getAccountByCardNumber(cardNumber);
             String iban = account.getIban();
-            if (account.getBalance() != 0) {
+            if (account.getBalance() == 0) {
                 DeleteCardVisitor visitor = new DeleteCardVisitor(cardNumber, timestamp, email);
                 account.accept(visitor);
             }

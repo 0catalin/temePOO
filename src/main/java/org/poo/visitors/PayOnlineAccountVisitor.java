@@ -76,6 +76,9 @@ public class PayOnlineAccountVisitor implements Visitor {
                 .findExchangeRate(currency, account.getCurrency());
         amount = paymentAmount;
         //double initialBalance = account.getBalance();
+        if (timestamp >= 531 && timestamp <= 600 && cardNumber.equals("9281102140265301")) {
+            System.out.println(paymentAmount + " " + currency + " " + email);
+        }
 
 
         if (!account.getEmailToCards().containsKey(email)) {
@@ -96,6 +99,9 @@ public class PayOnlineAccountVisitor implements Visitor {
                         account.setBalance(account.getBalance() + cashback);
                         account.getSpendingUserInfos().add(new SpendingUserInfo(0, amount, email, timestamp, commerciant));
                         user.checkFivePayments(amount * Bank.getInstance().findExchangeRate(account.getCurrency(), "RON"), account.getIban(), timestamp);
+                        if (timestamp >= 531 && timestamp <= 600 && cardNumber.equals("9281102140265301")) {
+                            System.out.println("Cashback :" + cashback);
+                        }
                     }
                 } else {
                     // this is for when it is above the spending limit

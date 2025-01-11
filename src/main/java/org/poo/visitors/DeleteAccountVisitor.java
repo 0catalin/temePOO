@@ -47,7 +47,8 @@ public class DeleteAccountVisitor implements Visitor {
         } else if (!account.getRbac().hasPermissions(user.getEmail(), "deleteAccount")) {
 
         } else {
-            user.getClassicAccounts().remove(account);
+            deleteSuccess();
+            user.getAccounts().remove(account);
         }
     }
 
