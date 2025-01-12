@@ -27,7 +27,7 @@ public class UpgradePlan implements Command{
             if (user.getServicePlan().equals(newType)) {
                 account.getReportsSavings().add(alreadyHasPlan(newType));
                 user.getTranzactions().add(alreadyHasPlan(newType));
-            } else if (user.getServicePlan().equals("silver") && !newType.equals("gold") || user.getServicePlan().equals("gold")) {
+            } else if ((user.getServicePlan().equals("silver") && !newType.equals("gold")) || user.getServicePlan().equals("gold")) {
 
             } else if (newType.equals("student") || newType.equals("standard")) {
                 // nu stiu daca e nevoie aici

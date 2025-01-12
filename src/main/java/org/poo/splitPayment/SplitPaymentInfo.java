@@ -70,6 +70,8 @@ public class SplitPaymentInfo {
             if (problemIban.isEmpty()) {
                 for (int i = 0; i < accountList.size(); i++) {
                     userList.get(i).getTranzactions().add(splitPayment());
+                    userList.get(i).checkFivePayments(eachAmount * Bank.getInstance()
+                            .findExchangeRate(currency, "RON"), accountList.get(i).getIban(), timestamp);
                     userList.get(i).getTranzactions().sort(Comparator.comparingInt(t -> t.get("timestamp").asInt()));
                     accountList.get(i).getReportsClassic().add(splitPayment());
 

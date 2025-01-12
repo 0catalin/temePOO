@@ -36,9 +36,6 @@ public class PayOnlineAccountVisitor implements Visitor {
     public void visit(ClassicAccount account) {
                 Card card = Bank.getInstance().getCardByCardNumber(cardNumber);
                 User user = Bank.getInstance().getUserByEmail(email);
-                if (timestamp == 248) {
-                    int i = 1;
-                }
                 double cashback = 0;
                 double paymentAmount = amount * Bank.getInstance()
                         .findExchangeRate(currency, account.getCurrency());
@@ -70,38 +67,34 @@ public class PayOnlineAccountVisitor implements Visitor {
     public void visit(BusinessAccount account) {
         Card card = Bank.getInstance().getCardByCardNumber(cardNumber);
         User user = Bank.getInstance().getUserByEmail(email);
+        User ownerUser = Bank.getInstance().getUserByAccount(account);
 
         double cashback = 0;
         double paymentAmount = amount * Bank.getInstance()
                 .findExchangeRate(currency, account.getCurrency());
         amount = paymentAmount;
         //double initialBalance = account.getBalance();
-        if (timestamp >= 531 && timestamp <= 600 && cardNumber.equals("9281102140265301")) {
-            System.out.println(paymentAmount + " " + currency + " " + email);
-        }
+
 
 
         if (!account.getEmailToCards().containsKey(email)) {
             cardNotFound();
         } else if (account.getBalance() != 0) {
-            if (account.getBalance() - account.getMinBalance() < paymentAmount * user.getPlanMultiplier(paymentAmount * Bank.getInstance().findExchangeRate(account.getCurrency(), "RON"))) {
+            if (account.getBalance() - account.getMinBalance() < paymentAmount * ownerUser.getPlanMultiplier(paymentAmount * Bank.getInstance().findExchangeRate(account.getCurrency(), "RON"))) {
 
             } else {
-                if (account.getSpendingLimit(email) > paymentAmount * user.getPlanMultiplier(paymentAmount * Bank.getInstance().findExchangeRate(account.getCurrency(), "RON"))) {
+                if (account.getSpendingLimit(email) > paymentAmount * ownerUser.getPlanMultiplier(paymentAmount * Bank.getInstance().findExchangeRate(account.getCurrency(), "RON"))) {
                     cashback += account.getTransactionCashback(Bank.getInstance().getCommerciantByName(commerciant)) * paymentAmount;
-                    paymentAmount *= user.getPlanMultiplier(paymentAmount * Bank.getInstance().findExchangeRate(account.getCurrency(), "RON"));
+                    paymentAmount *= ownerUser.getPlanMultiplier(paymentAmount * Bank.getInstance().findExchangeRate(account.getCurrency(), "RON"));
                     PayOnlineVisitor visitor = new PayOnlineVisitor(paymentAmount, timestamp,
                             commerciant, account, amount); // asta pusa cu 2 randuri mai sus
                     if (card.accept(visitor)) { // si asta, ultimele 4 se intampla doar daca returneaza True acceptul
                         Strategy strategy = StrategyFactory.createStrategy(Bank.getInstance().getCommerciantByName(commerciant), account, paymentAmount);
                         strategy.execute();
-                        cashback += account.getSpendingCashBack(Bank.getInstance().getCommerciantByName(commerciant), user.getServicePlan()) * amount;
+                        cashback += account.getSpendingCashBack(Bank.getInstance().getCommerciantByName(commerciant), ownerUser.getServicePlan()) * amount;
                         account.setBalance(account.getBalance() + cashback);
                         account.getSpendingUserInfos().add(new SpendingUserInfo(0, amount, email, timestamp, commerciant));
                         user.checkFivePayments(amount * Bank.getInstance().findExchangeRate(account.getCurrency(), "RON"), account.getIban(), timestamp);
-                        if (timestamp >= 531 && timestamp <= 600 && cardNumber.equals("9281102140265301")) {
-                            System.out.println("Cashback :" + cashback);
-                        }
                     }
                 } else {
                     // this is for when it is above the spending limit

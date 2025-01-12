@@ -52,7 +52,8 @@ public class SplitPaymentInfoNonEqual extends SplitPaymentInfo {
 
                     //userList.get(i).getTranzactions().add(splitPayment());
                     //accountList.get(i).getReportsClassic().add(splitPayment());
-
+                    userList.get(i).checkFivePayments(amountsList.get(i) * Bank.getInstance()
+                            .findExchangeRate(accountList.get(i).getCurrency(), "RON"), accountList.get(i).getIban(), getTimestamp());
                     Bank.getInstance().getAccountByIBAN(getAccountsForSplit().get(i))
                             .setBalance(accountList.get(i).getBalance()
                                     - amountsList.get(i));
