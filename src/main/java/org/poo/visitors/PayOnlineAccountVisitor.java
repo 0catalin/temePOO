@@ -40,12 +40,28 @@ public final class PayOnlineAccountVisitor implements Visitor {
         this.email = email;
     }
 
+
+
+
+    /**
+     * runs the function for both classic and savings accounts
+     * @param account the classic account
+     */
     public void visit(final ClassicAccount account) {
         payOnlineSavingsOrClassic(account);
     }
 
 
 
+
+    /**
+     * if the account has the card, the balance is not 0, the
+     * spending limit is lower than the amount to be paid we get the transaction
+     * cashback first, then if the amount can be paid we execute the cradVisitor and
+     * the strategy, get the 2nd cashback and add the cashback money to the account
+     * then, we check for 5 payments to maybe upgrade to gold
+     * @param account the business account
+     */
     public void visit(final BusinessAccount account) {
         Card card = Bank.getInstance().getCardByCardNumber(cardNumber);
         User user = Bank.getInstance().getUserByEmail(email);
@@ -75,10 +91,13 @@ public final class PayOnlineAccountVisitor implements Visitor {
                             * Bank.getInstance().findExchangeRate(account.getCurrency(), "RON"));
                     PayOnlineVisitor visitor = new PayOnlineVisitor(paymentAmount, timestamp,
                             commerciant, account, amount);
+
+
                     if (card.accept(visitor)) {
                         Strategy strategy = StrategyFactory.createStrategy(Bank.getInstance()
                                 .getCommerciantByName(commerciant), account, paymentAmount);
                         strategy.execute();
+
                         cashback += account.getSpendingCashBack(Bank.getInstance()
                                 .getCommerciantByName(commerciant),
                                 ownerUser.getServicePlan()) * amount;
@@ -86,6 +105,7 @@ public final class PayOnlineAccountVisitor implements Visitor {
                         account.getSpendingUserInfos().add(
                                 new SpendingUserInfoBuilder(email, timestamp)
                                 .spent(amount).commerciant(commerciant).build());
+
                         user.checkFivePayments(amount * Bank.getInstance()
                                 .findExchangeRate(account.getCurrency(), "RON"),
                                 account.getIban(), timestamp);
@@ -103,9 +123,15 @@ public final class PayOnlineAccountVisitor implements Visitor {
 
 
 
+    /**
+     * runs the function for both classic and savings accounts
+     * @param account the classic account
+     */
     public void visit(final SavingsAccount account) {
         payOnlineSavingsOrClassic(account);
     }
+
+
 
     private ObjectNode insufficientFunds() {
         ObjectMapper mapper = new ObjectMapper();
@@ -114,6 +140,8 @@ public final class PayOnlineAccountVisitor implements Visitor {
         finalNode.put("description", "Insufficient funds");
         return finalNode;
     }
+
+
 
     private void cardNotFound() {
         ObjectMapper mapper = new ObjectMapper();
@@ -127,6 +155,15 @@ public final class PayOnlineAccountVisitor implements Visitor {
         Bank.getInstance().getOutput().add(finalNode);
     }
 
+
+
+    /**
+     * if the account has the card, and the balance is not 0 we get the transaction
+     * cashback first, then if the amount can be paid we execute the cradVisitor and
+     * the strategy, get the 2nd cashback and add the cashback money to the account
+     * then, we check for 5 payments to maybe upgrade to gold
+     * @param account the classic or savings account
+     */
     private void payOnlineSavingsOrClassic(final Account account) {
         Card card = Bank.getInstance().getCardByCardNumber(cardNumber);
         User user = Bank.getInstance().getUserByEmail(email);
@@ -134,6 +171,7 @@ public final class PayOnlineAccountVisitor implements Visitor {
         double paymentAmount = amount * Bank.getInstance()
                 .findExchangeRate(currency, account.getCurrency());
         amount = paymentAmount;
+
         if (!user.getAccounts().contains(account)) {
             cardNotFound();
         } else if (account.getBalance() != 0) {
@@ -141,20 +179,24 @@ public final class PayOnlineAccountVisitor implements Visitor {
                     * Bank.getInstance().findExchangeRate(account.getCurrency(), "RON"))) {
                 user.getTranzactions().add(insufficientFunds());
                 account.getReportsClassic().add(insufficientFunds());
-            } else { // TODO MIGHT NEED TO ADD THE CASE WHERE THE BAL IS GREATER THAN MINBAL
+            } else {
+
                 cashback += account.getTransactionCashback(Bank.getInstance()
                         .getCommerciantByName(commerciant)) * paymentAmount;
                 paymentAmount *= user.getPlanMultiplier(paymentAmount
                         * Bank.getInstance().findExchangeRate(account.getCurrency(), "RON"));
                 PayOnlineVisitor visitor = new PayOnlineVisitor(paymentAmount, timestamp,
-                        commerciant, account, amount); // asta pusa cu 2 randuri mai sus
+                        commerciant, account, amount);
+
                 if (card.accept(visitor)) {
                     Strategy strategy = StrategyFactory.createStrategy(Bank.getInstance()
                             .getCommerciantByName(commerciant), account, paymentAmount);
                     strategy.execute();
+
                     cashback += account.getSpendingCashBack(Bank.getInstance()
                             .getCommerciantByName(commerciant), user.getServicePlan()) * amount;
                     account.setBalance(account.getBalance() + cashback);
+
                     user.checkFivePayments(amount * Bank.getInstance()
                             .findExchangeRate(account.getCurrency(), "RON"),
                             account.getIban(), timestamp);

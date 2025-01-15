@@ -38,8 +38,7 @@ public final class PayOnline implements Command {
 
 
     /**
-     * if the card and user are found and the card is in the user's accounts and the card
-     * has more than 0 balance a visitor instance is created and the card accepts the visitor
+     * if the card and user are found a visitor is created and the account accepts the visitor
      */
     @Override
     public void execute() {

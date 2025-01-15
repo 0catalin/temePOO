@@ -95,6 +95,7 @@ public final class DeleteCardVisitor implements Visitor {
 
     /**
      * deletes the card and adds to transactions
+     * @param account the classic or savings account
      */
     private void deleteCardClassicOrSavings(final Account account) {
         ChangeCardVisitor visitor = new ChangeCardVisitor();

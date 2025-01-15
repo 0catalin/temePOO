@@ -33,9 +33,8 @@ public final class SendMoney implements Command {
 
 
     /**
-     * gets the accounts and if they are valid checks whether
-     * the sender has enough balance, and if he does multiple transactions
-     * are added to their accounts and the balances are set afterwards
+     * tries to get the account sender, if it does not find it : it's printed error to
+     * output, else a visitor is initialized and accepted by the account
      */
     @Override
     public void execute() {

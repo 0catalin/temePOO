@@ -41,13 +41,23 @@ public final class SendMoneyVisitor implements Visitor {
 
     }
 
-
+    /**
+     *  runs the function for both classic and savings accounts
+     * @param account the classic account
+     */
     public void visit(final ClassicAccount account) {
         sendMoneyClassicOrSavings(account);
     }
 
 
-
+    /**
+     * there are some checks done about the spending limit and then the method runs
+     * on 2 branches: the valid commerciant one and the valid user one
+     * - in the commerciant one the cashback is received like in the PayOnline command
+     * - in the user one a user simply receives the money and the other send it,
+     * the transactions being added in their reports and user transactions
+     * @param account the business account
+     */
     public void visit(final BusinessAccount account) {
         if (!account.getEmailToCards().containsKey(email)) {
             return;
@@ -148,10 +158,15 @@ public final class SendMoneyVisitor implements Visitor {
     }
 
 
-
+    /**
+     *  runs the function for both classic and savings accounts
+     * @param account the savings account
+     */
     public void visit(final SavingsAccount account) {
         sendMoneyClassicOrSavings(account);
     }
+
+
 
 
     private ObjectNode addToSendersTranzactions(final Account accountSender,
@@ -166,6 +181,7 @@ public final class SendMoneyVisitor implements Visitor {
         output.put("transferType", "sent");
         return output;
     }
+
 
 
 
@@ -194,6 +210,8 @@ public final class SendMoneyVisitor implements Visitor {
         return finalNode;
     }
 
+
+
     private ObjectNode userNotFound() {
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode output = mapper.createObjectNode();
@@ -206,6 +224,14 @@ public final class SendMoneyVisitor implements Visitor {
         return output;
     }
 
+
+    /**
+     * the function runs on 2 branches: the valid commerciant one and the valid user one
+     * - in the commerciant one the cashback is received like in the PayOnline command
+     * - in the user one a user simply receives the money and the other send it,
+     * the transactions being added in their reports and user transactions
+     * @param account the classic or savings account
+     */
     private void sendMoneyClassicOrSavings(final Account account) {
         try {
             Account accountSender = Bank.getInstance().getAccountByIBANOrAlias(iban);
