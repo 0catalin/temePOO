@@ -95,8 +95,6 @@ public final class SpendingsReportVisitor implements Visitor {
 
     public void visit(BusinessAccount account) {
 
-
-
     }
 
 

@@ -29,11 +29,4 @@ public class DiscountInfo {
         numberOfTransactionsForEachCommerciant = new HashMap<String, Integer>();
     }
 
-    public int totalTransactions() {
-        int total = 0;
-        for (Integer value : numberOfTransactionsForEachCommerciant.values()) {
-            total += value;
-        }
-        return total;
-    }
 }

@@ -3,6 +3,7 @@ package org.poo.visitors;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.poo.SpendingUserInfo;
+import org.poo.accounts.Account;
 import org.poo.accounts.BusinessAccount;
 import org.poo.accounts.ClassicAccount;
 import org.poo.accounts.SavingsAccount;
@@ -34,32 +35,7 @@ public class PayOnlineAccountVisitor implements Visitor {
     }
 
     public void visit(ClassicAccount account) {
-                Card card = Bank.getInstance().getCardByCardNumber(cardNumber);
-                User user = Bank.getInstance().getUserByEmail(email);
-                double cashback = 0;
-                double paymentAmount = amount * Bank.getInstance()
-                        .findExchangeRate(currency, account.getCurrency());
-                amount = paymentAmount;
-                if (!user.getAccounts().contains(account)) {
-                    cardNotFound();
-                } else if (account.getBalance() != 0) {
-                    if (account.getBalance() < paymentAmount * user.getPlanMultiplier(paymentAmount * Bank.getInstance().findExchangeRate(account.getCurrency(), "RON"))) {
-                        user.getTranzactions().add(insufficientFunds());
-                        account.getReportsClassic().add(insufficientFunds());
-                    } else { // TODO MIGHT NEED TO ADD THE CASE WHERE THE BAL IS GREATER THAN MINBAL
-                        cashback += account.getTransactionCashback(Bank.getInstance().getCommerciantByName(commerciant)) * paymentAmount;
-                        paymentAmount *= user.getPlanMultiplier(paymentAmount * Bank.getInstance().findExchangeRate(account.getCurrency(), "RON"));
-                        PayOnlineVisitor visitor = new PayOnlineVisitor(paymentAmount, timestamp,
-                                commerciant, account, amount); // asta pusa cu 2 randuri mai sus
-                        if (card.accept(visitor)) { // si asta, ultimele 4 se intampla doar daca returneaza True acceptul
-                            Strategy strategy = StrategyFactory.createStrategy(Bank.getInstance().getCommerciantByName(commerciant), account, paymentAmount);
-                            strategy.execute();
-                            cashback += account.getSpendingCashBack(Bank.getInstance().getCommerciantByName(commerciant), user.getServicePlan()) * amount;
-                            account.setBalance(account.getBalance() + cashback);
-                            user.checkFivePayments(amount * Bank.getInstance().findExchangeRate(account.getCurrency(), "RON"), account.getIban(), timestamp);
-                        }
-                    }
-                }
+        payOnlineSavingsOrClassic(account);
     }
 
 
@@ -109,6 +85,30 @@ public class PayOnlineAccountVisitor implements Visitor {
 
 
     public void visit(SavingsAccount account) {
+        payOnlineSavingsOrClassic(account);
+    }
+
+    private ObjectNode insufficientFunds() {
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode finalNode = mapper.createObjectNode();
+        finalNode.put("timestamp", timestamp);
+        finalNode.put("description", "Insufficient funds");
+        return finalNode;
+    }
+
+    private void cardNotFound() {
+        ObjectMapper mapper = new ObjectMapper();
+        ObjectNode finalNode = mapper.createObjectNode();
+        finalNode.put("command", "payOnline");
+        ObjectNode outputNode = mapper.createObjectNode();
+        outputNode.put("description", "Card not found");
+        outputNode.put("timestamp", timestamp);
+        finalNode.set("output", outputNode);
+        finalNode.put("timestamp", timestamp);
+        Bank.getInstance().getOutput().add(finalNode);
+    }
+
+    private void payOnlineSavingsOrClassic(Account account) {
         Card card = Bank.getInstance().getCardByCardNumber(cardNumber);
         User user = Bank.getInstance().getUserByEmail(email);
         double cashback = 0;
@@ -135,25 +135,5 @@ public class PayOnlineAccountVisitor implements Visitor {
                 }
             }
         }
-    }
-
-    private ObjectNode insufficientFunds() {
-        ObjectMapper mapper = new ObjectMapper();
-        ObjectNode finalNode = mapper.createObjectNode();
-        finalNode.put("timestamp", timestamp);
-        finalNode.put("description", "Insufficient funds");
-        return finalNode;
-    }
-
-    private void cardNotFound() {
-        ObjectMapper mapper = new ObjectMapper();
-        ObjectNode finalNode = mapper.createObjectNode();
-        finalNode.put("command", "payOnline");
-        ObjectNode outputNode = mapper.createObjectNode();
-        outputNode.put("description", "Card not found");
-        outputNode.put("timestamp", timestamp);
-        finalNode.set("output", outputNode);
-        finalNode.put("timestamp", timestamp);
-        Bank.getInstance().getOutput().add(finalNode);
     }
 }

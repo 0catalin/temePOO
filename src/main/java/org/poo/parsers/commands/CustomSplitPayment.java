@@ -27,9 +27,6 @@ public class CustomSplitPayment implements Command {
     }
 
     public void execute() {
-        if (input.getTimestamp() == 151) {
-            int i = 0;
-        }
         Bank.getInstance().getSplitPayments().add(new SplitPaymentInfoNonEqual(input));
     }
 }

@@ -2,6 +2,7 @@ package org.poo.visitors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.poo.accounts.Account;
 import org.poo.accounts.BusinessAccount;
 import org.poo.accounts.ClassicAccount;
 import org.poo.accounts.SavingsAccount;
@@ -15,21 +16,16 @@ public class DeleteCardVisitor implements Visitor {
     private int timestamp;
     private String email;
 
+
     public DeleteCardVisitor(String cardNumber, int timestamp, String email) {
           this.cardNumber = cardNumber;
           this.timestamp = timestamp;
           this.email = email;
     }
 
+
     public void visit(ClassicAccount account) {
-        ChangeCardVisitor visitor = new ChangeCardVisitor();
-        if (Bank.getInstance().getCardByCardNumber(cardNumber).accept(visitor)) {
-            String email = Bank.getInstance().getUserByIBAN(account.getIban()).getEmail();
-            Bank.getInstance().getUserByIBAN(account.getIban())
-                    .getTranzactions().add(successfulDeletion(account.getIban(), email));
-            account.getReportsClassic().add(successfulDeletion(account.getIban(), email));
-            account.getCards().remove(account.getCardByCardNumber(cardNumber));
-        }
+        deleteAccountClassicOrSavings(account);
     }
 
 
@@ -67,14 +63,7 @@ public class DeleteCardVisitor implements Visitor {
 
 
     public void visit(SavingsAccount account) {
-        ChangeCardVisitor visitor = new ChangeCardVisitor();
-        if (Bank.getInstance().getCardByCardNumber(cardNumber).accept(visitor)) {
-            String email = Bank.getInstance().getUserByIBAN(account.getIban()).getEmail();
-            Bank.getInstance().getUserByIBAN(account.getIban())
-                    .getTranzactions().add(successfulDeletion(account.getIban(), email));
-            account.getReportsClassic().add(successfulDeletion(account.getIban(), email));
-            account.getCards().remove(account.getCardByCardNumber(cardNumber));
-        }
+        deleteAccountClassicOrSavings(account);
     }
 
 
@@ -87,5 +76,17 @@ public class DeleteCardVisitor implements Visitor {
         finalNode.put("cardHolder", email);
         finalNode.put("account", iban);
         return finalNode;
+    }
+
+
+    private void deleteAccountClassicOrSavings(Account account) {
+        ChangeCardVisitor visitor = new ChangeCardVisitor();
+        if (Bank.getInstance().getCardByCardNumber(cardNumber).accept(visitor)) {
+            String email = Bank.getInstance().getUserByIBAN(account.getIban()).getEmail();
+            Bank.getInstance().getUserByIBAN(account.getIban())
+                    .getTranzactions().add(successfulDeletion(account.getIban(), email));
+            account.getReportsClassic().add(successfulDeletion(account.getIban(), email));
+            account.getCards().remove(account.getCardByCardNumber(cardNumber));
+        }
     }
 }

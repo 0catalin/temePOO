@@ -2,6 +2,7 @@ package org.poo.visitors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.poo.accounts.Account;
 import org.poo.accounts.BusinessAccount;
 import org.poo.accounts.ClassicAccount;
 import org.poo.accounts.SavingsAccount;
@@ -27,14 +28,7 @@ public class CreateOneTimeCardVisitor implements Visitor {
     }
 
     public void visit(ClassicAccount account) {
-        User user = Bank.getInstance().getUserByEmail(email);
-        if (user.getAccounts().contains(account)) {
-            Card oneTimeCard = new OneTimeCard();
-            user.getTranzactions().add(addToUsersTranzactions(oneTimeCard));
-            Bank.getInstance().getAccountByIBAN(iban)
-                    .getReportsClassic().add(addToUsersTranzactions(oneTimeCard));
-            account.getCards().add(oneTimeCard);
-        }
+        createOneTimeCardCardSavingsOrClassic(account);
     }
 
 
@@ -52,14 +46,7 @@ public class CreateOneTimeCardVisitor implements Visitor {
 
 
     public void visit(SavingsAccount account) {
-        User user = Bank.getInstance().getUserByEmail(email);
-        if (user.getAccounts().contains(account)) {
-            Card oneTimeCard = new OneTimeCard();
-            user.getTranzactions().add(addToUsersTranzactions(oneTimeCard));
-            Bank.getInstance().getAccountByIBAN(iban)
-                    .getReportsClassic().add(addToUsersTranzactions(oneTimeCard));
-            account.getCards().add(oneTimeCard);
-        }
+        createOneTimeCardCardSavingsOrClassic(account);
     }
 
 
@@ -72,5 +59,16 @@ public class CreateOneTimeCardVisitor implements Visitor {
         output.put("description", "New card created");
         output.put("timestamp", timestamp);
         return output;
+    }
+
+    private void createOneTimeCardCardSavingsOrClassic(Account account) {
+        User user = Bank.getInstance().getUserByEmail(email);
+        if (user.getAccounts().contains(account)) {
+            Card oneTimeCard = new OneTimeCard();
+            user.getTranzactions().add(addToUsersTranzactions(oneTimeCard));
+            Bank.getInstance().getAccountByIBAN(iban)
+                    .getReportsClassic().add(addToUsersTranzactions(oneTimeCard));
+            account.getCards().add(oneTimeCard);
+        }
     }
 }

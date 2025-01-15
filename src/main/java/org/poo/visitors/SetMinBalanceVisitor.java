@@ -24,7 +24,8 @@ public class SetMinBalanceVisitor implements Visitor {
 
 
     public void visit(BusinessAccount account) {
-        account.setMinBalance(minBalance); // should be given email to check for owner
+        // should be given email in input to check for owner
+        account.setMinBalance(minBalance);
     }
 
 

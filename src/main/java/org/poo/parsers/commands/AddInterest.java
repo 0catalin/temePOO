@@ -33,9 +33,6 @@ public final class AddInterest implements Command {
             Account account = Bank.getInstance().getAccountByIBAN(iban);
             if (account.getType().equals("savings")) {
                 double interestRate = ((SavingsAccount)account).getInterestRate();
-//                if (interestRate == 0.17 && account.getIban().equals("RO65POOB8944016386845896")) {
-//                    int i = 1;
-//                }
                 double interest = account.getBalance() * interestRate;
                 Bank.getInstance().getUserByAccount(account).getTranzactions().add(addInterestRateSuccess(interest));
                 account.setBalance(account.getBalance()

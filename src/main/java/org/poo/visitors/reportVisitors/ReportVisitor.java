@@ -65,8 +65,6 @@ public final class ReportVisitor implements Visitor {
 
     public void visit(BusinessAccount account) {
 
-
-
     }
 
 

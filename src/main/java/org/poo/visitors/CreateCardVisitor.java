@@ -2,6 +2,7 @@ package org.poo.visitors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
+import org.poo.accounts.Account;
 import org.poo.accounts.BusinessAccount;
 import org.poo.accounts.ClassicAccount;
 import org.poo.accounts.SavingsAccount;
@@ -28,14 +29,7 @@ public class CreateCardVisitor implements Visitor {
 
 
     public void visit(ClassicAccount account) {
-        User user = Bank.getInstance().getUserByEmail(email);
-        if (user.getAccounts().contains(account)) {
-            Card card = new RegularCard();
-            account.getCards().add(card);
-            user.getTranzactions().add(addToUsersTranzactions(card));
-            Bank.getInstance().getAccountByIBAN(iban)
-                    .getReportsClassic().add(addToUsersTranzactions(card));
-        }
+        createCardSavingsOrClassic(account);
     }
 
 
@@ -54,14 +48,7 @@ public class CreateCardVisitor implements Visitor {
 
 
     public void visit(SavingsAccount account) {
-        User user = Bank.getInstance().getUserByEmail(email);
-        if (user.getAccounts().contains(account)) {
-            Card card = new RegularCard();
-            account.getCards().add(card);
-            user.getTranzactions().add(addToUsersTranzactions(card));
-            Bank.getInstance().getAccountByIBAN(iban)
-                    .getReportsClassic().add(addToUsersTranzactions(card));
-        }
+        createCardSavingsOrClassic(account);
     }
 
 
@@ -74,5 +61,17 @@ public class CreateCardVisitor implements Visitor {
         output.put("cardHolder", email);
         output.put("account", iban);
         return output;
+    }
+
+
+    private void createCardSavingsOrClassic(Account account) {
+        User user = Bank.getInstance().getUserByEmail(email);
+        if (user.getAccounts().contains(account)) {
+            Card card = new RegularCard();
+            account.getCards().add(card);
+            user.getTranzactions().add(addToUsersTranzactions(card));
+            Bank.getInstance().getAccountByIBAN(iban)
+                    .getReportsClassic().add(addToUsersTranzactions(card));
+        }
     }
 }

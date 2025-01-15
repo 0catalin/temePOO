@@ -22,11 +22,8 @@ import java.util.HashMap;
 public class BusinessAccount extends Account {
     private HashMap<String, ArrayList<Card>> emailToCards;
     private RoleBasedAccessControl rbac;
-    private HashMap<String, String> aliasToCommerciantIban;
     private double depositLimit;
     private double spendingLimit;
-    private double totalDeposited;
-    private double totalSpent;
     private ArrayList<UserInfo> employees;
     private ArrayList<UserInfo> managers;
     private ArrayList<SpendingUserInfo> spendingUserInfos;
@@ -36,13 +33,10 @@ public class BusinessAccount extends Account {
     public BusinessAccount(String ownerEmail, String currency) {
         super(currency);
         emailToCards = new HashMap<String, ArrayList<Card>>();
-        aliasToCommerciantIban = new HashMap<String, String>();
         emailToCards.put(ownerEmail, new ArrayList<>());
         rbac = new RoleBasedAccessControl(ownerEmail);
         depositLimit = Bank.getInstance().findExchangeRate("RON", getCurrency()) * 500.0;
         spendingLimit = Bank.getInstance().findExchangeRate("RON", getCurrency()) * 500.0;
-        totalDeposited = 0;
-        totalSpent = 0;
         managers = new ArrayList<UserInfo>();
         employees = new ArrayList<UserInfo>();
         spendingUserInfos = new ArrayList<SpendingUserInfo>();

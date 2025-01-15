@@ -4,6 +4,7 @@ import org.poo.accounts.Account;
 import org.poo.accounts.BusinessAccount;
 import org.poo.bankPair.Bank;
 import org.poo.parsers.fileio.CommandInput;
+import org.poo.visitors.AddNewBusinessAssociateVisitor;
 
 public class AddNewBusinessAssociate implements Command{
     private final int timestamp;
@@ -20,7 +21,8 @@ public class AddNewBusinessAssociate implements Command{
 
     public void execute() {
         Account account = Bank.getInstance().getAccountByIBAN(iban);
-        ((BusinessAccount )account).addNewBusinessAssociate(email, role);
+        AddNewBusinessAssociateVisitor visitor = new AddNewBusinessAssociateVisitor(email, role);
+        account.accept(visitor);
 
     }
 }
