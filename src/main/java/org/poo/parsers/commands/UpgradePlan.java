@@ -9,6 +9,10 @@ import org.poo.exceptions.AccountNotFoundException;
 import org.poo.exceptions.UserNotFoundException;
 import org.poo.parsers.fileio.CommandInput;
 
+
+/**
+ * class implementing the upgrade plan command
+ */
 public final class UpgradePlan implements Command {
     private final String iban;
     private final String newType;
@@ -17,12 +21,17 @@ public final class UpgradePlan implements Command {
     private static final double SILVER_UPGRADE = 100.0;
     private static final double GOLD_UPGRADE = 250.0;
 
+
+
     public UpgradePlan(final CommandInput commandInput) {
         iban = commandInput.getAccount();
         newType = commandInput.getNewPlanType();
         timestamp = commandInput.getTimestamp();
     }
 
+    /**
+     * method that changes the user's plan if the command is valid
+     */
     public void execute() {
         try {
             Account account = Bank.getInstance().getAccountByIBAN(iban);

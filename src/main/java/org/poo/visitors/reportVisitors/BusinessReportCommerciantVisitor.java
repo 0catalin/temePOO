@@ -23,6 +23,8 @@ public final class BusinessReportCommerciantVisitor implements Visitor {
     private final int timestamp;
     private final String iban;
 
+
+
     public BusinessReportCommerciantVisitor(final int startTimestamp, final int endTimestamp,
                                             final int timestamp, final String iban) {
         this.startTimestamp = startTimestamp;
@@ -31,15 +33,33 @@ public final class BusinessReportCommerciantVisitor implements Visitor {
         this.iban = iban;
     }
 
+
+    /**
+     * doesn't do anything for a classic account
+     * @param account the classic account
+     */
     public void visit(final ClassicAccount account) {
 
     }
 
 
+
+    /**
+     * doesn't do anything for a savings account
+     * @param account the savings account
+     */
     public void visit(final SavingsAccount account) {
 
     }
 
+
+    /**
+     * the method first filters based on the timestamp and the existence of commerciants.
+     * the commerciants are added to a set, then to an arrayList and sorted
+     * for each commerciant it iterates over the transactions and adds everything accordingly
+     * to the ObjectNode which is later added to the output
+     * @param account the business account
+     */
     public void visit(final BusinessAccount account) {
 
         User user = Bank.getInstance().getUserByIBAN(iban);

@@ -8,6 +8,9 @@ import org.poo.baseinput.User;
 import org.poo.exceptions.UserNotFoundException;
 import org.poo.parsers.fileio.CommandInput;
 
+/**
+ * class implementing addBusinessAccount method
+ */
 public final class AddBusinessAccount implements Command {
 
 
@@ -15,12 +18,19 @@ public final class AddBusinessAccount implements Command {
     private String currency;
     private int timestamp;
 
+
     public AddBusinessAccount(final CommandInput commandInput) {
         email = commandInput.getEmail();
         currency = commandInput.getCurrency();
         timestamp = commandInput.getTimestamp();
     }
 
+
+
+    /**
+     * creates a business account if the user email is valid and
+     * adds it to the account list and transactions
+     */
     public void execute() {
         try {
             BusinessAccount businessAccount = new BusinessAccount(email, currency);
@@ -33,6 +43,7 @@ public final class AddBusinessAccount implements Command {
 
         }
     }
+
 
 
     private ObjectNode addToUsersTranzactions() {

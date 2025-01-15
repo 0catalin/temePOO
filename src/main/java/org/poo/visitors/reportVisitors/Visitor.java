@@ -21,6 +21,9 @@ public interface Visitor {
     void visit(ClassicAccount account);
 
 
-
+    /**
+     * method which performs an operation on a business account
+     * @param account the business account
+     */
     void visit(BusinessAccount account);
 }

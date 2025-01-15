@@ -92,7 +92,10 @@ public final class SpendingsReportVisitor implements Visitor {
     }
 
 
-
+    /**
+     * does nothing on a business account
+     * @param account business account
+     */
     public void visit(final BusinessAccount account) {
 
     }

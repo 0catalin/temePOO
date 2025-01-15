@@ -23,6 +23,10 @@ import java.util.Comparator;
 
 @Getter
 @Setter
+
+/**
+ * class designed to store the info of an ongoing split payment
+ */
 public class SplitPaymentInfo {
     private final double amount;
     private final int timestamp;
@@ -52,13 +56,23 @@ public class SplitPaymentInfo {
     }
 
 
-
+    /**
+     * checks if the current object has the searched type and contains the email
+     * @param paymentType the payment type of split
+     * @param email the user email
+     * @return true if it is the right instance and false if it is not
+     */
     public boolean isRightType(final String paymentType, final String email) {
         return splitPaymentType.equals(paymentType) && emailsForSplit.contains(email);
     }
 
 
 
+    /**
+     *  all the accounts, ibans and users are added into lists. the method
+     *  checks if the ibans are correct at first, if everything is okay
+     *  the accounts have transactions added and balances decreased
+     */
     public void successfulPayment() {
         try {
             ArrayList<Account> accountList = new ArrayList<Account>();
@@ -110,6 +124,7 @@ public class SplitPaymentInfo {
 
 
 
+
     private ObjectNode splitPayment() {
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode successNode = mapper.createObjectNode();
@@ -128,7 +143,10 @@ public class SplitPaymentInfo {
     }
 
 
-
+    /**
+     * method that makes a node
+     * @return the rejection payment node
+     */
     public ObjectNode rejectNode() {
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode node = mapper.createObjectNode();

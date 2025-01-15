@@ -40,6 +40,7 @@ public final class User {
     private static final double TOTAL_PAYMENTS_LIMIT = 5;
 
 
+
     public User(final UserInput userInput) {
         firstName = userInput.getFirstName();
         lastName = userInput.getLastName();
@@ -55,14 +56,23 @@ public final class User {
             servicePlan = "standard";
         }
         numberOfPaymentsForGold = 0;
-
     }
 
+
+    /**
+     * function which checks for the occupation of the user
+     * @return true if he is a student and false otherwise
+     */
     public boolean isStudent() {
         return occupation.equals("student");
     }
 
 
+    /**
+     * gets the plan multiplier of the user depending on the amount
+     * @param amount the amount of the payment being done
+     * @return the multiplier of the amount having to be paid
+     */
     public double getPlanMultiplier(final double amount) {
         if (servicePlan.equals("student") || servicePlan.equals("gold")) {
             return 1;
@@ -75,6 +85,11 @@ public final class User {
         }
     }
 
+
+    /**
+     * calculates whether the user is over 21 or not
+     * @return true if he is more than 21 and false otherwise
+     */
     public boolean isUserOldEnough() {
         String[] parts = birthDate.split("-");
         int birthYear = Integer.parseInt(parts[0]);
@@ -109,6 +124,14 @@ public final class User {
     }
 
 
+    /**
+     * function that updates fields depending on the payment amounts and
+     * the total number of payments and changes the user's plan to gold
+     * after 5 payments of at least 300 RON each
+     * @param amount amount being spent by the user
+     * @param iban the iban of the user
+     * @param timestamp the timestamp of the payment
+     */
     public void checkFivePayments(final double amount, final String iban, final int timestamp) {
         if (servicePlan.equals("silver") && amount >= FIVE_PAYMENTS_LIMIT) {
             numberOfPaymentsForGold++;
@@ -120,6 +143,8 @@ public final class User {
         }
     }
 
+
+
     private ObjectNode addGoldUpgrade(final String iban, final int timestamp) {
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode output = mapper.createObjectNode();
@@ -130,6 +155,12 @@ public final class User {
         return output;
     }
 
+
+    /**
+     * returns the user's card by the card number given
+     * @param cardNumber given card number of user
+     * @return the corresponding card object
+     */
     public Card getCardByCardNumber(final String cardNumber) {
         for (Account account : accounts) {
             for (Card card : account.getCards()) {

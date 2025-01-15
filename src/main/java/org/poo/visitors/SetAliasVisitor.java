@@ -6,6 +6,11 @@ import org.poo.accounts.SavingsAccount;
 import org.poo.baseinput.User;
 import org.poo.visitors.reportVisitors.Visitor;
 
+
+
+/**
+ * visitor class designed to run different commands on different types of accounts
+ */
 public final class SetAliasVisitor implements Visitor {
     private final User user;
     private final String alias;
@@ -26,7 +31,10 @@ public final class SetAliasVisitor implements Visitor {
     }
 
 
-
+    /**
+     * sets alias of classic account
+     * @param account the classic account
+     */
     public void visit(final ClassicAccount account) {
             if (user.getAccounts().contains(account)) {
                 account.setAlias(alias);
@@ -34,7 +42,10 @@ public final class SetAliasVisitor implements Visitor {
     }
 
 
-
+    /**
+     * is the user has permissions the alias is changed
+     * @param account the business account
+     */
     public void visit(final BusinessAccount account) {
 
         if (!account.getEmailToCards().containsKey(email)) {
@@ -48,6 +59,10 @@ public final class SetAliasVisitor implements Visitor {
 
 
 
+    /**
+     * sets alias to savings account
+     * @param account the savings account
+     */
     public void visit(final SavingsAccount account) {
         if (user.getAccounts().contains(account)) {
             account.setAlias(alias);

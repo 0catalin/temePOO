@@ -16,6 +16,10 @@ import org.poo.strategies.Strategy;
 import org.poo.strategies.StrategyFactory;
 import org.poo.visitors.reportVisitors.Visitor;
 
+
+/**
+ * visitor class designed to run different commands on different types of accounts
+ */
 public final class SendMoneyVisitor implements Visitor {
 
     private final double amount;

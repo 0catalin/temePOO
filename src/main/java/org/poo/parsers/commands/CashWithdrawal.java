@@ -10,12 +10,18 @@ import org.poo.exceptions.CardNotFoundException;
 import org.poo.exceptions.UserNotFoundException;
 import org.poo.parsers.fileio.CommandInput;
 
+
+/**
+ * class implementing the method of cash withdrawal
+ */
 public final class CashWithdrawal implements Command {
+
     private final double amount;
     private final String cardNumber;
     private final String email;
     private final String location;
     private final int timestamp;
+
 
     public CashWithdrawal(final CommandInput commandInput) {
         amount = commandInput.getAmount();
@@ -24,6 +30,14 @@ public final class CashWithdrawal implements Command {
         location = commandInput.getLocation();
         timestamp = commandInput.getTimestamp();
     }
+
+
+
+    @Override
+    /**
+     * removes balance from the account if the account has enough money,
+     * is valid and the card is the user's
+     */
     public void execute() {
         try {
             Card card = Bank.getInstance().getCardByCardNumber(cardNumber);
@@ -50,6 +64,8 @@ public final class CashWithdrawal implements Command {
 
     }
 
+
+
     private ObjectNode successWithdrawal() {
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode output = mapper.createObjectNode();
@@ -58,6 +74,8 @@ public final class CashWithdrawal implements Command {
         output.put("amount", amount);
         return output;
     }
+
+
 
     private ObjectNode cardNotFound() {
         ObjectMapper mapper = new ObjectMapper();
@@ -71,6 +89,8 @@ public final class CashWithdrawal implements Command {
         return output;
     }
 
+
+
     private ObjectNode userNotFound() {
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode output = mapper.createObjectNode();
@@ -82,6 +102,8 @@ public final class CashWithdrawal implements Command {
         output.put("timestamp", timestamp);
         return output;
     }
+
+
 
     private ObjectNode insufficientFunds() {
         ObjectMapper mapper = new ObjectMapper();

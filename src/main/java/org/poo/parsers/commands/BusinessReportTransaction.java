@@ -7,12 +7,18 @@ import org.poo.parsers.fileio.CommandInput;
 import org.poo.visitors.reportVisitors.BusinessReportTransactionVisitor;
 import org.poo.visitors.reportVisitors.Visitor;
 
+
+/**
+ * class implementing the transaction business report method
+ */
 public final class BusinessReportTransaction implements Command {
 
-    private String iban;
-    private int startTimestamp;
-    private int endTimestamp;
-    private int timestamp;
+    private final String iban;
+    private final int startTimestamp;
+    private final int endTimestamp;
+    private final int timestamp;
+
+
 
     public BusinessReportTransaction(final CommandInput commandInput) {
          iban = commandInput.getAccount();
@@ -21,6 +27,11 @@ public final class BusinessReportTransaction implements Command {
          timestamp = commandInput.getTimestamp();
     }
 
+
+    @Override
+    /**
+     * method that initializes the visitor and accepts it via the account
+     */
     public void execute() {
         try {
             Account account = Bank.getInstance().getAccountByIBAN(iban);
@@ -31,4 +42,5 @@ public final class BusinessReportTransaction implements Command {
 
         }
     }
+
 }

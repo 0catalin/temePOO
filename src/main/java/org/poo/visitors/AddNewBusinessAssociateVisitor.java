@@ -5,6 +5,10 @@ import org.poo.accounts.ClassicAccount;
 import org.poo.accounts.SavingsAccount;
 import org.poo.visitors.reportVisitors.Visitor;
 
+
+/**
+ * visitor class designed to run different commands on different types of accounts
+ */
 public final class AddNewBusinessAssociateVisitor implements Visitor {
 
     private final String role;

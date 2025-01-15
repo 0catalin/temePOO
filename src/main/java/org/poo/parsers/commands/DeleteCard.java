@@ -27,7 +27,7 @@ public final class DeleteCard implements Command {
 
 
     /**
-     * it searches for the account and if it is found it deletes it
+     * it searches for the account and if it is found it deletes the card
      */
     @Override
     public void execute() {

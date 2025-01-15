@@ -12,6 +12,10 @@ import org.poo.bankPair.Bank;
 import org.poo.baseinput.User;
 import org.poo.visitors.reportVisitors.Visitor;
 
+
+/**
+ * visitor class designed to run different commands on different types of accounts
+ */
 public final class CreateCardVisitor implements Visitor {
 
     private final String email;
@@ -26,12 +30,22 @@ public final class CreateCardVisitor implements Visitor {
     }
 
 
+
+    /**
+     * runs the method used for both classic and savings accounts
+     * @param account the classic account
+     */
     public void visit(final ClassicAccount account) {
         createCardSavingsOrClassic(account);
     }
 
 
 
+    /**
+     * if the user is a business associate it creates the card
+     * and associates it with the user's email
+     * @param account the business account
+     */
     public void visit(final BusinessAccount account) {
         Card card = new RegularCard();
         if (account.getEmailToCards().containsKey(email)) {
@@ -43,9 +57,16 @@ public final class CreateCardVisitor implements Visitor {
 
 
 
+
+    /**
+     * runs the method used for both classic and savings accounts
+     * @param account the classic account
+     */
     public void visit(final SavingsAccount account) {
         createCardSavingsOrClassic(account);
     }
+
+
 
 
     private ObjectNode addToUsersTranzactions(final Card card) {
@@ -60,6 +81,11 @@ public final class CreateCardVisitor implements Visitor {
     }
 
 
+
+    /**
+     * function that creates a card and adds it to the account's cards
+     * @param account the Account given
+     */
     private void createCardSavingsOrClassic(final Account account) {
         User user = Bank.getInstance().getUserByEmail(email);
         if (user.getAccounts().contains(account)) {

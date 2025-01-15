@@ -18,6 +18,7 @@ public final class AddSavingsAccount implements Command {
     private final int timestamp;
     private final double interestRate;
 
+
     public AddSavingsAccount(final CommandInput commandInput) {
         email = commandInput.getEmail();
         currency = commandInput.getCurrency();

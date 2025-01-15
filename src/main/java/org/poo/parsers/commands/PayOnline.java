@@ -11,6 +11,7 @@ import org.poo.accounts.Account;
 import org.poo.baseinput.User;
 import org.poo.accounts.cards.Card;
 import org.poo.parsers.fileio.CommandInput;
+
 /**
  * class implementing the pay online command
  */

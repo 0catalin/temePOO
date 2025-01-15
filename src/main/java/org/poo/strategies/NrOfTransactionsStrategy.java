@@ -3,6 +3,10 @@ package org.poo.strategies;
 import org.poo.accounts.Account;
 import org.poo.baseinput.Commerciant;
 
+
+/**
+ * class designed for the numberoftransactions cashback method
+ */
 public final class NrOfTransactionsStrategy implements Strategy {
 
     private final Account account;
@@ -18,6 +22,10 @@ public final class NrOfTransactionsStrategy implements Strategy {
     }
 
 
+    /**
+     * method which adds payments for commerciants and if the target number is reached
+     * the cashback is received by the user
+     */
     public void execute() {
         account.getDiscountInfo().getNumberOfTransactionsForEachCommerciant()
                 .put(commerciant.getCommerciant(),

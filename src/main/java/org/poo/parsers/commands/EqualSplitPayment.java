@@ -21,9 +21,7 @@ public final class EqualSplitPayment implements Command {
 
 
     /**
-     * all the accounts, ibans and users are added into lists. the method
-     * checks if the ibans are correct at first, if everything is okay
-     * the accounts have transactions added and balances decreased
+     * adds the payment to the payment queue from the Bank
      */
     @Override
     public void execute() {

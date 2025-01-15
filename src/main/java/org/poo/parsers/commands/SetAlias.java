@@ -30,7 +30,7 @@ public final class SetAlias implements Command {
 
 
     /**
-     * if the account and user are valid the alias is set
+     * if the account and user are valid a visitor is created and accepted by account
      */
     @Override
     public void execute() {
@@ -41,9 +41,6 @@ public final class SetAlias implements Command {
             SetAliasVisitor visitor = new SetAliasVisitor(user, alias, email, timestamp, iban);
             account.accept(visitor);
 
-//            if (user.getAccounts().contains(account)) {
-//                account.setAlias(alias);
-//            }
         } catch (UserNotFoundException | AccountNotFoundException ignored) {
 
         }

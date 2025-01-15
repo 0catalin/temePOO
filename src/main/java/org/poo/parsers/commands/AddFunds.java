@@ -27,7 +27,7 @@ public final class AddFunds implements Command {
 
 
     /**
-     * adds funds to the account, if the account is not found it doesn't do anything
+     * creates visitor for adding funds and it gets accepted by the account
      */
     @Override
     public void execute() {

@@ -25,7 +25,8 @@ public final class SetMinimumBalance implements Command {
 
 
     /**
-     * if the account is valid the min balance is set
+     * if the account is valid the a visitor
+     * is created and accepted to set the min balance
      */
     @Override
     public void execute() {
@@ -34,8 +35,6 @@ public final class SetMinimumBalance implements Command {
 
             SetMinBalanceVisitor visitor = new SetMinBalanceVisitor(minBalance, timestamp);
             account.accept(visitor);
-
-            //account.setMinBalance(minBalance);
         } catch (AccountNotFoundException ignored) {
 
         }

@@ -9,6 +9,11 @@ import org.poo.accounts.SavingsAccount;
 import org.poo.bankPair.Bank;
 import org.poo.visitors.reportVisitors.Visitor;
 
+
+
+/**
+ * visitor class designed to run different commands on different types of accounts
+ */
 public final class ChangeDepositLimitVisitor implements Visitor {
     private final int timestamp;
     private final double amount;
@@ -20,16 +25,29 @@ public final class ChangeDepositLimitVisitor implements Visitor {
         this.email = email;
     }
 
+    /**
+     * empty function, will add error when the format is out
+     * @param account the classic account
+     */
     @Override
     public void visit(final ClassicAccount account) {
 
     }
 
+    /**
+     * empty function, will add error when the format is out
+     * @param account the savings account
+     */
     @Override
     public void visit(final SavingsAccount account) {
 
     }
 
+
+    /**
+     * changes the business account field only if the email has permissions
+     * @param account the business account
+     */
     @Override
     public void visit(final BusinessAccount account) {
         if (!account.getEmailToCards().containsKey(email)) {

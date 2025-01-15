@@ -11,10 +11,14 @@ import org.poo.accounts.SavingsAccount;
 import org.poo.bankPair.Bank;
 
 public final class BusinessReportTransactionVisitor implements Visitor {
+
+
     private final int startTimestamp;
     private final int endTimestamp;
     private final int timestamp;
     private final String iban;
+
+
 
     public BusinessReportTransactionVisitor(final String iban, final int timestamp,
                                             final int startTimestamp, final int endTimestamp) {
@@ -24,6 +28,13 @@ public final class BusinessReportTransactionVisitor implements Visitor {
         this.iban = iban;
     }
 
+
+    /**
+     * the method first iterates over all the stored transactions and for each
+     * employee and manager it calculates individual and collective sums spent and
+     * deposited. then they are all added to an ObjectNode and added to the output
+     * @param account the business account
+     */
     public void visit(final BusinessAccount account) {
         double totalSpent = 0;
         double totalDeposited = 0;
@@ -100,11 +111,19 @@ public final class BusinessReportTransactionVisitor implements Visitor {
     }
 
 
+
+    /**
+     * doesn't do anything for a classic account
+     * @param account the classic account
+     */
     public void visit(final ClassicAccount account) {
 
     }
 
-
+    /**
+     * doesn't do anything for a savings account
+     * @param account the savings account
+     */
     public void visit(final SavingsAccount account) {
 
     }

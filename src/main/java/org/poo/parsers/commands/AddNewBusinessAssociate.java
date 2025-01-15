@@ -5,11 +5,17 @@ import org.poo.bankPair.Bank;
 import org.poo.parsers.fileio.CommandInput;
 import org.poo.visitors.AddNewBusinessAssociateVisitor;
 
+/**
+ * class implementing addBusinessAccount method
+ */
 public final class AddNewBusinessAssociate implements Command {
+
     private final int timestamp;
     private final String email;
     private final String role;
     private final String iban;
+
+
 
     public AddNewBusinessAssociate(final CommandInput commandInput) {
         email = commandInput.getEmail();
@@ -18,6 +24,10 @@ public final class AddNewBusinessAssociate implements Command {
         iban = commandInput.getAccount();
     }
 
+
+    /**
+     * method that initializes the visitor and accepts it via the account
+     */
     public void execute() {
         Account account = Bank.getInstance().getAccountByIBAN(iban);
         AddNewBusinessAssociateVisitor visitor = new AddNewBusinessAssociateVisitor(email, role);

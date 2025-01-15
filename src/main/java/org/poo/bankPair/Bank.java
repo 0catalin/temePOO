@@ -209,6 +209,13 @@ public final class Bank {
         return -1;
     }
 
+
+
+    /**
+     * The method returns a commerciant based on its name
+     * @param name the name of the commerciant
+     * @return the commerciant instance which corresponds to the name
+     */
     public Commerciant getCommerciantByName(final String name) {
         for (Commerciant commerciant : commerciants) {
             if (commerciant.getCommerciant().equals(name)) {
@@ -218,6 +225,13 @@ public final class Bank {
         throw new CommerciantNotFoundException("");
     }
 
+
+
+    /**
+     * returns a commerciant based on its iban
+     * @param iban the iban of the commerciant
+     * @return the commerciant instance which corresponds to the name
+     */
     public Commerciant getCommerciantByIban(final String iban) {
         for (Commerciant commerciant : commerciants) {
             if (commerciant.getAccount().equals(iban)) {
@@ -227,6 +241,14 @@ public final class Bank {
         throw new CommerciantNotFoundException("");
     }
 
+
+
+
+    /**
+     * method that gets the user's email based on an account iban
+     * @param iban the account iban
+     * @return the email of the user who owns the account
+     */
     public String getEmailByIban(final String iban) {
         for (User user : users) {
             for (Account account : user.getAccounts()) {
@@ -239,6 +261,14 @@ public final class Bank {
     }
 
 
+
+    /**
+     * iterates through the list of payments and returns the right one
+     * @param email the email of the user
+     * @param type the type of the searched payment
+     * @return the SplitPaymentInfo instance which
+     * corresponds to the user and type given
+     */
     public SplitPaymentInfo getSplitPaymentByTypeAndEmail(final String email, final String type) {
         for (SplitPaymentInfo splitPaymentInfo : splitPayments) {
             if (splitPaymentInfo.isRightType(type, email)

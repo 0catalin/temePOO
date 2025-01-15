@@ -76,7 +76,13 @@ public abstract class Account {
     public abstract Card getCardByCardNumber(String cardNumber);
 
 
-
+    /**
+     * depending on the commerciant and the user's service plan it returns the fraction
+     * of the cashback that will be sent back to the user
+     * @param commerciant the commerciant which the payment is made to
+     * @param servicePlan the user's service plan
+     * @return the fraction of the payment amount that will be sent back
+     */
     public double getSpendingCashBack(final Commerciant commerciant, final String servicePlan) {
         if (!commerciant.getCashbackStrategy().equals("spendingThreshold")) {
             return 0;
@@ -113,7 +119,11 @@ public abstract class Account {
     }
 
 
-
+    /**
+     * returns the cashback if the user has a coupon depending on the type of commerciant
+     * @param commerciant the commerciant the payment is made to
+     * @return the fraction of the payback to the user
+     */
     public double getTransactionCashback(final Commerciant commerciant) {
         if (commerciant.getType().equals("Food") && discountInfo.isFoodCashback()) {
             discountInfo.setFoodCashback(false);
@@ -133,7 +143,7 @@ public abstract class Account {
 
     /**
      * checks if an account balance is 0
-     * @return tru if it is 0 false if it is not
+     * @return true if it is 0 false if it is not
      */
     public boolean isEmpty() {
         return balance == 0;

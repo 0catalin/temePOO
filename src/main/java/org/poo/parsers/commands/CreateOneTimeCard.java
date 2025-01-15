@@ -28,8 +28,8 @@ public final class CreateOneTimeCard implements Command {
 
 
     /**
-     * if the account and users are found a one time
-     * card is created and added to the account's cards
+     * if the account and users are found an accountVisitor instance is created and
+     * visits the account
      */
     @Override
     public void execute() {

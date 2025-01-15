@@ -17,6 +17,7 @@ import java.util.HashMap;
 @Getter
 @Setter
 public final class BusinessAccount extends Account {
+
     private HashMap<String, ArrayList<Card>> emailToCards;
     private RoleBasedAccessControl rbac;
     private double depositLimit;
@@ -45,6 +46,11 @@ public final class BusinessAccount extends Account {
 
     }
 
+    /**
+     * gets the spending limit of the user given as parameter
+     * @param userEmail the user the spending limit is asked for
+     * @return the spending limit
+     */
     public double getSpendingLimit(final String userEmail) {
         if (Bank.getInstance().getUserByEmail(userEmail).getAccounts().contains(this)
                 || rbac.getEmailToRoleMap().get(userEmail).equals("manager")) {
@@ -53,6 +59,12 @@ public final class BusinessAccount extends Account {
         return spendingLimit;
     }
 
+
+    /**
+     * gets the deposit limit of the user given as parameter
+     * @param userEmail the user the spending limit is asked for
+     * @return the deposit limit
+     */
     public double getDepositLimit(final String userEmail) {
         if (Bank.getInstance().getUserByEmail(userEmail).getAccounts().contains(this)
                 || rbac.getEmailToRoleMap().get(userEmail).equals("manager")) {
@@ -61,6 +73,11 @@ public final class BusinessAccount extends Account {
         return depositLimit;
     }
 
+    /**
+     * adds an email to the current business account with the given role
+     * @param email the email of the associated user
+     * @param role the role of the associated user
+     */
     public void addNewBusinessAssociate(final String email, final String role) {
         if (emailToCards.containsKey(email)) {
             return;
@@ -77,6 +94,12 @@ public final class BusinessAccount extends Account {
     }
 
 
+
+    /**
+     * iterates through the list of users and takes returns the name of the user
+     * @param email the email of the business associate
+     * @return the username
+     */
     public String getNameByEmail(final String email) {
         for (UserInfo userInfo : employees) {
             if (userInfo.getEmail().equals(email)) {
@@ -91,6 +114,12 @@ public final class BusinessAccount extends Account {
         return null;
     }
 
+
+    /**
+     * checks whether a user is employee or not
+     * @param email the email of the business associate
+     * @return true if the user is an employee and false otherwise
+     */
     public boolean isUserEmployee(final String email) {
         for (UserInfo userInfo : employees) {
             if (userInfo.getEmail().equals(email)) {
@@ -100,6 +129,12 @@ public final class BusinessAccount extends Account {
         return false;
     }
 
+
+    /**
+     * checks whether a user is manager or not
+     * @param email the email of the business associate
+     * @return true if the user is a manager and false otherwise
+     */
     public boolean isUserManager(final String email) {
         for (UserInfo userInfo : managers) {
             if (userInfo.getEmail().equals(email)) {
@@ -130,6 +165,11 @@ public final class BusinessAccount extends Account {
         throw new CardNotFoundException("");
     }
 
+
+    /**
+     * method of accepting the visitor
+     * @param visitor the interface of the possible visitor classes
+     */
     @Override
     public void accept(final Visitor visitor) {
         visitor.visit(this);

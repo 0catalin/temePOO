@@ -28,7 +28,8 @@ public final class CreateCard implements Command {
 
 
     /**
-     * if the account and users are found a card is created and added to the account's cards
+     * if the account and users are found an accountVisitor
+     * instance is created and visits the account
      */
     @Override
     public void execute() {

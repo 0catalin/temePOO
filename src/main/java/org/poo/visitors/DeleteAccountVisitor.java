@@ -9,6 +9,11 @@ import org.poo.bankPair.Bank;
 import org.poo.baseinput.User;
 import org.poo.visitors.reportVisitors.Visitor;
 
+
+
+/**
+ * visitor class designed to run different commands on different types of accounts
+ */
 public final class DeleteAccountVisitor implements Visitor {
 
     private final int timestamp;
@@ -21,6 +26,11 @@ public final class DeleteAccountVisitor implements Visitor {
     }
 
 
+    /**
+     * if the account and user are found it checks whether it has 0 balance,
+     * if it does, it is deleted and if not it is not deleted and it prints error
+     * @param account the classic account
+     */
     public void visit(final ClassicAccount account) {
         if (!account.isEmpty()) {
             deleteFailure();
@@ -42,7 +52,11 @@ public final class DeleteAccountVisitor implements Visitor {
     }
 
 
-
+    /**
+     * if the user has permissions to delete the account the business
+     * account is deleted
+     * @param account the business account
+     */
     public void visit(final BusinessAccount account) {
         if (!account.getEmailToCards().containsKey(user.getEmail())) {
             return;
@@ -55,7 +69,11 @@ public final class DeleteAccountVisitor implements Visitor {
     }
 
 
-
+    /**
+     * if the account and user are found it checks whether it has 0 balance,
+     * if it does, it is deleted and if not it is not deleted and it prints error
+     * @param account the classic account
+     */
     public void visit(final SavingsAccount account) {
         if (!account.isEmpty()) {
             deleteFailure();

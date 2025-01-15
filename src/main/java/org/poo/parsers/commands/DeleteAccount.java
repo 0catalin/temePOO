@@ -27,10 +27,8 @@ public final class DeleteAccount implements Command {
     }
 
 
-
     /**
-     * if the account and user are found it checks whether it has 0 balance,
-     * if it does, it is deleted and if not it is not deleted and it prints error
+     * method that instantiates a visitor which gets accepted by the account
      */
     @Override
     public void execute() {
@@ -40,23 +38,7 @@ public final class DeleteAccount implements Command {
 
             DeleteAccountVisitor visitor = new DeleteAccountVisitor(user, timestamp);
             account.accept(visitor);
-//            if (!account.isEmpty()) {
-//                deleteFailure();
-//                Bank.getInstance().getUserByIBAN(account.getIban())
-//                        .getTranzactions().add(deleteFundsRemaining());
-//                account.getReportsClassic().add(deleteFundsRemaining());
-//            } else if (user.getAccounts().contains(account)) {
-//                if (!user.getClassicAccounts().contains(account)) {
-//                    user.getAccounts().remove(account);
-//                    deleteSuccess();
-//                } else {
-//                    user.getClassicAccounts().remove(account);
-//                    user.getAccounts().remove(account);
-//                    deleteSuccess();
-//                }
-//            } else {
-//                deleteFailure();
-//            }
+
         } catch (AccountNotFoundException | UserNotFoundException e) {
             deleteFailure();
         }

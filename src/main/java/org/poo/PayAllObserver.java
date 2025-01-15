@@ -6,6 +6,11 @@ import org.poo.exceptions.UserNotFoundException;
 import java.util.HashMap;
 import java.util.List;
 
+
+
+/**
+ * class that monitors the user's acceptance of the split payments
+ */
 public final class PayAllObserver {
 
     private HashMap<String, Boolean> acceptMap;
@@ -19,7 +24,11 @@ public final class PayAllObserver {
     }
 
 
-
+    /**
+     * function that accepts the email and then checks if all the users have accepted
+     * @param email the email of the user
+     * @return true if all have accepted, else false
+     */
     public boolean update(final String email) {
         acceptValue(email);
         for (boolean accept : acceptMap.values()) {
@@ -32,6 +41,11 @@ public final class PayAllObserver {
 
 
     // daca userul are contul nu e suficient, trebuie si sa nu fie acceptat de dinainte
+
+    /**
+     * places true for the email (simulating an accept) in the hashmap
+     * @param email
+     */
     private void acceptValue(final String email) {
         for (String iban : acceptMap.keySet()) {
             try {
@@ -48,7 +62,12 @@ public final class PayAllObserver {
     }
 
 
-
+    /**
+     * function which checks if a user has accepted all his accounts
+     * to know if the accept is on the current instance or the next
+     * @param email the user email
+     * @return true he has previously accepted all and false otherwise
+     */
     public boolean hasAcceptedAllHisAccounts(final String email) {
         for (String iban : acceptMap.keySet()) {
             try {

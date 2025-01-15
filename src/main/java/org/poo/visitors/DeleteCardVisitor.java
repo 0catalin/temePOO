@@ -9,6 +9,11 @@ import org.poo.accounts.SavingsAccount;
 import org.poo.bankPair.Bank;
 import org.poo.visitors.reportVisitors.Visitor;
 
+
+
+/**
+ * visitor class designed to run different commands on different types of accounts
+ */
 public final class DeleteCardVisitor implements Visitor {
 
     private final String cardNumber;
@@ -23,12 +28,19 @@ public final class DeleteCardVisitor implements Visitor {
     }
 
 
+    /**
+     * runs method designed for both classic and savings
+     */
     public void visit(final ClassicAccount account) {
-        deleteAccountClassicOrSavings(account);
+        deleteCardClassicOrSavings(account);
     }
 
 
-
+    /**
+     * checks if the user has permissions and if he does it deletes the card
+     * else error or nothing happens
+     * @param account the business account
+     */
     public void visit(final BusinessAccount account) {
         if (!account.getEmailToCards().containsKey(email)) {
             return;
@@ -61,9 +73,11 @@ public final class DeleteCardVisitor implements Visitor {
     }
 
 
-
+    /**
+     * runs method designed for both classic and savings
+     */
     public void visit(final SavingsAccount account) {
-        deleteAccountClassicOrSavings(account);
+        deleteCardClassicOrSavings(account);
     }
 
 
@@ -79,7 +93,10 @@ public final class DeleteCardVisitor implements Visitor {
     }
 
 
-    private void deleteAccountClassicOrSavings(final Account account) {
+    /**
+     * deletes the card and adds to transactions
+     */
+    private void deleteCardClassicOrSavings(final Account account) {
         ChangeCardVisitor visitor = new ChangeCardVisitor();
         if (Bank.getInstance().getCardByCardNumber(cardNumber).accept(visitor)) {
             Bank.getInstance().getUserByIBAN(account.getIban())

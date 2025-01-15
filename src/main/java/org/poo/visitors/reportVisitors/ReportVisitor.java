@@ -62,7 +62,10 @@ public final class ReportVisitor implements Visitor {
         addToOutput(tranzactions, account);
     }
 
-
+    /**
+     * does nothing on a business account
+     * @param account business account
+     */
     public void visit(final BusinessAccount account) {
 
     }

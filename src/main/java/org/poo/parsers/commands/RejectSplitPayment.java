@@ -9,11 +9,18 @@ import org.poo.exceptions.UserNotFoundException;
 import org.poo.parsers.fileio.CommandInput;
 import org.poo.splitPayment.SplitPaymentInfo;
 
+
+
+/**
+ * class implementing the reject split payment command
+ */
 public final class RejectSplitPayment implements Command {
 
     private String email;
     private String splitPaymentType;
     private int timestamp;
+
+
 
     public RejectSplitPayment(final CommandInput commandInput) {
         email = commandInput.getEmail();
@@ -21,6 +28,11 @@ public final class RejectSplitPayment implements Command {
         timestamp = commandInput.getTimestamp();
     }
 
+
+    /**
+     * method that searches for the split payment, if it exists
+     * removes it and adds the failed transaction to all the users
+     */
     public void execute() {
         try {
             User user = Bank.getInstance().getUserByEmail(email);
@@ -40,7 +52,7 @@ public final class RejectSplitPayment implements Command {
     }
 
 
-    public ObjectNode userNotFound() {
+    private ObjectNode userNotFound() {
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode node = mapper.createObjectNode();
         node.put("command", "rejectSplitPayment");

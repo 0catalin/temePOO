@@ -13,9 +13,12 @@ import org.poo.parsers.fileio.CommandInput;
  */
 public final class ChangeInterestRate implements Command {
 
+
     private final String iban;
     private final int timestamp;
     private final double interestRate;
+
+
 
     public ChangeInterestRate(final CommandInput commandInput) {
         timestamp = commandInput.getTimestamp();

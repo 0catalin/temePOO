@@ -8,28 +8,50 @@ import org.poo.accounts.SavingsAccount;
 import org.poo.bankPair.Bank;
 import org.poo.visitors.reportVisitors.Visitor;
 
+
+/**
+ * visitor class designed to run different commands on different types of accounts
+ */
 public final class ChangeSpendingLimitVisitor implements Visitor {
 
     private final double amount;
     private final String email;
     private final int timestamp;
 
-    public ChangeSpendingLimitVisitor(final double amount, final String email, final int timestamp) {
+
+
+    public ChangeSpendingLimitVisitor(final double amount,
+                                      final String email, final int timestamp) {
         this.amount = amount;
         this.email = email;
         this.timestamp = timestamp;
     }
 
+
+    /**
+     * adds error to the output because it is a classic account
+     * @param account the classic account
+     */
     public void visit(final ClassicAccount account) {
         Bank.getInstance().getOutput().add(notBusinessAccount());
     }
 
 
+
+    /**
+     * adds error to the output because it is a savings account
+     * @param account the savings account
+     */
     public void visit(final SavingsAccount account) {
         Bank.getInstance().getOutput().add(notBusinessAccount());
     }
 
 
+
+    /**
+     * changes the business account field only if the email has permissions
+     * @param account the business account
+     */
     public void visit(final BusinessAccount account) {
         if (!account.getEmailToCards().containsKey(email)) {
             return;
@@ -41,6 +63,8 @@ public final class ChangeSpendingLimitVisitor implements Visitor {
             account.setSpendingLimit(amount);
         }
     }
+
+
 
     private ObjectNode lackOfPermissions() {
         ObjectMapper mapper = new ObjectMapper();
@@ -54,6 +78,8 @@ public final class ChangeSpendingLimitVisitor implements Visitor {
         node.put("timestamp", timestamp);
         return node;
     }
+
+
 
     private ObjectNode notBusinessAccount() {
         ObjectMapper mapper = new ObjectMapper();

@@ -3,7 +3,9 @@ package org.poo.strategies;
 import org.poo.accounts.Account;
 import org.poo.bankPair.Bank;
 
-
+/**
+ * class designed for the spending threshold cashback method
+ */
 public final class SpendingThresholdStrategy implements Strategy {
 
     private final Account account;
@@ -16,6 +18,9 @@ public final class SpendingThresholdStrategy implements Strategy {
     }
 
 
+    /**
+     * method which adds the amount spent so far to the variable storing it
+     */
     public void execute() {
         account.getDiscountInfo().setSpendingThreshold(account
                 .getDiscountInfo().getSpendingThreshold()

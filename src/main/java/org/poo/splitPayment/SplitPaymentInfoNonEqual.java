@@ -16,6 +16,11 @@ import java.util.Comparator;
 
 @Getter
 @Setter
+
+/**
+ * class which is supposed to store intomation about
+ * the non equal split payments
+ */
 public final class SplitPaymentInfoNonEqual extends SplitPaymentInfo {
 
     private final ArrayList<Double> amountsForUsers;
@@ -27,7 +32,11 @@ public final class SplitPaymentInfoNonEqual extends SplitPaymentInfo {
     }
 
 
-
+    /**
+     *  all the accounts, ibans and users are added into lists. the method
+     *  checks if the ibans are correct at first, if everything is okay
+     *  the accounts have transactions added and balances decreased
+     */
     @Override
     public void successfulPayment() {
         try {
@@ -50,6 +59,8 @@ public final class SplitPaymentInfoNonEqual extends SplitPaymentInfo {
                     break;
                 }
             }
+
+
             if (problemIban.isEmpty()) {
                 ObjectNode insertedNode = splitPayment();
 
@@ -64,6 +75,7 @@ public final class SplitPaymentInfoNonEqual extends SplitPaymentInfo {
                             .setBalance(accountList.get(i).getBalance()
                                     - amountsList.get(i));
                 }
+
             } else {
                 ObjectNode node = splitPayment();
 
@@ -110,7 +122,11 @@ public final class SplitPaymentInfoNonEqual extends SplitPaymentInfo {
     }
 
 
-
+    /**
+     * method that makes a node
+     * @return the rejection payment node
+     */
+    @Override
     public ObjectNode rejectNode() {
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode rejectNode = mapper.createObjectNode();
