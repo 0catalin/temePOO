@@ -7,19 +7,16 @@ import org.poo.SpendingUserInfo;
 import org.poo.UserInfo;
 import org.poo.accounts.cards.Card;
 import org.poo.bankPair.Bank;
-import org.poo.baseinput.User;
 import org.poo.exceptions.CardNotFoundException;
-import org.poo.exceptions.UserNotFoundException;
 import org.poo.visitors.reportVisitors.Visitor;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.HashMap;
 
 
 @Getter
 @Setter
-public class BusinessAccount extends Account {
+public final class BusinessAccount extends Account {
     private HashMap<String, ArrayList<Card>> emailToCards;
     private RoleBasedAccessControl rbac;
     private double depositLimit;
@@ -28,15 +25,18 @@ public class BusinessAccount extends Account {
     private ArrayList<UserInfo> managers;
     private ArrayList<SpendingUserInfo> spendingUserInfos;
 
+    private static final double LIMIT_RON = 500.0;
+    private static final double INFINITE = 999999999;
 
 
-    public BusinessAccount(String ownerEmail, String currency) {
+
+    public BusinessAccount(final String ownerEmail, final String currency) {
         super(currency);
         emailToCards = new HashMap<String, ArrayList<Card>>();
         emailToCards.put(ownerEmail, new ArrayList<>());
         rbac = new RoleBasedAccessControl(ownerEmail);
-        depositLimit = Bank.getInstance().findExchangeRate("RON", getCurrency()) * 500.0;
-        spendingLimit = Bank.getInstance().findExchangeRate("RON", getCurrency()) * 500.0;
+        depositLimit = Bank.getInstance().findExchangeRate("RON", getCurrency()) * LIMIT_RON;
+        spendingLimit = Bank.getInstance().findExchangeRate("RON", getCurrency()) * LIMIT_RON;
         managers = new ArrayList<UserInfo>();
         employees = new ArrayList<UserInfo>();
         spendingUserInfos = new ArrayList<SpendingUserInfo>();
@@ -45,27 +45,29 @@ public class BusinessAccount extends Account {
 
     }
 
-    public double getSpendingLimit(String userEmail) {
-        if (Bank.getInstance().getUserByEmail(userEmail).getAccounts().contains(this) || rbac.getEmailToRoleMap().get(userEmail).equals("manager")) { // de modificat astea 2 cu manager, faci cu permisiuni
-            return 999999999;
+    public double getSpendingLimit(final String userEmail) {
+        if (Bank.getInstance().getUserByEmail(userEmail).getAccounts().contains(this)
+                || rbac.getEmailToRoleMap().get(userEmail).equals("manager")) {
+            return INFINITE;
         }
         return spendingLimit;
     }
 
-    public double getDepositLimit(String userEmail) {
-        if (Bank.getInstance().getUserByEmail(userEmail).getAccounts().contains(this) || rbac.getEmailToRoleMap().get(userEmail).equals("manager")) {
-            return 999999999;
+    public double getDepositLimit(final String userEmail) {
+        if (Bank.getInstance().getUserByEmail(userEmail).getAccounts().contains(this)
+                || rbac.getEmailToRoleMap().get(userEmail).equals("manager")) {
+            return INFINITE;
         }
         return depositLimit;
     }
 
-    public void addNewBusinessAssociate(String email, String role) {
+    public void addNewBusinessAssociate(final String email, final String role) {
         if (emailToCards.containsKey(email)) {
-            System.out.println("THE EMAIL HAS ALREADY BEEN ADDED! DO NOT READD!");
+            return;
         } else {
             emailToCards.put(email, new ArrayList<>());
             rbac.addEmail(email, role);
-            if(role.equals("employee")) {
+            if (role.equals("employee")) {
                 employees.add(new UserInfo(email));
             } else if (role.equals("manager")) {
                 managers.add(new UserInfo(email));
@@ -75,7 +77,7 @@ public class BusinessAccount extends Account {
     }
 
 
-    public String getNameByEmail(String email) {
+    public String getNameByEmail(final String email) {
         for (UserInfo userInfo : employees) {
             if (userInfo.getEmail().equals(email)) {
                 return userInfo.getUsername();
@@ -89,7 +91,7 @@ public class BusinessAccount extends Account {
         return null;
     }
 
-    public boolean isUserEmployee(String email) {
+    public boolean isUserEmployee(final String email) {
         for (UserInfo userInfo : employees) {
             if (userInfo.getEmail().equals(email)) {
                 return true;
@@ -98,7 +100,7 @@ public class BusinessAccount extends Account {
         return false;
     }
 
-    public boolean isUserManager(String email) {
+    public boolean isUserManager(final String email) {
         for (UserInfo userInfo : managers) {
             if (userInfo.getEmail().equals(email)) {
                 return true;
@@ -129,7 +131,7 @@ public class BusinessAccount extends Account {
     }
 
     @Override
-    public void accept(Visitor visitor) {
+    public void accept(final Visitor visitor) {
         visitor.visit(this);
     }
 }

@@ -1,12 +1,8 @@
 package org.poo.parsers.commands;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.poo.bankPair.Bank;
 import org.poo.accounts.Account;
 import org.poo.baseinput.User;
-import org.poo.accounts.cards.Card;
-import org.poo.accounts.cards.RegularCard;
 import org.poo.exceptions.AccountNotFoundException;
 import org.poo.exceptions.UserNotFoundException;
 import org.poo.parsers.fileio.CommandInput;
@@ -40,15 +36,8 @@ public final class CreateCard implements Command {
 
             Account account = Bank.getInstance().getAccountByIBAN(iban);
             User user = Bank.getInstance().getUserByEmail(email);
-
-            CreateCardVisitor visitor = new CreateCardVisitor(email, timestamp, user, iban);
+            CreateCardVisitor visitor = new CreateCardVisitor(email, timestamp, iban);
             account.accept(visitor);
-                //Card card = new RegularCard();
-                //account.getCards().add(card);
-//                user.getTranzactions().add(addToUsersTranzactions(card));
-//                Bank.getInstance().getAccountByIBAN(iban)
-//                        .getReportsClassic().add(addToUsersTranzactions(card));
-
 
         } catch (AccountNotFoundException | UserNotFoundException ignored) {
 

@@ -8,14 +8,14 @@ import org.poo.baseinput.User;
 import org.poo.exceptions.UserNotFoundException;
 import org.poo.parsers.fileio.CommandInput;
 
-public class AddBusinessAccount implements Command {
+public final class AddBusinessAccount implements Command {
 
 
     private String email;
     private String currency;
     private int timestamp;
 
-    public AddBusinessAccount(CommandInput commandInput) {
+    public AddBusinessAccount(final CommandInput commandInput) {
         email = commandInput.getEmail();
         currency = commandInput.getCurrency();
         timestamp = commandInput.getTimestamp();

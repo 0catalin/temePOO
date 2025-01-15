@@ -1,19 +1,18 @@
 package org.poo.parsers.commands;
 
 import org.poo.accounts.Account;
-import org.poo.accounts.BusinessAccount;
 import org.poo.bankPair.Bank;
 import org.poo.parsers.fileio.CommandInput;
 import org.poo.visitors.ChangeSpendingLimitVisitor;
 
-public class ChangeSpendingLimit implements Command {
+public final class ChangeSpendingLimit implements Command {
 
     private int timestamp;
     private double amount;
     private String iban;
     private String email;
 
-    public ChangeSpendingLimit(CommandInput commandInput) {
+    public ChangeSpendingLimit(final CommandInput commandInput) {
         timestamp = commandInput.getTimestamp();
         amount = commandInput.getAmount();
         iban = commandInput.getAccount();
@@ -22,7 +21,8 @@ public class ChangeSpendingLimit implements Command {
 
     public void execute() {
         Account account = Bank.getInstance().getAccountByIBAN(iban);
-        ChangeSpendingLimitVisitor visitor = new ChangeSpendingLimitVisitor(amount, email, timestamp);
+        ChangeSpendingLimitVisitor visitor
+                = new ChangeSpendingLimitVisitor(amount, email, timestamp);
         account.accept(visitor);
     }
 }

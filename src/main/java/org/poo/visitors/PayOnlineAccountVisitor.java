@@ -2,7 +2,6 @@ package org.poo.visitors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.poo.SpendingUserInfo;
 import org.poo.SpendingUserInfoBuilder;
 import org.poo.accounts.Account;
 import org.poo.accounts.BusinessAccount;
@@ -11,12 +10,11 @@ import org.poo.accounts.SavingsAccount;
 import org.poo.accounts.cards.Card;
 import org.poo.bankPair.Bank;
 import org.poo.baseinput.User;
-import org.poo.parsers.commands.PayOnline;
 import org.poo.strategies.Strategy;
 import org.poo.strategies.StrategyFactory;
 import org.poo.visitors.reportVisitors.Visitor;
 
-public class PayOnlineAccountVisitor implements Visitor {
+public final class PayOnlineAccountVisitor implements Visitor {
 
     private final String cardNumber;
     private double amount;
@@ -26,7 +24,9 @@ public class PayOnlineAccountVisitor implements Visitor {
     private final String email;
 
 
-    public PayOnlineAccountVisitor(String cardNumber, double amount, int timestamp, String currency, String commerciant, String email) {
+    public PayOnlineAccountVisitor(final String cardNumber, final double amount,
+                                   final int timestamp, final String currency,
+                                   final String commerciant, final String email) {
         this.cardNumber = cardNumber;
         this.amount = amount;
         this.timestamp = timestamp;
@@ -35,13 +35,13 @@ public class PayOnlineAccountVisitor implements Visitor {
         this.email = email;
     }
 
-    public void visit(ClassicAccount account) {
+    public void visit(final ClassicAccount account) {
         payOnlineSavingsOrClassic(account);
     }
 
 
 
-    public void visit(BusinessAccount account) {
+    public void visit(final BusinessAccount account) {
         Card card = Bank.getInstance().getCardByCardNumber(cardNumber);
         User user = Bank.getInstance().getUserByEmail(email);
         User ownerUser = Bank.getInstance().getUserByAccount(account);
@@ -50,31 +50,44 @@ public class PayOnlineAccountVisitor implements Visitor {
         double paymentAmount = amount * Bank.getInstance()
                 .findExchangeRate(currency, account.getCurrency());
         amount = paymentAmount;
-        //double initialBalance = account.getBalance();
 
 
 
         if (!account.getEmailToCards().containsKey(email)) {
             cardNotFound();
         } else if (account.getBalance() != 0) {
-            if (account.getBalance() - account.getMinBalance() < paymentAmount * ownerUser.getPlanMultiplier(paymentAmount * Bank.getInstance().findExchangeRate(account.getCurrency(), "RON"))) {
-
+            if (account.getBalance() - account.getMinBalance() < paymentAmount
+                    * ownerUser.getPlanMultiplier(paymentAmount * Bank.getInstance()
+                    .findExchangeRate(account.getCurrency(), "RON"))) {
+                return;
             } else {
-                if (account.getSpendingLimit(email) > paymentAmount * ownerUser.getPlanMultiplier(paymentAmount * Bank.getInstance().findExchangeRate(account.getCurrency(), "RON"))) {
-                    cashback += account.getTransactionCashback(Bank.getInstance().getCommerciantByName(commerciant)) * paymentAmount;
-                    paymentAmount *= ownerUser.getPlanMultiplier(paymentAmount * Bank.getInstance().findExchangeRate(account.getCurrency(), "RON"));
+                if (account.getSpendingLimit(email) > paymentAmount
+                        * ownerUser.getPlanMultiplier(paymentAmount
+                        * Bank.getInstance().findExchangeRate(account.getCurrency(), "RON"))) {
+                    cashback += account.getTransactionCashback(Bank.getInstance()
+                            .getCommerciantByName(commerciant)) * paymentAmount;
+                    paymentAmount *= ownerUser.getPlanMultiplier(paymentAmount
+                            * Bank.getInstance().findExchangeRate(account.getCurrency(), "RON"));
                     PayOnlineVisitor visitor = new PayOnlineVisitor(paymentAmount, timestamp,
-                            commerciant, account, amount); // asta pusa cu 2 randuri mai sus
-                    if (card.accept(visitor)) { // si asta, ultimele 4 se intampla doar daca returneaza True acceptul
-                        Strategy strategy = StrategyFactory.createStrategy(Bank.getInstance().getCommerciantByName(commerciant), account, paymentAmount);
+                            commerciant, account, amount);
+                    if (card.accept(visitor)) {
+                        Strategy strategy = StrategyFactory.createStrategy(Bank.getInstance()
+                                .getCommerciantByName(commerciant), account, paymentAmount);
                         strategy.execute();
-                        cashback += account.getSpendingCashBack(Bank.getInstance().getCommerciantByName(commerciant), ownerUser.getServicePlan()) * amount;
+                        cashback += account.getSpendingCashBack(Bank.getInstance()
+                                .getCommerciantByName(commerciant),
+                                ownerUser.getServicePlan()) * amount;
                         account.setBalance(account.getBalance() + cashback);
-                        account.getSpendingUserInfos().add(new SpendingUserInfoBuilder(email, timestamp).spent(amount).commerciant(commerciant).build());
-                        user.checkFivePayments(amount * Bank.getInstance().findExchangeRate(account.getCurrency(), "RON"), account.getIban(), timestamp);
+                        account.getSpendingUserInfos().add(
+                                new SpendingUserInfoBuilder(email, timestamp)
+                                .spent(amount).commerciant(commerciant).build());
+                        user.checkFivePayments(amount * Bank.getInstance()
+                                .findExchangeRate(account.getCurrency(), "RON"),
+                                account.getIban(), timestamp);
                     }
                 } else {
                     // this is for when it is above the spending limit
+                    return;
                 }
             }
 
@@ -85,7 +98,7 @@ public class PayOnlineAccountVisitor implements Visitor {
 
 
 
-    public void visit(SavingsAccount account) {
+    public void visit(final SavingsAccount account) {
         payOnlineSavingsOrClassic(account);
     }
 
@@ -109,7 +122,7 @@ public class PayOnlineAccountVisitor implements Visitor {
         Bank.getInstance().getOutput().add(finalNode);
     }
 
-    private void payOnlineSavingsOrClassic(Account account) {
+    private void payOnlineSavingsOrClassic(final Account account) {
         Card card = Bank.getInstance().getCardByCardNumber(cardNumber);
         User user = Bank.getInstance().getUserByEmail(email);
         double cashback = 0;
@@ -119,20 +132,27 @@ public class PayOnlineAccountVisitor implements Visitor {
         if (!user.getAccounts().contains(account)) {
             cardNotFound();
         } else if (account.getBalance() != 0) {
-            if (account.getBalance() < paymentAmount * user.getPlanMultiplier(paymentAmount * Bank.getInstance().findExchangeRate(account.getCurrency(), "RON"))) {
+            if (account.getBalance() < paymentAmount * user.getPlanMultiplier(paymentAmount
+                    * Bank.getInstance().findExchangeRate(account.getCurrency(), "RON"))) {
                 user.getTranzactions().add(insufficientFunds());
                 account.getReportsClassic().add(insufficientFunds());
             } else { // TODO MIGHT NEED TO ADD THE CASE WHERE THE BAL IS GREATER THAN MINBAL
-                cashback += account.getTransactionCashback(Bank.getInstance().getCommerciantByName(commerciant)) * paymentAmount;
-                paymentAmount *= user.getPlanMultiplier(paymentAmount * Bank.getInstance().findExchangeRate(account.getCurrency(), "RON"));
+                cashback += account.getTransactionCashback(Bank.getInstance()
+                        .getCommerciantByName(commerciant)) * paymentAmount;
+                paymentAmount *= user.getPlanMultiplier(paymentAmount
+                        * Bank.getInstance().findExchangeRate(account.getCurrency(), "RON"));
                 PayOnlineVisitor visitor = new PayOnlineVisitor(paymentAmount, timestamp,
                         commerciant, account, amount); // asta pusa cu 2 randuri mai sus
-                if (card.accept(visitor)) { // si asta, ultimele 4 se intampla doar daca returneaza True acceptul
-                    Strategy strategy = StrategyFactory.createStrategy(Bank.getInstance().getCommerciantByName(commerciant), account, paymentAmount);
+                if (card.accept(visitor)) {
+                    Strategy strategy = StrategyFactory.createStrategy(Bank.getInstance()
+                            .getCommerciantByName(commerciant), account, paymentAmount);
                     strategy.execute();
-                    cashback += account.getSpendingCashBack(Bank.getInstance().getCommerciantByName(commerciant), user.getServicePlan()) * amount;
+                    cashback += account.getSpendingCashBack(Bank.getInstance()
+                            .getCommerciantByName(commerciant), user.getServicePlan()) * amount;
                     account.setBalance(account.getBalance() + cashback);
-                    user.checkFivePayments(amount * Bank.getInstance().findExchangeRate(account.getCurrency(), "RON"), account.getIban(), timestamp);
+                    user.checkFivePayments(amount * Bank.getInstance()
+                            .findExchangeRate(account.getCurrency(), "RON"),
+                            account.getIban(), timestamp);
                 }
             }
         }

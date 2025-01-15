@@ -9,14 +9,14 @@ import org.poo.exceptions.UserNotFoundException;
 import org.poo.parsers.fileio.CommandInput;
 import org.poo.splitPayment.SplitPaymentInfo;
 
-public class AcceptSplitPayment implements Command {
+public final class AcceptSplitPayment implements Command {
 
     private String email;
     private String splitPaymentType;
     private int timestamp;
 
 
-    public AcceptSplitPayment(CommandInput commandInput) {
+    public AcceptSplitPayment(final CommandInput commandInput) {
         email = commandInput.getEmail();
         splitPaymentType = commandInput.getSplitPaymentType();
         timestamp = commandInput.getTimestamp();
@@ -26,7 +26,8 @@ public class AcceptSplitPayment implements Command {
     public void execute() {
         try {
             User user = Bank.getInstance().getUserByEmail(email);
-            SplitPaymentInfo splitPaymentInfo = Bank.getInstance().getSplitPaymentByTypeAndEmail(email, splitPaymentType);
+            SplitPaymentInfo splitPaymentInfo
+                    = Bank.getInstance().getSplitPaymentByTypeAndEmail(email, splitPaymentType);
             if (splitPaymentInfo.getObserver().update(email)) {
                 Bank.getInstance().getSplitPayments().remove(splitPaymentInfo);
                 splitPaymentInfo.successfulPayment();

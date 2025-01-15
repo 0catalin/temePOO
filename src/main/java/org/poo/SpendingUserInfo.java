@@ -5,16 +5,18 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class SpendingUserInfo {
+public final class SpendingUserInfo {
 
-    private double deposited;
-    private double spent;
-    private String email;
-    private int timestamp;
-    private String commerciant;
+    private final double deposited;
+    private final double spent;
+    private final String email;
+    private final int timestamp;
+    private final String commerciant;
 
 
-    public SpendingUserInfo(double deposited, double spent, String email, int timestamp, String commerciant) {
+    public SpendingUserInfo(final double deposited,
+                            final double spent, final String email,
+                            final int timestamp, final String commerciant) {
         this.deposited = deposited;
         this.spent = spent;
         this.email = email;

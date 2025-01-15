@@ -32,9 +32,10 @@ public final class AddInterest implements Command {
         try {
             Account account = Bank.getInstance().getAccountByIBAN(iban);
             if (account.getType().equals("savings")) {
-                double interestRate = ((SavingsAccount)account).getInterestRate();
+                double interestRate = ((SavingsAccount) account).getInterestRate();
                 double interest = account.getBalance() * interestRate;
-                Bank.getInstance().getUserByAccount(account).getTranzactions().add(addInterestRateSuccess(interest));
+                Bank.getInstance().getUserByAccount(account)
+                        .getTranzactions().add(addInterestRateSuccess(interest));
                 account.setBalance(account.getBalance()
                         * (1 + interestRate));
                 account.getReportsSavings().add(addInterestRateSuccess(interest));
@@ -62,7 +63,7 @@ public final class AddInterest implements Command {
         return node;
     }
 
-    private ObjectNode addInterestRateSuccess(double amount) {
+    private ObjectNode addInterestRateSuccess(final double amount) {
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode node = mapper.createObjectNode();
         node.put("amount", amount);

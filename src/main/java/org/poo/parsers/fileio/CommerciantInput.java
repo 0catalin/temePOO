@@ -3,7 +3,6 @@ package org.poo.parsers.fileio;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
 
 @Data
 @NoArgsConstructor

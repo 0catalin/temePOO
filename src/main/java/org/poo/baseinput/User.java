@@ -32,6 +32,14 @@ public final class User {
     private ArrayList<Account> classicAccounts;
     private int numberOfPaymentsForGold;
 
+    private static final double STANDARD_TAX = 1.002;
+    private static final double SILVER_TAX = 1.001;
+    private static final double SILVER_TAX_LIMIT = 500.0;
+    private static final int MINIMUM_AGE = 21;
+    private static final double FIVE_PAYMENTS_LIMIT = 300.0;
+    private static final double TOTAL_PAYMENTS_LIMIT = 5;
+
+
     public User(final UserInput userInput) {
         firstName = userInput.getFirstName();
         lastName = userInput.getLastName();
@@ -55,20 +63,16 @@ public final class User {
     }
 
 
-    public double getPlanMultiplier (double amount) {
+    public double getPlanMultiplier(final double amount) {
         if (servicePlan.equals("student") || servicePlan.equals("gold")) {
             return 1;
         } else if (servicePlan.equals("standard")) {
-            return 1.002;
-        } else if (servicePlan.equals("silver")) {
-            if (amount < 500) {
-                return 1;
-            } else {
-                return 1.001;
-            }
+            return STANDARD_TAX;
+        } else if (amount < SILVER_TAX_LIMIT) {
+            return 1;
+        } else {
+            return SILVER_TAX;
         }
-        return 10000;
-
     }
 
     public boolean isUserOldEnough() {
@@ -83,9 +87,9 @@ public final class User {
         int currentDay = calendar.get(java.util.Calendar.DAY_OF_MONTH);
 
 
-        if (currentYear - birthYear > 21) {
+        if (currentYear - birthYear > MINIMUM_AGE) {
             return true;
-        } else if (currentYear - birthYear < 21) {
+        } else if (currentYear - birthYear < MINIMUM_AGE) {
             return false;
         }
 
@@ -105,18 +109,18 @@ public final class User {
     }
 
 
-    public void checkFivePayments(double amount, String iban, int timestamp) {
-        if (servicePlan.equals("silver") && amount >= 300) {
+    public void checkFivePayments(final double amount, final String iban, final int timestamp) {
+        if (servicePlan.equals("silver") && amount >= FIVE_PAYMENTS_LIMIT) {
             numberOfPaymentsForGold++;
         }
-        if (numberOfPaymentsForGold == 5) {
+        if (numberOfPaymentsForGold == TOTAL_PAYMENTS_LIMIT) {
             numberOfPaymentsForGold++;
             servicePlan = "gold";
             tranzactions.add(addGoldUpgrade(iban, timestamp));
         }
     }
 
-    private ObjectNode addGoldUpgrade(String iban, int timestamp) {
+    private ObjectNode addGoldUpgrade(final String iban, final int timestamp) {
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode output = mapper.createObjectNode();
         output.put("timestamp", timestamp);
@@ -126,7 +130,7 @@ public final class User {
         return output;
     }
 
-    public Card getCardByCardNumber(String cardNumber) {
+    public Card getCardByCardNumber(final String cardNumber) {
         for (Account account : accounts) {
             for (Card card : account.getCards()) {
                 if (card.getCardNumber().equals(cardNumber)) {

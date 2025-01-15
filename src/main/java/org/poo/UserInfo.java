@@ -9,10 +9,11 @@ import org.poo.baseinput.User;
 @Getter
 @Setter
 public class UserInfo {
+
     private String username;
     private String email;
 
-    public UserInfo(String email) {
+    public UserInfo(final String email) {
         this.email = email;
         User user = Bank.getInstance().getUserByEmail(email);
         username = user.getLastName() + " " + user.getFirstName();

@@ -10,23 +10,25 @@ import java.util.HashMap;
 
 @Getter
 @Setter
-public class RoleBasedAccessControl {
-    ArrayList<String> typesOfUsers;
-    HashMap<String, ArrayList<String>> roleToPermissions;
-    HashMap<String, String> emailToRoleMap;
+public final class RoleBasedAccessControl {
+    private final ArrayList<String> typesOfUsers;
+    private final HashMap<String, ArrayList<String>> roleToPermissions;
+    private final HashMap<String, String> emailToRoleMap;
 
 
 
-    public RoleBasedAccessControl(String ownerEmail) {
+    public RoleBasedAccessControl(final String ownerEmail) {
         typesOfUsers = new ArrayList<String>();
         typesOfUsers.addAll(Arrays.asList("owner", "manager", "employee"));
         roleToPermissions = new HashMap<String, ArrayList<String>>();
-        ArrayList<String> ownerPermissions = new ArrayList<>();
-        ArrayList<String> managerPermissions = new ArrayList<>();
-        ArrayList<String> employeePermissions = new ArrayList<>();
-        ownerPermissions.addAll(Arrays.asList("setAlias", "deleteOwnCard", "addFunds", "cardPayment",
+        ArrayList<String> ownerPermissions = new ArrayList<String>();
+        ArrayList<String> managerPermissions = new ArrayList<String>();
+        ArrayList<String> employeePermissions = new ArrayList<String>();
+        ownerPermissions.addAll(Arrays.asList("setAlias", "deleteOwnCard",
+                "addFunds", "cardPayment",
                 "bankTransfer", "createCard", "deleteAnyCard",
-                "addNewBusinessAssociate", "changeSpendingLimit", "changeDepositLimit", "deleteAccount"));
+                "addNewBusinessAssociate", "changeSpendingLimit",
+                "changeDepositLimit", "deleteAccount"));
         managerPermissions.addAll(Arrays.asList("addFunds", "cardPayment",
                 "bankTransfer", "createCard", "deleteAnyCard", "deleteOwnCard"));
         employeePermissions.addAll(Arrays.asList("createCard", "deleteOwnCard",
@@ -41,12 +43,11 @@ public class RoleBasedAccessControl {
     }
 
 
-    public void addEmail(String email, String typeOfUser) {
+    public void addEmail(final String email, final String typeOfUser) {
         emailToRoleMap.put(email, typeOfUser);
     }
 
-    public boolean hasPermissions(String email, String permission) {
+    public boolean hasPermissions(final String email, final String permission) {
         return roleToPermissions.get(emailToRoleMap.get(email)).contains(permission);
-        // TODO maybe create and add own exception here
     }
 }

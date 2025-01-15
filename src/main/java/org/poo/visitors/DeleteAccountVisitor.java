@@ -9,17 +9,19 @@ import org.poo.bankPair.Bank;
 import org.poo.baseinput.User;
 import org.poo.visitors.reportVisitors.Visitor;
 
-public class DeleteAccountVisitor implements Visitor {
-    private int timestamp;
-    private User user;
+public final class DeleteAccountVisitor implements Visitor {
 
-    public DeleteAccountVisitor(User user, int timestamp) {
+    private final int timestamp;
+    private final User user;
+
+
+    public DeleteAccountVisitor(final User user, final int timestamp) {
         this.user = user;
         this.timestamp = timestamp;
     }
 
 
-    public void visit(ClassicAccount account) {
+    public void visit(final ClassicAccount account) {
         if (!account.isEmpty()) {
             deleteFailure();
             Bank.getInstance().getUserByIBAN(account.getIban())
@@ -41,11 +43,11 @@ public class DeleteAccountVisitor implements Visitor {
 
 
 
-    public void visit(BusinessAccount account) {
+    public void visit(final BusinessAccount account) {
         if (!account.getEmailToCards().containsKey(user.getEmail())) {
-
+            return;
         } else if (!account.getRbac().hasPermissions(user.getEmail(), "deleteAccount")) {
-
+            return;
         } else {
             deleteSuccess();
             user.getAccounts().remove(account);
@@ -54,7 +56,7 @@ public class DeleteAccountVisitor implements Visitor {
 
 
 
-    public void visit(SavingsAccount account) {
+    public void visit(final SavingsAccount account) {
         if (!account.isEmpty()) {
             deleteFailure();
             Bank.getInstance().getUserByIBAN(account.getIban())

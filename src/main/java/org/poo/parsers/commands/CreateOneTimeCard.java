@@ -1,16 +1,12 @@
 package org.poo.parsers.commands;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import org.poo.bankPair.Bank;
 import org.poo.accounts.Account;
 import org.poo.baseinput.User;
-import org.poo.accounts.cards.Card;
-import org.poo.accounts.cards.OneTimeCard;
 import org.poo.exceptions.AccountNotFoundException;
 import org.poo.exceptions.UserNotFoundException;
 import org.poo.parsers.fileio.CommandInput;
-import org.poo.visitors.CreateCardVisitor;
 import org.poo.visitors.CreateOneTimeCardVisitor;
 
 /**
@@ -40,15 +36,9 @@ public final class CreateOneTimeCard implements Command {
         try {
             Account account = Bank.getInstance().getAccountByIBAN(iban);
             User user = Bank.getInstance().getUserByEmail(email);
-
-            CreateOneTimeCardVisitor visitor = new CreateOneTimeCardVisitor(email, timestamp, user, iban);
+            CreateOneTimeCardVisitor visitor
+                    = new CreateOneTimeCardVisitor(email, timestamp, iban);
             account.accept(visitor);
-//                Card oneTimeCard = new OneTimeCard();
-//                user.getTranzactions().add(addToUsersTranzactions(oneTimeCard));
-//                Bank.getInstance().getAccountByIBAN(iban)
-//                        .getReportsClassic().add(addToUsersTranzactions(oneTimeCard));
-//                account.getCards().add(oneTimeCard);
-
         } catch (AccountNotFoundException | UserNotFoundException ignored) {
 
         }

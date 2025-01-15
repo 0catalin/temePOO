@@ -12,42 +12,38 @@ import org.poo.bankPair.Bank;
 import org.poo.baseinput.User;
 import org.poo.visitors.reportVisitors.Visitor;
 
-public class CreateCardVisitor implements Visitor {
+public final class CreateCardVisitor implements Visitor {
 
-    private String email;
-    private int timestamp;
-    private User user;
-    private String iban;
+    private final String email;
+    private final int timestamp;
+    private final String iban;
 
 
-    public CreateCardVisitor(String email, int timestamp, User user, String iban) {
+    public CreateCardVisitor(final String email, final int timestamp, final String iban) {
         this.email = email;
         this.timestamp = timestamp;
-        this.user = user;
         this.iban = iban;
     }
 
 
-    public void visit(ClassicAccount account) {
+    public void visit(final ClassicAccount account) {
         createCardSavingsOrClassic(account);
     }
 
 
 
-    public void visit(BusinessAccount account) {
+    public void visit(final BusinessAccount account) {
         Card card = new RegularCard();
         if (account.getEmailToCards().containsKey(email)) {
             account.getEmailToCards().get(email).add(card);
             account.getCards().add(card);
-        } else {
-
         }
 
     }
 
 
 
-    public void visit(SavingsAccount account) {
+    public void visit(final SavingsAccount account) {
         createCardSavingsOrClassic(account);
     }
 
@@ -64,7 +60,7 @@ public class CreateCardVisitor implements Visitor {
     }
 
 
-    private void createCardSavingsOrClassic(Account account) {
+    private void createCardSavingsOrClassic(final Account account) {
         User user = Bank.getInstance().getUserByEmail(email);
         if (user.getAccounts().contains(account)) {
             Card card = new RegularCard();

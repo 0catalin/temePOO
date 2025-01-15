@@ -8,35 +8,35 @@ import org.poo.accounts.SavingsAccount;
 import org.poo.bankPair.Bank;
 import org.poo.visitors.reportVisitors.Visitor;
 
-public class ChangeSpendingLimitVisitor implements Visitor {
+public final class ChangeSpendingLimitVisitor implements Visitor {
 
-    private double amount;
-    private String email;
-    private int timestamp;
+    private final double amount;
+    private final String email;
+    private final int timestamp;
 
-    public ChangeSpendingLimitVisitor(double amount, String email, int timestamp) {
+    public ChangeSpendingLimitVisitor(final double amount, final String email, final int timestamp) {
         this.amount = amount;
         this.email = email;
         this.timestamp = timestamp;
     }
 
-    public void visit(ClassicAccount account) {
+    public void visit(final ClassicAccount account) {
         Bank.getInstance().getOutput().add(notBusinessAccount());
     }
 
 
-    public void visit(SavingsAccount account) {
+    public void visit(final SavingsAccount account) {
         Bank.getInstance().getOutput().add(notBusinessAccount());
     }
 
 
-    public void visit(BusinessAccount account) {
+    public void visit(final BusinessAccount account) {
         if (!account.getEmailToCards().containsKey(email)) {
-
+            return;
         } else if (!account.getRbac().hasPermissions(email, "changeSpendingLimit")) {
             Bank.getInstance().getOutput().add(lackOfPermissions());
         } else if (amount < 0) {
-
+            return;
         } else {
             account.setSpendingLimit(amount);
         }
@@ -47,7 +47,8 @@ public class ChangeSpendingLimitVisitor implements Visitor {
         ObjectNode node = mapper.createObjectNode();
         node.put("command", "changeSpendingLimit");
         ObjectNode outputNode = mapper.createObjectNode();
-        outputNode.put("description", "You must be owner in order to change spending limit.");
+        outputNode.put("description",
+                "You must be owner in order to change spending limit.");
         outputNode.put("timestamp", timestamp);
         node.set("output", outputNode);
         node.put("timestamp", timestamp);

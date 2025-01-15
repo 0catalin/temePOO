@@ -6,44 +6,43 @@ import org.poo.accounts.Account;
 import org.poo.accounts.BusinessAccount;
 import org.poo.accounts.ClassicAccount;
 import org.poo.accounts.SavingsAccount;
-import org.poo.accounts.cards.OneTimeCard;
 import org.poo.bankPair.Bank;
 import org.poo.visitors.reportVisitors.Visitor;
 
-public class DeleteCardVisitor implements Visitor {
+public final class DeleteCardVisitor implements Visitor {
 
-    private String cardNumber;
-    private int timestamp;
-    private String email;
+    private final String cardNumber;
+    private final int timestamp;
+    private final String email;
 
 
-    public DeleteCardVisitor(String cardNumber, int timestamp, String email) {
+    public DeleteCardVisitor(final String cardNumber, final int timestamp, final String email) {
           this.cardNumber = cardNumber;
           this.timestamp = timestamp;
           this.email = email;
     }
 
 
-    public void visit(ClassicAccount account) {
+    public void visit(final ClassicAccount account) {
         deleteAccountClassicOrSavings(account);
     }
 
 
 
-    public void visit(BusinessAccount account) {
+    public void visit(final BusinessAccount account) {
         if (!account.getEmailToCards().containsKey(email)) {
-
-        } else if (!account.getEmailToCards().get(email).contains(account.getCardByCardNumber(cardNumber))) {
-            // card was not created by the user
+            return;
+        } else if (!account.getEmailToCards().get(email).contains(
+                account.getCardByCardNumber(cardNumber))) {
             if (!account.getRbac().hasPermissions(email, "deleteAnyCard")) {
                 ChangeCardVisitor visitor = new ChangeCardVisitor();
                 if (Bank.getInstance().getCardByCardNumber(cardNumber).accept(visitor)) {
                     account.getCards().remove(account.getCardByCardNumber(cardNumber));
-                    account.getEmailToCards().get(email).remove(account.getCardByCardNumber(cardNumber));
+                    account.getEmailToCards().get(email).remove(
+                            account.getCardByCardNumber(cardNumber));
                 }
-
             } else {
-
+                return;
             }
 
         } else {
@@ -52,22 +51,23 @@ public class DeleteCardVisitor implements Visitor {
                 ChangeCardVisitor visitor = new ChangeCardVisitor();
                 if (Bank.getInstance().getCardByCardNumber(cardNumber).accept(visitor)) {
                     account.getCards().remove(account.getCardByCardNumber(cardNumber));
-                    account.getEmailToCards().get(email).remove(account.getCardByCardNumber(cardNumber));
+                    account.getEmailToCards().get(email).remove(
+                            account.getCardByCardNumber(cardNumber));
                 }
             } else {
-
+                return;
             }
         }
     }
 
 
 
-    public void visit(SavingsAccount account) {
+    public void visit(final SavingsAccount account) {
         deleteAccountClassicOrSavings(account);
     }
 
 
-    private ObjectNode successfulDeletion(final String iban, final String email) {
+    private ObjectNode successfulDeletion(final String iban) {
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode finalNode = mapper.createObjectNode();
         finalNode.put("timestamp", timestamp);
@@ -79,13 +79,12 @@ public class DeleteCardVisitor implements Visitor {
     }
 
 
-    private void deleteAccountClassicOrSavings(Account account) {
+    private void deleteAccountClassicOrSavings(final Account account) {
         ChangeCardVisitor visitor = new ChangeCardVisitor();
         if (Bank.getInstance().getCardByCardNumber(cardNumber).accept(visitor)) {
-            String email = Bank.getInstance().getUserByIBAN(account.getIban()).getEmail();
             Bank.getInstance().getUserByIBAN(account.getIban())
-                    .getTranzactions().add(successfulDeletion(account.getIban(), email));
-            account.getReportsClassic().add(successfulDeletion(account.getIban(), email));
+                    .getTranzactions().add(successfulDeletion(account.getIban()));
+            account.getReportsClassic().add(successfulDeletion(account.getIban()));
             account.getCards().remove(account.getCardByCardNumber(cardNumber));
         }
     }

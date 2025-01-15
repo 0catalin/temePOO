@@ -9,12 +9,15 @@ import org.poo.exceptions.AccountNotFoundException;
 import org.poo.exceptions.UserNotFoundException;
 import org.poo.parsers.fileio.CommandInput;
 
-public class UpgradePlan implements Command{
-    private String iban;
-    private String newType;
-    private int timestamp;
+public final class UpgradePlan implements Command {
+    private final String iban;
+    private final String newType;
+    private final int timestamp;
 
-    public UpgradePlan(CommandInput commandInput) {
+    private static final double SILVER_UPGRADE = 100.0;
+    private static final double GOLD_UPGRADE = 250.0;
+
+    public UpgradePlan(final CommandInput commandInput) {
         iban = commandInput.getAccount();
         newType = commandInput.getNewPlanType();
         timestamp = commandInput.getTimestamp();
@@ -27,14 +30,19 @@ public class UpgradePlan implements Command{
             if (user.getServicePlan().equals(newType)) {
                 account.getReportsSavings().add(alreadyHasPlan(newType));
                 user.getTranzactions().add(alreadyHasPlan(newType));
-            } else if ((user.getServicePlan().equals("silver") && !newType.equals("gold")) || user.getServicePlan().equals("gold")) {
-
+            } else if ((user.getServicePlan().equals("silver") && !newType.equals("gold"))
+                    || user.getServicePlan().equals("gold")) {
+                return;
             } else if (newType.equals("student") || newType.equals("standard")) {
-                // nu stiu daca e nevoie aici
-            } else if (Bank.getInstance().findExchangeRate("RON", account.getCurrency()) * getUpgradeCost(user.getServicePlan(), newType) > account.getBalance() - account.getMinBalance()) {
+                return;
+            } else if (Bank.getInstance().findExchangeRate("RON", account.getCurrency())
+                    * getUpgradeCost(user.getServicePlan(), newType)
+                    > account.getBalance() - account.getMinBalance()) {
                 user.getTranzactions().add(insufficientFunds());
             } else {
-                account.setBalance(account.getBalance() - Bank.getInstance().findExchangeRate("RON", account.getCurrency()) * getUpgradeCost(user.getServicePlan(), newType));
+                account.setBalance(account.getBalance()
+                        - Bank.getInstance().findExchangeRate("RON", account.getCurrency())
+                        * getUpgradeCost(user.getServicePlan(), newType));
                 user.setServicePlan(newType);
                 user.getTranzactions().add(addToSendersTranzactions());
                 if (account.getType().equals("savings")) {
@@ -48,15 +56,15 @@ public class UpgradePlan implements Command{
     }
 
 
-    private double getUpgradeCost(String initial, String last) {
+    private double getUpgradeCost(final String initial, final String last) {
         if (last.equals("gold") && initial.equals("silver")) {
-            return 250;
+            return GOLD_UPGRADE;
         }
         if (last.equals("gold")) {
-            return 350;
+            return SILVER_UPGRADE + GOLD_UPGRADE;
         }
         if (last.equals("silver")) {
-            return 100;
+            return SILVER_UPGRADE;
         }
         throw new UserNotFoundException("somethings wrong");
     }
@@ -91,7 +99,7 @@ public class UpgradePlan implements Command{
         return node;
     }
 
-    private ObjectNode alreadyHasPlan(String plan) {
+    private ObjectNode alreadyHasPlan(final String plan) {
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode node = mapper.createObjectNode();
         node.put("description", "The user already has the " + plan + " plan.");

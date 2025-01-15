@@ -8,13 +8,13 @@ import org.poo.baseinput.User;
 import org.poo.exceptions.AccountNotFoundException;
 import org.poo.parsers.fileio.CommandInput;
 
-public class WithdrawSavings implements Command{
-    private String iban;
+public final class WithdrawSavings implements Command {
+    private final String iban;
     private double amount;
-    private String currency;
-    private int timestamp;
+    private final String currency;
+    private final int timestamp;
 
-    public WithdrawSavings(CommandInput commandInput) {
+    public WithdrawSavings(final CommandInput commandInput) {
         iban = commandInput.getAccount();
         amount = commandInput.getAmount();
         currency = commandInput.getCurrency();
@@ -34,21 +34,27 @@ public class WithdrawSavings implements Command{
                 user.getTranzactions().add(noClassicAccount());
                 account.getReportsSavings().add(noClassicAccount());
             } else if (!account.getType().equals("savings")) {
-                // account not of type savings
+                return;
             } else {
 
-                Account accountReceiver = user.getClassicAccounts().get(0);
-                if (account.getBalance() >= amount * Bank.getInstance().findExchangeRate(currency, account.getCurrency())) {
+                Account accountReceiver = user.getClassicAccounts().getFirst();
+                if (account.getBalance() >= amount * Bank.getInstance().findExchangeRate(currency,
+                        account.getCurrency())) {
                     double initialAmount = amount;
-                    amount = amount * Bank.getInstance().findExchangeRate(currency, account.getCurrency());
+                    amount = amount * Bank.getInstance().findExchangeRate(currency,
+                            account.getCurrency());
                     account.setBalance(account.getBalance() - amount);
 
-                    amount = amount * Bank.getInstance().findExchangeRate(account.getCurrency(), accountReceiver.getCurrency());
+                    amount = amount * Bank.getInstance().findExchangeRate(account.getCurrency(),
+                            accountReceiver.getCurrency());
                     accountReceiver.setBalance(accountReceiver.getBalance() + amount);
-                    user.getTranzactions().add(savingsWithdrawal(accountReceiver.getIban(), account.getIban(), initialAmount));
-                    user.getTranzactions().add(savingsWithdrawal(accountReceiver.getIban(), account.getIban(), initialAmount));
+                    user.getTranzactions().add(savingsWithdrawal(accountReceiver.getIban(),
+                            account.getIban(), initialAmount));
+                    user.getTranzactions().add(savingsWithdrawal(accountReceiver.getIban(),
+                            account.getIban(), initialAmount));
                 } else {
                     // not enough balance
+                    return;
                 }
             }
         } catch (AccountNotFoundException e) {
@@ -72,10 +78,12 @@ public class WithdrawSavings implements Command{
         return output;
     }
 
-    private ObjectNode savingsWithdrawal(String ibanClassic, String ibanSavings, double amount) {
+    private ObjectNode savingsWithdrawal(final String ibanClassic,
+                                         final String ibanSavings,
+                                         final double initialAmount) {
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode output = mapper.createObjectNode();
-        output.put("amount", amount);
+        output.put("amount", initialAmount);
         output.put("classicAccountIBAN", ibanClassic);
         output.put("description", "Savings withdrawal");
         output.put("savingsAccountIBAN", ibanSavings);

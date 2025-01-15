@@ -23,7 +23,8 @@ public final class PayOnlineVisitor implements CardVisitor {
 
 
     public PayOnlineVisitor(final double amount, final int timestamp,
-                            final String commerciant, final Account account, double prevAmount) {
+                            final String commerciant, final Account account,
+                            final double prevAmount) {
 
         this.amount = amount;
         this.timestamp = timestamp;

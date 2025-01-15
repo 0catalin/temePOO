@@ -1,7 +1,7 @@
 package org.poo.exceptions;
 
 public class PaymentInfoNotFoundException extends RuntimeException {
-    public PaymentInfoNotFoundException(String message) {
+    public PaymentInfoNotFoundException(final String message) {
         super(message);
     }
 }

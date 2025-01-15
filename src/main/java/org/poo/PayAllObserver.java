@@ -1,36 +1,42 @@
 package org.poo;
 
 import org.poo.bankPair.Bank;
-import org.poo.baseinput.User;
 import org.poo.exceptions.UserNotFoundException;
 
 import java.util.HashMap;
 import java.util.List;
 
-public class PayAllObserver {
-    HashMap<String, Boolean> acceptMap;
-    public PayAllObserver(List<String> accountsForSplit) {
+public final class PayAllObserver {
+
+    private HashMap<String, Boolean> acceptMap;
+
+
+    public PayAllObserver(final List<String> accountsForSplit) {
         acceptMap = new HashMap<String, Boolean>();
         for (String iban : accountsForSplit) {
             acceptMap.put(iban, false);
         }
     }
 
-    public boolean update(String email) {
+
+
+    public boolean update(final String email) {
         acceptValue(email);
         for (boolean accept : acceptMap.values()) {
-            if (!accept)
+            if (!accept) {
                 return false;
+            }
         }
         return true;
     }
 
 
     // daca userul are contul nu e suficient, trebuie si sa nu fie acceptat de dinainte
-    private void acceptValue(String email) {
+    private void acceptValue(final String email) {
         for (String iban : acceptMap.keySet()) {
             try {
-                if (Bank.getInstance().getUserByIBAN(iban).getEmail().equals(email) && !acceptMap.get(iban)) {
+                if (Bank.getInstance().getUserByIBAN(iban).getEmail().equals(email)
+                        && !acceptMap.get(iban)) {
                     acceptMap.put(iban, true);
                     break;
                 }
@@ -41,10 +47,13 @@ public class PayAllObserver {
 
     }
 
-    public boolean hasAcceptedAllHisAccounts(String email) {
+
+
+    public boolean hasAcceptedAllHisAccounts(final String email) {
         for (String iban : acceptMap.keySet()) {
             try {
-                if (Bank.getInstance().getUserByIBAN(iban).getEmail().equals(email) && !acceptMap.get(iban)) {
+                if (Bank.getInstance().getUserByIBAN(iban).getEmail().equals(email)
+                        && !acceptMap.get(iban)) {
                     return false;
                 }
 

@@ -1,7 +1,7 @@
 package org.poo.exceptions;
 
 public class EmailNotFoundException extends RuntimeException {
-    public EmailNotFoundException(String message) {
+    public EmailNotFoundException(final String message) {
         super(message);
     }
 }

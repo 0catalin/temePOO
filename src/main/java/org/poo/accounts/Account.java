@@ -28,8 +28,30 @@ public abstract class Account {
     private ArrayList<ObjectNode> reportsSavings;
     private ArrayList<ObjectNode> reportsClassic;
     private DiscountInfo discountInfo;
-    private static final int WARNING_LIMIT = 30;
     private ArrayList<Card> cards;
+
+    private static final int WARNING_LIMIT = 30;
+
+    private static final double FOOD_CASHBACK = 0.02;
+    private static final double CLOTHES_CASHBACK = 0.05;
+    private static final double TECH_CASHBACK = 0.1;
+
+    private static final double SPENDING_THRESHOLD1 = 100;
+    private static final double SPENDING_THRESHOLD2 = 300;
+    private static final double SPENDING_THRESHOLD3 = 500;
+
+    private static final double CASHBACK_REGULAR1 = 0.001;
+    private static final double CASHBACK_REGULAR2 = 0.002;
+    private static final double CASHBACK_REGULAR3 = 0.0025;
+
+    private static final double CASHBACK_SILVER1 = 0.003;
+    private static final double CASHBACK_SILVER2 = 0.004;
+    private static final double CASHBACK_SILVER3 = 0.005;
+
+    private static final double CASHBACK_GOLD1 = 0.005;
+    private static final double CASHBACK_GOLD2 = 0.0055;
+    private static final double CASHBACK_GOLD3 = 0.007;
+
 
 
     public Account(final String currency) {
@@ -51,57 +73,63 @@ public abstract class Account {
      * @param cardNumber the card id
      * @return the Card object corresponding to ID
      */
-    public abstract Card getCardByCardNumber(final String cardNumber);
+    public abstract Card getCardByCardNumber(String cardNumber);
 
 
 
-    public double getSpendingCashBack (Commerciant commerciant, String servicePlan) {
+    public double getSpendingCashBack(final Commerciant commerciant, final String servicePlan) {
         if (!commerciant.getCashbackStrategy().equals("spendingThreshold")) {
             return 0;
         }
-        if (discountInfo.getSpendingThreshold() >= 100 && discountInfo.getSpendingThreshold() < 300) {
+        if (discountInfo.getSpendingThreshold() >= SPENDING_THRESHOLD1
+                && discountInfo.getSpendingThreshold() < SPENDING_THRESHOLD2) {
             if (servicePlan.equals("standard") || servicePlan.equals("student")) {
-                return 0.001;
+                return CASHBACK_REGULAR1;
             } else if (servicePlan.equals("silver")) {
-                return 0.003;
+                return CASHBACK_SILVER1;
             } else if (servicePlan.equals("gold")) {
-                return 0.005;
+                return CASHBACK_GOLD1;
             }
-        } else if (discountInfo.getSpendingThreshold() >= 300 && discountInfo.getSpendingThreshold() < 500) {
+        } else if (discountInfo.getSpendingThreshold() >= SPENDING_THRESHOLD2
+                && discountInfo.getSpendingThreshold() < SPENDING_THRESHOLD3) {
             if (servicePlan.equals("standard") || servicePlan.equals("student")) {
-                return 0.002;
+                return CASHBACK_REGULAR2;
             } else if (servicePlan.equals("silver")) {
-                return 0.004;
+                return CASHBACK_SILVER2;
             } else if (servicePlan.equals("gold")) {
-                return 0.0055;
+                return CASHBACK_GOLD2;
             }
-        } else if (discountInfo.getSpendingThreshold() >= 500) {
+        } else if (discountInfo.getSpendingThreshold() >= SPENDING_THRESHOLD3) {
             if (servicePlan.equals("standard") || servicePlan.equals("student")) {
-                return 0.0025;
+                return CASHBACK_REGULAR3;
             } else if (servicePlan.equals("silver")) {
-                return 0.005;
+                return CASHBACK_SILVER3;
             } else if (servicePlan.equals("gold")) {
-                return 0.007;
+                return CASHBACK_GOLD3;
             }
         }
         return 0;
 
     }
-    public double getTransactionCashback (Commerciant commerciant) {
+
+
+
+    public double getTransactionCashback(final Commerciant commerciant) {
         if (commerciant.getType().equals("Food") && discountInfo.isFoodCashback()) {
             discountInfo.setFoodCashback(false);
-            return 0.02;
+            return FOOD_CASHBACK;
         }
         if (commerciant.getType().equals("Clothes") && discountInfo.isClothesCashback()) {
             discountInfo.setClothesCashback(false);
-            return 0.05;
+            return CLOTHES_CASHBACK;
         }
         if (commerciant.getType().equals("Tech") && discountInfo.isTechCashback()) {
             discountInfo.setTechCashback(false);
-            return 0.1;
+            return TECH_CASHBACK;
         }
         return 0;
     }
+
 
     /**
      * checks if an account balance is 0
@@ -111,6 +139,7 @@ public abstract class Account {
         return balance == 0;
     }
 
+
     /**
      * checks if the balance is in warning range
      * @return true if it is and false if it is not
@@ -118,6 +147,7 @@ public abstract class Account {
     public boolean isInWarningRange() {
         return balance - minBalance <= WARNING_LIMIT;
     }
+
 
     /**
      * accepts visitors that do different operations on different types of accounts

@@ -10,20 +10,21 @@ import org.poo.accounts.ClassicAccount;
 import org.poo.accounts.SavingsAccount;
 import org.poo.bankPair.Bank;
 
-public class BusinessReportTransactionVisitor implements Visitor {
-    private int startTimestamp;
-    private int endTimestamp;
-    private int timestamp;
-    private String iban;
+public final class BusinessReportTransactionVisitor implements Visitor {
+    private final int startTimestamp;
+    private final int endTimestamp;
+    private final int timestamp;
+    private final String iban;
 
-    public BusinessReportTransactionVisitor(String iban, int timestamp, int startTimestamp, int endTimestamp) {
+    public BusinessReportTransactionVisitor(final String iban, final int timestamp,
+                                            final int startTimestamp, final int endTimestamp) {
         this.startTimestamp = startTimestamp;
         this.endTimestamp = endTimestamp;
         this.timestamp = timestamp;
         this.iban = iban;
     }
 
-    public void visit(BusinessAccount account) {
+    public void visit(final BusinessAccount account) {
         double totalSpent = 0;
         double totalDeposited = 0;
         ObjectMapper mapper = new ObjectMapper();
@@ -48,7 +49,9 @@ public class BusinessReportTransactionVisitor implements Visitor {
             ObjectNode employeeNode = mapper.createObjectNode();
             employeeNode.put("username", userInfo.getUsername());
             for (SpendingUserInfo spendingUserInfo : account.getSpendingUserInfos()) {
-                if (spendingUserInfo.getEmail().equals(userInfo.getEmail()) && spendingUserInfo.getTimestamp() <= endTimestamp && spendingUserInfo.getTimestamp() >= startTimestamp) {
+                if (spendingUserInfo.getEmail().equals(userInfo.getEmail())
+                        && spendingUserInfo.getTimestamp() <= endTimestamp
+                        && spendingUserInfo.getTimestamp() >= startTimestamp) {
                     deposited += spendingUserInfo.getDeposited();
                     spent += spendingUserInfo.getSpent();
                     totalDeposited += spendingUserInfo.getDeposited();
@@ -97,12 +100,12 @@ public class BusinessReportTransactionVisitor implements Visitor {
     }
 
 
-    public void visit(ClassicAccount account) {
+    public void visit(final ClassicAccount account) {
 
     }
 
 
-    public void visit(SavingsAccount account) {
+    public void visit(final SavingsAccount account) {
 
     }
 }

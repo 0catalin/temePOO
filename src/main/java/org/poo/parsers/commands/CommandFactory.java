@@ -1,6 +1,5 @@
 package org.poo.parsers.commands;
 
-import org.poo.accounts.BusinessAccount;
 import org.poo.exceptions.CommandNotFoundException;
 import org.poo.parsers.fileio.CommandInput;
 
@@ -74,10 +73,12 @@ public abstract class CommandFactory {
         if (commandInput.getCommand().equals("spendingsReport")) {
             return new SpendingsReport(commandInput);
         }
-        if (commandInput.getCommand().equals("splitPayment") && commandInput.getSplitPaymentType().equals("equal")) {
+        if (commandInput.getCommand().equals("splitPayment")
+                && commandInput.getSplitPaymentType().equals("equal")) {
             return new EqualSplitPayment(commandInput);
         }
-        if (commandInput.getCommand().equals("splitPayment") && commandInput.getSplitPaymentType().equals("custom")) {
+        if (commandInput.getCommand().equals("splitPayment")
+                && commandInput.getSplitPaymentType().equals("custom")) {
             return new CustomSplitPayment(commandInput);
         }
         if (commandInput.getCommand().equals("withdrawSavings")) {
@@ -104,10 +105,12 @@ public abstract class CommandFactory {
         if (commandInput.getCommand().equals("changeDepositLimit")) {
             return new ChangeDepositLimit(commandInput);
         }
-        if (commandInput.getCommand().equals("businessReport") && commandInput.getType().equals("transaction")) {
+        if (commandInput.getCommand().equals("businessReport")
+                && commandInput.getType().equals("transaction")) {
             return new BusinessReportTransaction(commandInput);
         }
-        if (commandInput.getCommand().equals("businessReport") && commandInput.getType().equals("commerciant")) {
+        if (commandInput.getCommand().equals("businessReport")
+                && commandInput.getType().equals("commerciant")) {
             return new BusinessReportCommerciant(commandInput);
         }
          throw new CommandNotFoundException("Invalid command");

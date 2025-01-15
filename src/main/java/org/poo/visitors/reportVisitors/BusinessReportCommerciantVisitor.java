@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.poo.SpendingUserInfo;
-import org.poo.UserInfo;
 import org.poo.accounts.BusinessAccount;
 import org.poo.accounts.ClassicAccount;
 import org.poo.accounts.SavingsAccount;
@@ -17,41 +16,45 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-public class BusinessReportCommerciantVisitor implements Visitor {
+public final class BusinessReportCommerciantVisitor implements Visitor {
 
-    private int startTimestamp;
-    private int endTimestamp;
-    private int timestamp;
-    private String iban;
+    private final int startTimestamp;
+    private final int endTimestamp;
+    private final int timestamp;
+    private final String iban;
 
-    public BusinessReportCommerciantVisitor(int startTimestamp, int endTimestamp, int timestamp, String iban) {
+    public BusinessReportCommerciantVisitor(final int startTimestamp, final int endTimestamp,
+                                            final int timestamp, final String iban) {
         this.startTimestamp = startTimestamp;
         this.endTimestamp = endTimestamp;
         this.timestamp = timestamp;
         this.iban = iban;
     }
 
-    public void visit(ClassicAccount account) {
+    public void visit(final ClassicAccount account) {
 
     }
 
 
-    public void visit(SavingsAccount account) {
+    public void visit(final SavingsAccount account) {
 
     }
 
-    public void visit(BusinessAccount account) {
+    public void visit(final BusinessAccount account) {
 
         User user = Bank.getInstance().getUserByIBAN(iban);
-        if (iban.equals("RO69POOB6209498372540635") && timestamp == 162) {
-            int i = 293;
-        }
 
-        List<SpendingUserInfo> spendingUserInfos = new ArrayList<SpendingUserInfo>(account.getSpendingUserInfos());
-        spendingUserInfos = spendingUserInfos.stream().filter(userInfo -> userInfo.getCommerciant() != null && userInfo.getTimestamp() >= startTimestamp && userInfo.getTimestamp() <= endTimestamp && !userInfo.getEmail().equals(user.getEmail())).collect(Collectors.toList());
+        List<SpendingUserInfo> spendingUserInfos = new ArrayList<SpendingUserInfo>(
+                account.getSpendingUserInfos());
+        spendingUserInfos = spendingUserInfos.stream().filter(
+                userInfo -> userInfo.getCommerciant() != null
+                        && userInfo.getTimestamp() >= startTimestamp
+                        && userInfo.getTimestamp() <= endTimestamp
+                        && !userInfo.getEmail().equals(user.getEmail()))
+                .collect(Collectors.toList());
 
-        Set<String> commerciantSet = spendingUserInfos.stream().map(SpendingUserInfo::getCommerciant).collect(Collectors.toSet());
-        //Set<String> emailSet = spendingUserInfos.stream().map(SpendingUserInfo::getEmail).collect(Collectors.toSet());
+        Set<String> commerciantSet = spendingUserInfos.stream()
+                .map(SpendingUserInfo::getCommerciant).collect(Collectors.toSet());
         List<String> commerciantList = new ArrayList<String>();
         for (String commerciant : commerciantSet) {
             commerciantList.add(commerciant);
@@ -90,7 +93,9 @@ public class BusinessReportCommerciantVisitor implements Visitor {
             }
             oneCommerciantNode.put("total received", totalreceived);
 
-            List<String> emailList = spendingUserInfos.stream().filter(userInfo -> commerciant.equals(userInfo.getCommerciant())).map(SpendingUserInfo::getEmail).collect(Collectors.toList());
+            List<String> emailList = spendingUserInfos.stream().filter(
+                    userInfo -> commerciant.equals(userInfo.getCommerciant()))
+                    .map(SpendingUserInfo::getEmail).collect(Collectors.toList());
             List<String> managerList = new ArrayList<String>();
             List<String> employeeList = new ArrayList<String>();
             for (String email : emailList) {

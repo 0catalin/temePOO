@@ -10,14 +10,14 @@ import org.poo.exceptions.CardNotFoundException;
 import org.poo.exceptions.UserNotFoundException;
 import org.poo.parsers.fileio.CommandInput;
 
-public class CashWithdrawal implements Command {
-    public double amount;
-    public String cardNumber;
-    public String email;
-    public String location;
-    public int timestamp;
+public final class CashWithdrawal implements Command {
+    private final double amount;
+    private final String cardNumber;
+    private final String email;
+    private final String location;
+    private final int timestamp;
 
-    public CashWithdrawal (CommandInput commandInput) {
+    public CashWithdrawal(final CommandInput commandInput) {
         amount = commandInput.getAmount();
         cardNumber = commandInput.getCardNumber();
         email = commandInput.getEmail();
@@ -30,14 +30,14 @@ public class CashWithdrawal implements Command {
             User user = Bank.getInstance().getUserByEmail(email);
             Account account = Bank.getInstance().getAccountByCardNumber(cardNumber);
             card = user.getCardByCardNumber(cardNumber);
-            if (card.getStatus().equals("frozen")) {
-
-            } else if (amount * Bank.getInstance().findExchangeRate("RON", account.getCurrency()) * user.getPlanMultiplier(amount) > account.getBalance()) {
+            if (amount * Bank.getInstance().findExchangeRate("RON", account.getCurrency())
+                    * user.getPlanMultiplier(amount)
+                    > account.getBalance() - account.getMinBalance()) {
                 user.getTranzactions().add(insufficientFunds());
-            } else if (amount * Bank.getInstance().findExchangeRate("RON", account.getCurrency()) * user.getPlanMultiplier(amount) > account.getBalance() - account.getMinBalance()) {
-
             } else {
-                account.setBalance(account.getBalance() - amount * Bank.getInstance().findExchangeRate("RON", account.getCurrency()) * user.getPlanMultiplier(amount));
+                account.setBalance(account.getBalance() - amount
+                        * Bank.getInstance().findExchangeRate("RON", account.getCurrency())
+                        * user.getPlanMultiplier(amount));
                 user.getTranzactions().add(successWithdrawal());
 
 

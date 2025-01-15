@@ -5,8 +5,6 @@ import org.poo.accounts.cards.Card;
 import org.poo.exceptions.CardNotFoundException;
 import org.poo.visitors.reportVisitors.Visitor;
 
-import java.util.ArrayList;
-
 @Getter
 @Setter
 /**

@@ -1,16 +1,17 @@
 package org.poo.visitors;
 
-import org.poo.accounts.cards.Card;
+
 import org.poo.accounts.cards.OneTimeCard;
 import org.poo.accounts.cards.RegularCard;
 
-public class ChangeCardVisitor implements CardVisitor {
-    public boolean visit(OneTimeCard card) {
+public final class ChangeCardVisitor implements CardVisitor {
+
+    public boolean visit(final OneTimeCard card) {
         card.updateCardNumber();
         return false;
     }
 
-    public boolean visit(RegularCard card) {
+    public boolean visit(final RegularCard card) {
         return true;
     }
 }

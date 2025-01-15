@@ -14,21 +14,26 @@ import org.poo.exceptions.AccountNotFoundException;
 import org.poo.exceptions.EmailNotFoundException;
 import org.poo.parsers.fileio.CommandInput;
 
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.Comparator;
 
-import java.util.*;
 
 @Getter
 @Setter
 public class SplitPaymentInfo {
-    private double amount;
-    private int timestamp;
-    private String currency;
-    private List<String> accountsForSplit;
-    private PayAllObserver observer;
-    private String splitPaymentType;
-    private Set<String> emailsForSplit;
+    private final double amount;
+    private final int timestamp;
+    private final String currency;
+    private final List<String> accountsForSplit;
+    private final PayAllObserver observer;
+    private final String splitPaymentType;
+    private final Set<String> emailsForSplit;
 
-    public SplitPaymentInfo(CommandInput commandInput) {
+
+    public SplitPaymentInfo(final CommandInput commandInput) {
         amount = commandInput.getAmount();
         timestamp = commandInput.getTimestamp();
         currency = commandInput.getCurrency();
@@ -46,9 +51,13 @@ public class SplitPaymentInfo {
         }
     }
 
-    public boolean isRightType(String paymentType, String email) {
+
+
+    public boolean isRightType(final String paymentType, final String email) {
         return splitPaymentType.equals(paymentType) && emailsForSplit.contains(email);
     }
+
+
 
     public void successfulPayment() {
         try {
@@ -62,7 +71,8 @@ public class SplitPaymentInfo {
             double eachAmount = amount / accountList.size(); // amount per each
             for (Account account : accountList) {
                 if (account.getBalance() - eachAmount * Bank.getInstance()
-                        .findExchangeRate(currency, account.getCurrency()) < account.getMinBalance()) {
+                        .findExchangeRate(currency,
+                                account.getCurrency()) < account.getMinBalance()) {
                     problemIban = account.getIban();
                     break;
                 }
@@ -71,8 +81,10 @@ public class SplitPaymentInfo {
                 for (int i = 0; i < accountList.size(); i++) {
                     userList.get(i).getTranzactions().add(splitPayment());
                     userList.get(i).checkFivePayments(eachAmount * Bank.getInstance()
-                            .findExchangeRate(currency, "RON"), accountList.get(i).getIban(), timestamp);
-                    userList.get(i).getTranzactions().sort(Comparator.comparingInt(t -> t.get("timestamp").asInt()));
+                            .findExchangeRate(currency, "RON"),
+                            accountList.get(i).getIban(), timestamp);
+                    userList.get(i).getTranzactions().sort(
+                            Comparator.comparingInt(t -> t.get("timestamp").asInt()));
                     accountList.get(i).getReportsClassic().add(splitPayment());
 
                     Bank.getInstance().getAccountByIBAN(accountsForSplit.get(i))
@@ -86,7 +98,8 @@ public class SplitPaymentInfo {
                         + " has insufficient funds for a split payment.");
                 for (int i = 0; i < userList.size(); i++) {
                     userList.get(i).getTranzactions().add(node);
-                    userList.get(i).getTranzactions().sort(Comparator.comparingInt(t -> t.get("timestamp").asInt()));
+                    userList.get(i).getTranzactions().sort(
+                            Comparator.comparingInt(t -> t.get("timestamp").asInt()));
                     accountList.get(i).getReportsClassic().add(node);
                 }
             }
@@ -94,6 +107,7 @@ public class SplitPaymentInfo {
 
         }
     }
+
 
 
     private ObjectNode splitPayment() {
@@ -112,6 +126,8 @@ public class SplitPaymentInfo {
         successNode.put("splitPaymentType", splitPaymentType);
         return successNode;
     }
+
+
 
     public ObjectNode rejectNode() {
         ObjectMapper mapper = new ObjectMapper();

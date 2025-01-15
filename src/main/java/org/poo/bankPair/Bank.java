@@ -7,7 +7,13 @@ import org.poo.accounts.Account;
 import org.poo.baseinput.Commerciant;
 import org.poo.baseinput.User;
 import org.poo.accounts.cards.Card;
-import org.poo.exceptions.*;
+
+import org.poo.exceptions.AccountNotFoundException;
+import org.poo.exceptions.CardNotFoundException;
+import org.poo.exceptions.CommerciantNotFoundException;
+import org.poo.exceptions.UserNotFoundException;
+import org.poo.exceptions.EmailNotFoundException;
+import org.poo.exceptions.PaymentInfoNotFoundException;
 import org.poo.parsers.InputParser;
 import org.poo.splitPayment.SplitPaymentInfo;
 
@@ -203,16 +209,16 @@ public final class Bank {
         return -1;
     }
 
-    public Commerciant getCommerciantByName(String name) {
+    public Commerciant getCommerciantByName(final String name) {
         for (Commerciant commerciant : commerciants) {
             if (commerciant.getCommerciant().equals(name)) {
                 return commerciant;
             }
         }
-        throw new CommerciantNotFoundException(""); // might have to return null here or handle more cases
+        throw new CommerciantNotFoundException("");
     }
 
-    public Commerciant getCommerciantByIban (String iban) {
+    public Commerciant getCommerciantByIban(final String iban) {
         for (Commerciant commerciant : commerciants) {
             if (commerciant.getAccount().equals(iban)) {
                 return commerciant;
@@ -235,7 +241,8 @@ public final class Bank {
 
     public SplitPaymentInfo getSplitPaymentByTypeAndEmail(final String email, final String type) {
         for (SplitPaymentInfo splitPaymentInfo : splitPayments) {
-            if (splitPaymentInfo.isRightType(type, email) && !splitPaymentInfo.getObserver().hasAcceptedAllHisAccounts(email)) {
+            if (splitPaymentInfo.isRightType(type, email)
+                    && !splitPaymentInfo.getObserver().hasAcceptedAllHisAccounts(email)) {
                 return splitPaymentInfo;
             }
         }

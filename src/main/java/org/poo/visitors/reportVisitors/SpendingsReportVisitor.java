@@ -93,7 +93,7 @@ public final class SpendingsReportVisitor implements Visitor {
 
 
 
-    public void visit(BusinessAccount account) {
+    public void visit(final BusinessAccount account) {
 
     }
 

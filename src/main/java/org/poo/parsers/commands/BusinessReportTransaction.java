@@ -5,17 +5,16 @@ import org.poo.bankPair.Bank;
 import org.poo.exceptions.AccountNotFoundException;
 import org.poo.parsers.fileio.CommandInput;
 import org.poo.visitors.reportVisitors.BusinessReportTransactionVisitor;
-import org.poo.visitors.reportVisitors.SpendingsReportVisitor;
 import org.poo.visitors.reportVisitors.Visitor;
 
-public class BusinessReportTransaction implements Command {
+public final class BusinessReportTransaction implements Command {
 
     private String iban;
     private int startTimestamp;
     private int endTimestamp;
     private int timestamp;
 
-    public BusinessReportTransaction(CommandInput commandInput) {
+    public BusinessReportTransaction(final CommandInput commandInput) {
          iban = commandInput.getAccount();
          startTimestamp = commandInput.getStartTimestamp();
          endTimestamp = commandInput.getEndTimestamp();
