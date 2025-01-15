@@ -3,6 +3,7 @@ package org.poo.visitors;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.poo.SpendingUserInfo;
+import org.poo.SpendingUserInfoBuilder;
 import org.poo.accounts.Account;
 import org.poo.accounts.BusinessAccount;
 import org.poo.accounts.ClassicAccount;
@@ -65,7 +66,7 @@ public class SendMoneyVisitor implements Visitor {
                             .add(addToSendersTranzactions(accountSender, receiver));
 
                     userSender.checkFivePayments(amount * Bank.getInstance().findExchangeRate(account.getCurrency(), "RON"), account.getIban(), timestamp);
-                    account.getSpendingUserInfos().add(new SpendingUserInfo(0, amount, email, timestamp, null));
+                    account.getSpendingUserInfos().add(new SpendingUserInfoBuilder(email, timestamp).spent(amount).build());
 
                     User userReceiver = Bank.getInstance().getUserByAccount(accountReceiver);
 
@@ -108,7 +109,7 @@ public class SendMoneyVisitor implements Visitor {
                         //        .add(addToSendersTranzactions(accountSender, accountReceiver));
                         accountSender.setBalance(accountSender.getBalance() - newAmount);
                         userSender.checkFivePayments(amount * Bank.getInstance().findExchangeRate(account.getCurrency(), "RON"), account.getIban(), timestamp);
-                        account.getSpendingUserInfos().add(new SpendingUserInfo(0, amount, email, timestamp, commerciant.getCommerciant()));
+                        account.getSpendingUserInfos().add(new SpendingUserInfoBuilder(email, timestamp).spent(amount).commerciant(commerciant.getCommerciant()).build());
                         accountSender.setBalance(accountSender.getBalance() + cashback);
                     }
                 } catch (CommerciantNotFoundException ignored) {

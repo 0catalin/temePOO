@@ -3,6 +3,7 @@ package org.poo.visitors;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.poo.SpendingUserInfo;
+import org.poo.SpendingUserInfoBuilder;
 import org.poo.accounts.Account;
 import org.poo.accounts.BusinessAccount;
 import org.poo.accounts.ClassicAccount;
@@ -69,7 +70,7 @@ public class PayOnlineAccountVisitor implements Visitor {
                         strategy.execute();
                         cashback += account.getSpendingCashBack(Bank.getInstance().getCommerciantByName(commerciant), ownerUser.getServicePlan()) * amount;
                         account.setBalance(account.getBalance() + cashback);
-                        account.getSpendingUserInfos().add(new SpendingUserInfo(0, amount, email, timestamp, commerciant));
+                        account.getSpendingUserInfos().add(new SpendingUserInfoBuilder(email, timestamp).spent(amount).commerciant(commerciant).build());
                         user.checkFivePayments(amount * Bank.getInstance().findExchangeRate(account.getCurrency(), "RON"), account.getIban(), timestamp);
                     }
                 } else {
