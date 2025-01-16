@@ -14,13 +14,11 @@ public final class SetMinimumBalance implements Command {
 
     private final String iban;
     private final double minBalance;
-    private int timestamp;
 
 
     public SetMinimumBalance(final CommandInput commandInput) {
         iban = commandInput.getAccount();
         minBalance = commandInput.getAmount();
-        timestamp = commandInput.getTimestamp();
     }
 
 
@@ -33,7 +31,7 @@ public final class SetMinimumBalance implements Command {
         try {
             Account account = Bank.getInstance().getAccountByIBAN(iban);
 
-            SetMinBalanceVisitor visitor = new SetMinBalanceVisitor(minBalance, timestamp);
+            SetMinBalanceVisitor visitor = new SetMinBalanceVisitor(minBalance);
             account.accept(visitor);
         } catch (AccountNotFoundException ignored) {
 

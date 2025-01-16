@@ -23,6 +23,7 @@ public final class CreateOneTimeCardVisitor implements Visitor {
     private final int timestamp;
     private final String iban;
 
+
     public CreateOneTimeCardVisitor(final String email, final int timestamp, final String iban) {
         this.email = email;
         this.timestamp = timestamp;

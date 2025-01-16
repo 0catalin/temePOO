@@ -16,6 +16,7 @@ public final class ChangeSpendingLimit implements Command {
     private final String iban;
     private final String email;
 
+
     public ChangeSpendingLimit(final CommandInput commandInput) {
         timestamp = commandInput.getTimestamp();
         amount = commandInput.getAmount();

@@ -12,11 +12,9 @@ import org.poo.visitors.reportVisitors.Visitor;
  */
 public final class SetMinBalanceVisitor implements Visitor {
     private final double minBalance;
-    private final int timestamp;
 
-    public SetMinBalanceVisitor(final double minBalance, final int timestamp) {
+    public SetMinBalanceVisitor(final double minBalance) {
         this.minBalance = minBalance;
-        this.timestamp = timestamp;
     }
 
 

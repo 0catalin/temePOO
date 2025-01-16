@@ -15,11 +15,13 @@ public final class ExchangeRate {
     private String to;
     private double rate;
 
+
     public ExchangeRate(final ExchangeInput exchangeInput) {
         from = exchangeInput.getFrom();
         to = exchangeInput.getTo();
         rate = exchangeInput.getRate();
     }
+
 
     public ExchangeRate(final ExchangeRate exchangeRate) {
         from = exchangeRate.getTo();

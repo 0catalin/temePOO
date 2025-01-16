@@ -15,18 +15,13 @@ public final class SetAliasVisitor implements Visitor {
     private final User user;
     private final String alias;
     private final String email;
-    private final int timestamp;
-    private final String iban;
 
     public SetAliasVisitor(final User user, final String alias,
-                           final String email, final int timestamp,
-                           final String iban) {
+                           final String email) {
 
         this.user = user;
         this.alias = alias;
         this.email = email;
-        this.timestamp = timestamp;
-        this.iban = iban;
 
     }
 

@@ -2,6 +2,7 @@ package org.poo.strategies;
 
 import org.poo.accounts.Account;
 import org.poo.baseinput.Commerciant;
+import org.poo.exceptions.StrategyNotFoundException;
 
 public abstract class StrategyFactory {
 
@@ -22,6 +23,6 @@ public abstract class StrategyFactory {
             return new NrOfTransactionsStrategy(account, commerciant);
         }
 
-        return null; // de facut exceptie aici
+        throw new StrategyNotFoundException("");
     }
 }

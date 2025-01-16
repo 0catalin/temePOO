@@ -31,17 +31,20 @@ public final class NrOfTransactionsStrategy implements Strategy {
                 .put(commerciant.getCommerciant(),
                 account.getDiscountInfo().getNumberOfTransactionsForEachCommerciant()
                         .getOrDefault(commerciant.getCommerciant(), 0) + 1);
+
         if (account.getDiscountInfo().getNumberOfTransactionsForEachCommerciant()
                 .get(commerciant.getCommerciant()) == 2 && !account.getDiscountInfo()
                 .isHasHadFoodCashback()) {
             account.getDiscountInfo().setFoodCashback(true);
             account.getDiscountInfo().setHasHadFoodCashback(true);
+
         } else if (account.getDiscountInfo().getNumberOfTransactionsForEachCommerciant()
                 .get(commerciant.getCommerciant()) == CLOTHES_TRANSACTIONS
                 && !account.getDiscountInfo()
                 .isHasHadClothesCashback()) {
             account.getDiscountInfo().setClothesCashback(true);
             account.getDiscountInfo().setHasHadClothesCashback(true);
+
         } else if (account.getDiscountInfo().getNumberOfTransactionsForEachCommerciant()
                 .get(commerciant.getCommerciant()) == TECH_TRANSACTIONS
                 && !account.getDiscountInfo()

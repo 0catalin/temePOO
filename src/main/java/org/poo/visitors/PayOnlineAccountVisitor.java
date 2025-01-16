@@ -57,7 +57,7 @@ public final class PayOnlineAccountVisitor implements Visitor {
     /**
      * if the account has the card, the balance is not 0, the
      * spending limit is lower than the amount to be paid we get the transaction
-     * cashback first, then if the amount can be paid we execute the cradVisitor and
+     * cashback first, then if the amount can be paid we execute the cardVisitor and
      * the strategy, get the 2nd cashback and add the cashback money to the account
      * then, we check for 5 payments to maybe upgrade to gold
      * @param account the business account

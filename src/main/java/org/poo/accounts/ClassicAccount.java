@@ -17,6 +17,8 @@ public final class ClassicAccount extends Account {
         setType("classic");
     }
 
+
+
     /**
      * method of accepting the visitor
      * @param visitor the interface of the possible visitor classes
@@ -24,6 +26,8 @@ public final class ClassicAccount extends Account {
     public void accept(final Visitor visitor) {
         visitor.visit(this);
     }
+
+
 
     /**
      * iterates through the account cards and returns the corresponding card

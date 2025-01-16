@@ -34,7 +34,7 @@ public final class BusinessAccount extends Account {
     public BusinessAccount(final String ownerEmail, final String currency) {
         super(currency);
         emailToCards = new HashMap<String, ArrayList<Card>>();
-        emailToCards.put(ownerEmail, new ArrayList<>());
+        emailToCards.put(ownerEmail, new ArrayList<Card>());
         rbac = new RoleBasedAccessControl(ownerEmail);
         depositLimit = Bank.getInstance().findExchangeRate("RON", getCurrency()) * LIMIT_RON;
         spendingLimit = Bank.getInstance().findExchangeRate("RON", getCurrency()) * LIMIT_RON;
@@ -130,6 +130,7 @@ public final class BusinessAccount extends Account {
     }
 
 
+
     /**
      * checks whether a user is manager or not
      * @param email the email of the business associate
@@ -164,6 +165,7 @@ public final class BusinessAccount extends Account {
         }
         throw new CardNotFoundException("");
     }
+
 
 
     /**

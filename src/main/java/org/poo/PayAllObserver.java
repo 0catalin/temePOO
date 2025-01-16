@@ -40,11 +40,11 @@ public final class PayAllObserver {
     }
 
 
-    // daca userul are contul nu e suficient, trebuie si sa nu fie acceptat de dinainte
+
 
     /**
      * places true for the email (simulating an accept) in the hashmap
-     * @param email
+     * @param email the user email
      */
     private void acceptValue(final String email) {
         for (String iban : acceptMap.keySet()) {

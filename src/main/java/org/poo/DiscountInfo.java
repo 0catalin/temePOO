@@ -7,6 +7,7 @@ import java.util.HashMap;
 @Getter
 @Setter
 public class DiscountInfo {
+
     private boolean foodCashback;
     private boolean clothesCashback;
     private boolean techCashback;
@@ -16,6 +17,8 @@ public class DiscountInfo {
     private double spendingThreshold;
     private int nrOfTransactions;
     private HashMap<String, Integer> numberOfTransactionsForEachCommerciant;
+
+
 
     public DiscountInfo() {
         foodCashback = false;

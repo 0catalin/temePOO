@@ -82,8 +82,6 @@ public final class BusinessReportCommerciantVisitor implements Visitor {
         Collections.sort(commerciantList);
 
 
-
-
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode node = new ObjectMapper().createObjectNode();
         node.put("command", "businessReport");
@@ -126,6 +124,7 @@ public final class BusinessReportCommerciantVisitor implements Visitor {
                     managerList.add(name);
                 }
             }
+
             Collections.sort(managerList);
             Collections.sort(employeeList);
             ArrayNode managerArray = mapper.createArrayNode();
@@ -139,6 +138,7 @@ public final class BusinessReportCommerciantVisitor implements Visitor {
             oneCommerciantNode.set("managers", managerArray);
             oneCommerciantNode.set("employees", employeeArray);
             commerciantArray.add(oneCommerciantNode);
+
         }
         outputNode.set("commerciants", commerciantArray);
         node.set("output", outputNode);

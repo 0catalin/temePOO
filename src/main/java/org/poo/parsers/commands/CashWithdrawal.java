@@ -19,7 +19,6 @@ public final class CashWithdrawal implements Command {
     private final double amount;
     private final String cardNumber;
     private final String email;
-    private final String location;
     private final int timestamp;
 
 
@@ -27,7 +26,6 @@ public final class CashWithdrawal implements Command {
         amount = commandInput.getAmount();
         cardNumber = commandInput.getCardNumber();
         email = commandInput.getEmail();
-        location = commandInput.getLocation();
         timestamp = commandInput.getTimestamp();
     }
 

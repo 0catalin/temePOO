@@ -76,6 +76,8 @@ public abstract class Account {
     public abstract Card getCardByCardNumber(String cardNumber);
 
 
+
+
     /**
      * depending on the commerciant and the user's service plan it returns the fraction
      * of the cashback that will be sent back to the user

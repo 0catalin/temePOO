@@ -96,8 +96,8 @@ public final class BusinessReportTransactionVisitor implements Visitor {
         }
 
 
-        outputNode.put("managers", managersNode);
-        outputNode.put("employees", employeesNode);
+        outputNode.set("managers", managersNode);
+        outputNode.set("employees", employeesNode);
 
 
 
@@ -105,7 +105,7 @@ public final class BusinessReportTransactionVisitor implements Visitor {
         outputNode.put("total deposited", totalDeposited);
 
 
-        commandObject.put("output", outputNode);
+        commandObject.set("output", outputNode);
         commandObject.put("timestamp", timestamp);
         Bank.getInstance().getOutput().add(commandObject);
     }

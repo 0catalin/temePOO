@@ -54,8 +54,6 @@ public final class AddFundsVisitor implements Visitor {
     }
 
 
-
-
     /**
      * method that adds funds to the account
      * @param account the classic account

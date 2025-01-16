@@ -3,7 +3,6 @@ package org.poo.parsers.commands;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.poo.bankPair.Bank;
-import org.poo.baseinput.User;
 import org.poo.exceptions.PaymentInfoNotFoundException;
 import org.poo.exceptions.UserNotFoundException;
 import org.poo.parsers.fileio.CommandInput;
@@ -16,9 +15,9 @@ import org.poo.splitPayment.SplitPaymentInfo;
  */
 public final class RejectSplitPayment implements Command {
 
-    private String email;
-    private String splitPaymentType;
-    private int timestamp;
+    private final String email;
+    private final String splitPaymentType;
+    private final int timestamp;
 
 
 
@@ -35,7 +34,7 @@ public final class RejectSplitPayment implements Command {
      */
     public void execute() {
         try {
-            User user = Bank.getInstance().getUserByEmail(email);
+            Bank.getInstance().getUserByEmail(email);
             SplitPaymentInfo splitPaymentInfo = Bank.getInstance()
                     .getSplitPaymentByTypeAndEmail(email, splitPaymentType);
             Bank.getInstance().getSplitPayments().remove(splitPaymentInfo);

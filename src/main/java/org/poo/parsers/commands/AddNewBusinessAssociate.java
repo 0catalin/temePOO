@@ -10,7 +10,6 @@ import org.poo.visitors.AddNewBusinessAssociateVisitor;
  */
 public final class AddNewBusinessAssociate implements Command {
 
-    private final int timestamp;
     private final String email;
     private final String role;
     private final String iban;
@@ -20,7 +19,6 @@ public final class AddNewBusinessAssociate implements Command {
     public AddNewBusinessAssociate(final CommandInput commandInput) {
         email = commandInput.getEmail();
         role = commandInput.getRole();
-        timestamp = commandInput.getTimestamp();
         iban = commandInput.getAccount();
     }
 

@@ -230,7 +230,7 @@ public final class Bank {
     /**
      * returns a commerciant based on its iban
      * @param iban the iban of the commerciant
-     * @return the commerciant instance which corresponds to the name
+     * @return the commerciant instance which corresponds to the iban
      */
     public Commerciant getCommerciantByIban(final String iban) {
         for (Commerciant commerciant : commerciants) {

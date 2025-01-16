@@ -8,8 +8,6 @@ import org.poo.exceptions.CommerciantNotFoundException;
 import org.poo.exceptions.UserNotFoundException;
 import org.poo.visitors.PayOnlineAccountVisitor;
 import org.poo.accounts.Account;
-import org.poo.baseinput.User;
-import org.poo.accounts.cards.Card;
 import org.poo.parsers.fileio.CommandInput;
 
 /**
@@ -44,8 +42,8 @@ public final class PayOnline implements Command {
     public void execute() {
         if (amount != 0) {
             try {
-                Card card = Bank.getInstance().getCardByCardNumber(cardNumber);
-                User user = Bank.getInstance().getUserByEmail(email);
+                Bank.getInstance().getCardByCardNumber(cardNumber);
+                Bank.getInstance().getUserByEmail(email);
                 Account account = Bank.getInstance().getAccountByCardNumber(cardNumber);
 
                 PayOnlineAccountVisitor visitor

@@ -17,6 +17,8 @@ public final class Commerciant {
     private String type;
     private String cashbackStrategy;
 
+
+
     public Commerciant(final CommerciantInput commerciantInput) {
         commerciant = commerciantInput.getCommerciant();
         id = commerciantInput.getId();

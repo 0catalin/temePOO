@@ -39,11 +39,9 @@ public final class SendMoney implements Command {
     @Override
     public void execute() {
 
-
-
         boolean executeFlag = true;
         try {
-            Account accountSender = Bank.getInstance().getAccountByIBANOrAlias(iban);
+            Bank.getInstance().getAccountByIBANOrAlias(iban);
         }  catch (AccountNotFoundException e) {
             Bank.getInstance().getOutput().add(userNotFound());
             executeFlag = false;
@@ -60,47 +58,6 @@ public final class SendMoney implements Command {
 
 
 
-
-
-    private ObjectNode addToSendersTranzactions(final Account accountSender,
-                                                final Account accountReceiver) {
-        ObjectMapper mapper = new ObjectMapper();
-        ObjectNode output = mapper.createObjectNode();
-        output.put("timestamp", timestamp);
-        output.put("description", description);
-        output.put("senderIBAN", iban);
-        output.put("receiverIBAN", accountReceiver.getIban());
-        output.put("amount", amount + " " + accountSender.getCurrency());
-        output.put("transferType", "sent");
-        return output;
-    }
-
-
-
-    private ObjectNode addToReceiversTranzactions(final Account accountSender,
-                                                  final Account accountReceiver) {
-        ObjectMapper mapper = new ObjectMapper();
-        ObjectNode output = mapper.createObjectNode();
-        output.put("timestamp", timestamp);
-        output.put("description", description);
-        output.put("senderIBAN", iban);
-        output.put("receiverIBAN", accountReceiver.getIban());
-        output.put("amount", +amount * Bank.getInstance().
-                findExchangeRate(accountSender.getCurrency(),
-                accountReceiver.getCurrency()) + " " + accountReceiver.getCurrency());
-        output.put("transferType", "received");
-        return output;
-    }
-
-
-
-    private ObjectNode insufficientFunds() {
-        ObjectMapper mapper = new ObjectMapper();
-        ObjectNode finalNode = mapper.createObjectNode();
-        finalNode.put("timestamp", timestamp);
-        finalNode.put("description", "Insufficient funds");
-        return finalNode;
-    }
 
     private ObjectNode userNotFound() {
         ObjectMapper mapper = new ObjectMapper();

@@ -18,13 +18,11 @@ public final class SetAlias implements Command {
     private final String iban;
     private final String email;
     private final String alias;
-    private final int timestamp;
 
     public SetAlias(final CommandInput commandInput) {
         email = commandInput.getEmail();
         iban = commandInput.getAccount();
         alias = commandInput.getAlias();
-        timestamp = commandInput.getTimestamp();
     }
 
 
@@ -38,7 +36,7 @@ public final class SetAlias implements Command {
             Account account = Bank.getInstance().getAccountByIBAN(iban);
             User user = Bank.getInstance().getUserByEmail(email);
 
-            SetAliasVisitor visitor = new SetAliasVisitor(user, alias, email, timestamp, iban);
+            SetAliasVisitor visitor = new SetAliasVisitor(user, alias, email);
             account.accept(visitor);
 
         } catch (UserNotFoundException | AccountNotFoundException ignored) {

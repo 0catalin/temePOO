@@ -49,7 +49,7 @@ public final class User {
         occupation = userInput.getOccupation();
         tranzactions = new ArrayList<ObjectNode>();
         accounts = new ArrayList<Account>();
-        classicAccounts = new ArrayList<>();
+        classicAccounts = new ArrayList<Account>();
         if (occupation.equals("student")) {
             servicePlan = "student";
         } else {
@@ -125,7 +125,7 @@ public final class User {
 
 
     /**
-     * function that updates fields depending on the payment amounts and
+     * method that updates fields depending on the payment amounts and
      * the total number of payments and changes the user's plan to gold
      * after 5 payments of at least 300 RON each
      * @param amount amount being spent by the user
