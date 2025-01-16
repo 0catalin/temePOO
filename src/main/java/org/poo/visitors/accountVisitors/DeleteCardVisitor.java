@@ -29,6 +29,7 @@ public final class DeleteCardVisitor implements Visitor {
 
     /**
      * runs method designed for both classic and savings
+     * @param account classic account
      */
     public void visit(final ClassicAccount account) {
         deleteCardClassicOrSavings(account);
@@ -74,6 +75,7 @@ public final class DeleteCardVisitor implements Visitor {
 
     /**
      * runs method designed for both classic and savings
+     * @param account savings account
      */
     public void visit(final SavingsAccount account) {
         deleteCardClassicOrSavings(account);

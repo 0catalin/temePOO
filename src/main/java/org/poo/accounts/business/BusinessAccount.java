@@ -81,7 +81,7 @@ public final class BusinessAccount extends Account {
         if (emailToCards.containsKey(email)) {
             return;
         } else {
-            emailToCards.put(email, new ArrayList<>());
+            emailToCards.put(email, new ArrayList<Card>());
             rbac.addEmail(email, role);
             if (role.equals("employee")) {
                 employees.add(new UserInfo(email));
