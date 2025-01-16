@@ -1,9 +1,8 @@
-package org.poo.visitors;
+package org.poo.visitors.accountVisitors;
 
-import org.poo.accounts.BusinessAccount;
+import org.poo.accounts.business.BusinessAccount;
 import org.poo.accounts.ClassicAccount;
 import org.poo.accounts.SavingsAccount;
-import org.poo.visitors.reportVisitors.Visitor;
 
 
 /**
@@ -20,19 +19,28 @@ public final class AddNewBusinessAssociateVisitor implements Visitor {
         this.role = role;
     }
 
-
+    /**
+     * empty method for savings account
+     * @param account the savings account
+     */
     @Override
     public void visit(final SavingsAccount account) {
 
     }
 
-
+    /**
+     * adds new business associate to the account
+     * @param account the business account
+     */
     @Override
     public void visit(final BusinessAccount account) {
         account.addNewBusinessAssociate(email, role);
     }
 
-
+    /**
+     * empty method for classic account
+     * @param account the classic account
+     */
     @Override
     public void visit(final ClassicAccount account) {
 

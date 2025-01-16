@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.Getter;
 import lombok.Setter;
-import org.poo.PayAllObserver;
 
 import org.poo.accounts.Account;
 import org.poo.bankPair.Bank;

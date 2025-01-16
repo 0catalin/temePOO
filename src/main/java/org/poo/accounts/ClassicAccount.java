@@ -3,7 +3,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.poo.accounts.cards.Card;
 import org.poo.exceptions.CardNotFoundException;
-import org.poo.visitors.reportVisitors.Visitor;
+import org.poo.visitors.accountVisitors.Visitor;
 
 @Getter
 @Setter

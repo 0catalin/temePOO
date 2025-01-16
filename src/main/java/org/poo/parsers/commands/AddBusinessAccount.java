@@ -2,7 +2,7 @@ package org.poo.parsers.commands;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.poo.accounts.BusinessAccount;
+import org.poo.accounts.business.BusinessAccount;
 import org.poo.bankPair.Bank;
 import org.poo.baseinput.User;
 import org.poo.exceptions.UserNotFoundException;

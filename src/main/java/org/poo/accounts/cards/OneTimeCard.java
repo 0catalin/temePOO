@@ -1,6 +1,6 @@
 package org.poo.accounts.cards;
 
-import org.poo.visitors.CardVisitor;
+import org.poo.visitors.cardVisitors.CardVisitor;
 
 
 /**

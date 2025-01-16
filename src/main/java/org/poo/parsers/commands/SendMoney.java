@@ -6,7 +6,7 @@ import org.poo.bankPair.Bank;
 import org.poo.accounts.Account;
 import org.poo.exceptions.AccountNotFoundException;
 import org.poo.parsers.fileio.CommandInput;
-import org.poo.visitors.SendMoneyVisitor;
+import org.poo.visitors.accountVisitors.SendMoneyVisitor;
 
 
 /**

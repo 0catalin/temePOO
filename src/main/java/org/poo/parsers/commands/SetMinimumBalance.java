@@ -5,7 +5,7 @@ import org.poo.accounts.Account;
 import org.poo.bankPair.Bank;
 import org.poo.exceptions.AccountNotFoundException;
 import org.poo.parsers.fileio.CommandInput;
-import org.poo.visitors.SetMinBalanceVisitor;
+import org.poo.visitors.accountVisitors.SetMinBalanceVisitor;
 
 /**
  * class implementing the set minimum balance command

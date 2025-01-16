@@ -1,14 +1,15 @@
-package org.poo.visitors.reportVisitors;
+package org.poo.visitors.accountVisitors.reportVisitors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.poo.SpendingUserInfo;
-import org.poo.UserInfo;
-import org.poo.accounts.BusinessAccount;
+import org.poo.visitors.accountVisitors.reportVisitors.spendingInfo.SpendingUserInfo;
+import org.poo.accounts.business.UserInfo;
+import org.poo.accounts.business.BusinessAccount;
 import org.poo.accounts.ClassicAccount;
 import org.poo.accounts.SavingsAccount;
 import org.poo.bankPair.Bank;
+import org.poo.visitors.accountVisitors.Visitor;
 
 public final class BusinessReportTransactionVisitor implements Visitor {
 

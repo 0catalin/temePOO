@@ -8,7 +8,7 @@ import org.poo.baseinput.User;
 import org.poo.exceptions.AccountNotFoundException;
 import org.poo.exceptions.UserNotFoundException;
 import org.poo.parsers.fileio.CommandInput;
-import org.poo.visitors.DeleteAccountVisitor;
+import org.poo.visitors.accountVisitors.DeleteAccountVisitor;
 
 /**
  * class implementing the delete account command

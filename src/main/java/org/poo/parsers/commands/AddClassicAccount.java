@@ -17,6 +17,7 @@ public final class AddClassicAccount implements Command {
     private final String currency;
     private final int timestamp;
 
+
     public AddClassicAccount(final CommandInput commandInput) {
         email = commandInput.getEmail();
         currency = commandInput.getCurrency();

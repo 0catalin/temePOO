@@ -4,8 +4,8 @@ import org.poo.accounts.Account;
 import org.poo.bankPair.Bank;
 import org.poo.exceptions.AccountNotFoundException;
 import org.poo.parsers.fileio.CommandInput;
-import org.poo.visitors.reportVisitors.BusinessReportCommerciantVisitor;
-import org.poo.visitors.reportVisitors.Visitor;
+import org.poo.visitors.accountVisitors.reportVisitors.BusinessReportCommerciantVisitor;
+import org.poo.visitors.accountVisitors.Visitor;
 
 /**
  * class implementing the commerciant business report method

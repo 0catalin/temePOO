@@ -1,4 +1,4 @@
-package org.poo;
+package org.poo.visitors.accountVisitors.reportVisitors.spendingInfo;
 
 /**
  * class used as a builder for the spendingUserInfo class

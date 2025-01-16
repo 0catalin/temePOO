@@ -12,6 +12,7 @@ public final class NrOfTransactionsStrategy implements Strategy {
     private final Account account;
     private final Commerciant commerciant;
 
+    private static final int FOOD_TRANSACTIONS = 2;
     private static final int CLOTHES_TRANSACTIONS = 5;
     private static final int TECH_TRANSACTIONS = 10;
 
@@ -33,7 +34,8 @@ public final class NrOfTransactionsStrategy implements Strategy {
                         .getOrDefault(commerciant.getCommerciant(), 0) + 1);
 
         if (account.getDiscountInfo().getNumberOfTransactionsForEachCommerciant()
-                .get(commerciant.getCommerciant()) == 2 && !account.getDiscountInfo()
+                .get(commerciant.getCommerciant()) == FOOD_TRANSACTIONS
+                && !account.getDiscountInfo()
                 .isHasHadFoodCashback()) {
             account.getDiscountInfo().setFoodCashback(true);
             account.getDiscountInfo().setHasHadFoodCashback(true);

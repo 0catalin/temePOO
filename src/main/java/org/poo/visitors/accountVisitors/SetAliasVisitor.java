@@ -1,11 +1,9 @@
-package org.poo.visitors;
+package org.poo.visitors.accountVisitors;
 
-import org.poo.accounts.BusinessAccount;
+import org.poo.accounts.business.BusinessAccount;
 import org.poo.accounts.ClassicAccount;
 import org.poo.accounts.SavingsAccount;
 import org.poo.baseinput.User;
-import org.poo.visitors.reportVisitors.Visitor;
-
 
 
 /**

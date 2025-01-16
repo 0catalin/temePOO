@@ -2,10 +2,9 @@ package org.poo.accounts;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import lombok.Getter;
 import lombok.Setter;
-import org.poo.DiscountInfo;
 import org.poo.baseinput.Commerciant;
 import org.poo.utils.Utils;
-import org.poo.visitors.reportVisitors.Visitor;
+import org.poo.visitors.accountVisitors.Visitor;
 import org.poo.accounts.cards.Card;
 
 import java.util.ArrayList;
@@ -98,6 +97,7 @@ public abstract class Account {
             } else if (servicePlan.equals("gold")) {
                 return CASHBACK_GOLD1;
             }
+
         } else if (discountInfo.getSpendingThreshold() >= SPENDING_THRESHOLD2
                 && discountInfo.getSpendingThreshold() < SPENDING_THRESHOLD3) {
             if (servicePlan.equals("standard") || servicePlan.equals("student")) {
@@ -107,6 +107,7 @@ public abstract class Account {
             } else if (servicePlan.equals("gold")) {
                 return CASHBACK_GOLD2;
             }
+
         } else if (discountInfo.getSpendingThreshold() >= SPENDING_THRESHOLD3) {
             if (servicePlan.equals("standard") || servicePlan.equals("student")) {
                 return CASHBACK_REGULAR3;

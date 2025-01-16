@@ -7,7 +7,7 @@ import org.poo.baseinput.User;
 import org.poo.exceptions.AccountNotFoundException;
 import org.poo.exceptions.CardNotFoundException;
 import org.poo.parsers.fileio.CommandInput;
-import org.poo.visitors.DeleteCardVisitor;
+import org.poo.visitors.accountVisitors.DeleteCardVisitor;
 
 /**
  * class implementing the delete card command

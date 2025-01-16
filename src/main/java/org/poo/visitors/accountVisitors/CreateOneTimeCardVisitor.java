@@ -1,17 +1,15 @@
-package org.poo.visitors;
+package org.poo.visitors.accountVisitors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.poo.accounts.Account;
-import org.poo.accounts.BusinessAccount;
+import org.poo.accounts.business.BusinessAccount;
 import org.poo.accounts.ClassicAccount;
 import org.poo.accounts.SavingsAccount;
 import org.poo.accounts.cards.Card;
 import org.poo.accounts.cards.OneTimeCard;
 import org.poo.bankPair.Bank;
 import org.poo.baseinput.User;
-import org.poo.visitors.reportVisitors.Visitor;
-
 
 
 /**
@@ -31,8 +29,8 @@ public final class CreateOneTimeCardVisitor implements Visitor {
     }
 
     /**
-     * if the account and users are found an accountVisitor instance is created and
-     * visits the account
+     * runs the method used for both classic and savings
+     * @param account the classic account
      */
     public void visit(final ClassicAccount account) {
         createOneTimeCardCardSavingsOrClassic(account);
@@ -55,7 +53,7 @@ public final class CreateOneTimeCardVisitor implements Visitor {
 
     /**
      * runs the method used for both classic and savings
-     * @param account the classic account
+     * @param account the savings account
      */
     public void visit(final SavingsAccount account) {
         createOneTimeCardCardSavingsOrClassic(account);

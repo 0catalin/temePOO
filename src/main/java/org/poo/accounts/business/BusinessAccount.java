@@ -1,14 +1,13 @@
-package org.poo.accounts;
+package org.poo.accounts.business;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.poo.RoleBasedAccessControl;
-import org.poo.SpendingUserInfo;
-import org.poo.UserInfo;
+import org.poo.visitors.accountVisitors.reportVisitors.spendingInfo.SpendingUserInfo;
+import org.poo.accounts.Account;
 import org.poo.accounts.cards.Card;
 import org.poo.bankPair.Bank;
 import org.poo.exceptions.CardNotFoundException;
-import org.poo.visitors.reportVisitors.Visitor;
+import org.poo.visitors.accountVisitors.Visitor;
 
 import java.util.ArrayList;
 import java.util.HashMap;

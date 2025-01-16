@@ -1,10 +1,10 @@
-package org.poo.visitors;
+package org.poo.visitors.accountVisitors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.poo.SpendingUserInfoBuilder;
+import org.poo.visitors.accountVisitors.reportVisitors.spendingInfo.SpendingUserInfoBuilder;
 import org.poo.accounts.Account;
-import org.poo.accounts.BusinessAccount;
+import org.poo.accounts.business.BusinessAccount;
 import org.poo.accounts.ClassicAccount;
 import org.poo.accounts.SavingsAccount;
 import org.poo.bankPair.Bank;
@@ -14,7 +14,6 @@ import org.poo.exceptions.AccountNotFoundException;
 import org.poo.exceptions.CommerciantNotFoundException;
 import org.poo.strategies.Strategy;
 import org.poo.strategies.StrategyFactory;
-import org.poo.visitors.reportVisitors.Visitor;
 
 
 /**

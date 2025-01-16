@@ -1,4 +1,4 @@
-package org.poo;
+package org.poo.visitors.accountVisitors.reportVisitors.spendingInfo;
 
 import lombok.Getter;
 import lombok.Setter;

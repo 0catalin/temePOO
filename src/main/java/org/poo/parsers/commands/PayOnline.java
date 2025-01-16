@@ -6,7 +6,7 @@ import org.poo.bankPair.Bank;
 import org.poo.exceptions.CardNotFoundException;
 import org.poo.exceptions.CommerciantNotFoundException;
 import org.poo.exceptions.UserNotFoundException;
-import org.poo.visitors.PayOnlineAccountVisitor;
+import org.poo.visitors.accountVisitors.PayOnlineAccountVisitor;
 import org.poo.accounts.Account;
 import org.poo.parsers.fileio.CommandInput;
 

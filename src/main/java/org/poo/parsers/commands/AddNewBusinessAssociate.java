@@ -3,7 +3,7 @@ package org.poo.parsers.commands;
 import org.poo.accounts.Account;
 import org.poo.bankPair.Bank;
 import org.poo.parsers.fileio.CommandInput;
-import org.poo.visitors.AddNewBusinessAssociateVisitor;
+import org.poo.visitors.accountVisitors.AddNewBusinessAssociateVisitor;
 
 /**
  * class implementing addBusinessAccount method

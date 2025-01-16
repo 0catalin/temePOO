@@ -1,4 +1,4 @@
-package org.poo.visitors;
+package org.poo.visitors.cardVisitors;
 
 
 import org.poo.accounts.cards.OneTimeCard;

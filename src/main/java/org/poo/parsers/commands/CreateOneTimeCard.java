@@ -7,7 +7,7 @@ import org.poo.baseinput.User;
 import org.poo.exceptions.AccountNotFoundException;
 import org.poo.exceptions.UserNotFoundException;
 import org.poo.parsers.fileio.CommandInput;
-import org.poo.visitors.CreateOneTimeCardVisitor;
+import org.poo.visitors.accountVisitors.CreateOneTimeCardVisitor;
 
 /**
  * class implementing the creating of one time card command

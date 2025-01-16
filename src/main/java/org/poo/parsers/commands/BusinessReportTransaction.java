@@ -4,8 +4,8 @@ import org.poo.accounts.Account;
 import org.poo.bankPair.Bank;
 import org.poo.exceptions.AccountNotFoundException;
 import org.poo.parsers.fileio.CommandInput;
-import org.poo.visitors.reportVisitors.BusinessReportTransactionVisitor;
-import org.poo.visitors.reportVisitors.Visitor;
+import org.poo.visitors.accountVisitors.reportVisitors.BusinessReportTransactionVisitor;
+import org.poo.visitors.accountVisitors.Visitor;
 
 
 /**

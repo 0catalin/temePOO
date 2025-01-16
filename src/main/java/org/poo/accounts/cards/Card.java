@@ -1,7 +1,7 @@
 package org.poo.accounts.cards;
 import lombok.Getter;
 import lombok.Setter;
-import org.poo.visitors.CardVisitor;
+import org.poo.visitors.cardVisitors.CardVisitor;
 import org.poo.utils.Utils;
 
 @Getter

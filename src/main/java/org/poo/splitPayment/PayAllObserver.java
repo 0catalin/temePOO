@@ -1,4 +1,4 @@
-package org.poo;
+package org.poo.splitPayment;
 
 import org.poo.bankPair.Bank;
 import org.poo.exceptions.UserNotFoundException;
@@ -9,7 +9,7 @@ import java.util.List;
 
 
 /**
- * class that monitors the user's acceptance of the split payments
+ * class that monitors the users' acceptance of the split payments
  */
 public final class PayAllObserver {
 
