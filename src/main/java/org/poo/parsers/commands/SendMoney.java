@@ -38,7 +38,8 @@ public final class SendMoney implements Command {
      */
     @Override
     public void execute() {
-
+        // if the account does not exist at all we do not run the 2nd part
+        // and the executeFlag is set to false
         boolean executeFlag = true;
         try {
             Bank.getInstance().getAccountByIBANOrAlias(iban);
@@ -54,8 +55,6 @@ public final class SendMoney implements Command {
             accountSender.accept(visitor);
         }
     }
-
-
 
 
 

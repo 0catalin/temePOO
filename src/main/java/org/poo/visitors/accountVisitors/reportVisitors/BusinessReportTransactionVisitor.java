@@ -53,7 +53,8 @@ public final class BusinessReportTransactionVisitor implements Visitor {
         outputNode.put("statistics type", "transaction");
 
 
-
+        // for each employee the deposited and spent amounts are calculated
+        // by iterating through the arrayList of payments
         ArrayNode employeesNode = mapper.createArrayNode();
         for (UserInfo userInfo : account.getEmployees()) {
             double deposited = 0;
@@ -76,6 +77,8 @@ public final class BusinessReportTransactionVisitor implements Visitor {
             employeesNode.add(employeeNode);
         }
 
+        // for each manager the deposit and spent amounts are calculated
+        // by iterating through the arrayList of payments
         ArrayNode managersNode = mapper.createArrayNode();
         for (UserInfo userInfo : account.getManagers()) {
             double deposited = 0;

@@ -22,6 +22,7 @@ public final class SpendingThresholdStrategy implements Strategy {
      * method which adds the amount spent so far to the variable storing it
      */
     public void execute() {
+        // increases spent amount so far by the given amount
         account.getDiscountInfo().setSpendingThreshold(account
                 .getDiscountInfo().getSpendingThreshold()
                 + amount * Bank.getInstance()

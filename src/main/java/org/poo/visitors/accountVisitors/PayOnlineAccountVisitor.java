@@ -66,6 +66,7 @@ public final class PayOnlineAccountVisitor implements Visitor {
         User user = Bank.getInstance().getUserByEmail(email);
         User ownerUser = Bank.getInstance().getUserByAccount(account);
 
+        // gets the paymentAmount and amount in the account's currency
         double cashback = 0;
         double paymentAmount = amount * Bank.getInstance()
                 .findExchangeRate(currency, account.getCurrency());
@@ -84,6 +85,7 @@ public final class PayOnlineAccountVisitor implements Visitor {
                 if (account.getSpendingLimit(email) > paymentAmount
                         * ownerUser.getPlanMultiplier(paymentAmount
                         * Bank.getInstance().findExchangeRate(account.getCurrency(), "RON"))) {
+                    // increases the transaction cashback but doesn't add it yet
                     cashback += account.getTransactionCashback(Bank.getInstance()
                             .getCommerciantByName(commerciant)) * paymentAmount;
                     paymentAmount *= ownerUser.getPlanMultiplier(paymentAmount
@@ -93,6 +95,8 @@ public final class PayOnlineAccountVisitor implements Visitor {
 
 
                     if (card.accept(visitor)) {
+                        // only if the payment is successful we add everything and
+                        // check for the 5  300 RON payments
                         Strategy strategy = StrategyFactory.createStrategy(Bank.getInstance()
                                 .getCommerciantByName(commerciant), account, paymentAmount);
                         strategy.execute();
@@ -167,6 +171,8 @@ public final class PayOnlineAccountVisitor implements Visitor {
         Card card = Bank.getInstance().getCardByCardNumber(cardNumber);
         User user = Bank.getInstance().getUserByEmail(email);
         double cashback = 0;
+
+        // gets the paymentAmount and amount in the account's currency
         double paymentAmount = amount * Bank.getInstance()
                 .findExchangeRate(currency, account.getCurrency());
         amount = paymentAmount;
@@ -180,6 +186,7 @@ public final class PayOnlineAccountVisitor implements Visitor {
                 account.getReportsClassic().add(insufficientFunds());
             } else {
 
+                // increases the transaction cashback but doesn't add it yet
                 cashback += account.getTransactionCashback(Bank.getInstance()
                         .getCommerciantByName(commerciant)) * paymentAmount;
                 paymentAmount *= user.getPlanMultiplier(paymentAmount
@@ -188,6 +195,8 @@ public final class PayOnlineAccountVisitor implements Visitor {
                         commerciant, account, amount);
 
                 if (card.accept(visitor)) {
+                    // only if the payment is successful we add everything and
+                    // check for the 5  300 RON payments
                     Strategy strategy = StrategyFactory.createStrategy(Bank.getInstance()
                             .getCommerciantByName(commerciant), account, paymentAmount);
                     strategy.execute();

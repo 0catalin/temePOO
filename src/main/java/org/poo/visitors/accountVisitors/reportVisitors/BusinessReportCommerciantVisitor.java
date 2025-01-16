@@ -73,6 +73,8 @@ public final class BusinessReportCommerciantVisitor implements Visitor {
                         && userInfo.getTimestamp() <= endTimestamp
                         && !userInfo.getEmail().equals(user.getEmail()))
                 .collect(Collectors.toList());
+        // spendingUserInfo now has the right arrayList filtering by
+        // timestamp and the non existence of commerciants
 
         Set<String> commerciantSet = spendingUserInfos.stream()
                 .map(SpendingUserInfo::getCommerciant).collect(Collectors.toSet());
@@ -81,7 +83,7 @@ public final class BusinessReportCommerciantVisitor implements Visitor {
             commerciantList.add(commerciant);
         }
         Collections.sort(commerciantList);
-
+        // makes a list of commerciants without duplicates by putting into a set first
 
         ObjectMapper mapper = new ObjectMapper();
         ObjectNode node = new ObjectMapper().createObjectNode();
@@ -103,7 +105,8 @@ public final class BusinessReportCommerciantVisitor implements Visitor {
             ObjectNode oneCommerciantNode = mapper.createObjectNode();
             oneCommerciantNode.put("commerciant", commerciant);
 
-
+            // iterates through the spendingUserInfos and increases received amount
+            // based on the commerciant
             double totalreceived = 0;
             for (SpendingUserInfo spendingUserInfo : spendingUserInfos) {
                 if (spendingUserInfo.getCommerciant().equals(commerciant)) {
@@ -115,6 +118,8 @@ public final class BusinessReportCommerciantVisitor implements Visitor {
             List<String> emailList = spendingUserInfos.stream().filter(
                     userInfo -> commerciant.equals(userInfo.getCommerciant()))
                     .map(SpendingUserInfo::getEmail).collect(Collectors.toList());
+            // Gets all the emails of the users who made payments and separates between
+            // managers and employees and sorts them after
             List<String> managerList = new ArrayList<String>();
             List<String> employeeList = new ArrayList<String>();
             for (String email : emailList) {

@@ -3,6 +3,11 @@ package org.poo.visitors.cardVisitors;
 import org.poo.accounts.cards.OneTimeCard;
 import org.poo.accounts.cards.RegularCard;
 
+
+
+/**
+ * interface used for the Visitors who do operations on cards
+ */
 public interface CardVisitor {
 
     /**

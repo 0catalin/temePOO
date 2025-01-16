@@ -43,7 +43,7 @@ public final class PayAllObserver {
 
 
     /**
-     * places true for the email (simulating an accept) in the hashmap
+     * places true for the email (simulating an accept) in the hashMap
      * @param email the user email
      */
     private void acceptValue(final String email) {
@@ -64,7 +64,8 @@ public final class PayAllObserver {
 
     /**
      * function which checks if a user has accepted all his accounts
-     * to know if the accept is on the current instance or the next
+     * to know if the accept is on the current instance fom the arrayList
+     * or the next
      * @param email the user email
      * @return true he has previously accepted all and false otherwise
      */

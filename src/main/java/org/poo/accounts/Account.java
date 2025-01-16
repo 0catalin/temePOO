@@ -85,9 +85,12 @@ public abstract class Account {
      * @return the fraction of the payment amount that will be sent back
      */
     public double getSpendingCashBack(final Commerciant commerciant, final String servicePlan) {
+        // if the type is not spending Threshold there will not be cashback
         if (!commerciant.getCashbackStrategy().equals("spendingThreshold")) {
             return 0;
         }
+        // depending on the sum spent so far and the user plan
+        // we are getting cashback percentage
         if (discountInfo.getSpendingThreshold() >= SPENDING_THRESHOLD1
                 && discountInfo.getSpendingThreshold() < SPENDING_THRESHOLD2) {
             if (servicePlan.equals("standard") || servicePlan.equals("student")) {
@@ -128,6 +131,7 @@ public abstract class Account {
      * @return the fraction of the payback to the user
      */
     public double getTransactionCashback(final Commerciant commerciant) {
+        // if the cashback exists it gets nullified and the fraction is returned
         if (commerciant.getType().equals("Food") && discountInfo.isFoodCashback()) {
             discountInfo.setFoodCashback(false);
             return FOOD_CASHBACK;

@@ -4,6 +4,11 @@ import org.poo.accounts.Account;
 import org.poo.baseinput.Commerciant;
 import org.poo.exceptions.StrategyNotFoundException;
 
+
+/**
+ * class with just 1 static function designed to create Strategy instances
+ * based on given type
+ */
 public abstract class StrategyFactory {
 
     /**

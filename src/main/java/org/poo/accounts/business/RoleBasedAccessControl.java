@@ -17,7 +17,9 @@ import java.util.HashMap;
 public final class RoleBasedAccessControl {
 
     private final ArrayList<String> typesOfUsers;
+    // map between user roles and the corresponding permissions
     private final HashMap<String, ArrayList<String>> roleToPermissions;
+    // map between the emails of the users and their role in the account
     private final HashMap<String, String> emailToRoleMap;
 
 
@@ -47,10 +49,10 @@ public final class RoleBasedAccessControl {
         roleToPermissions.put("owner", ownerPermissions);
         roleToPermissions.put("manager", managerPermissions);
         roleToPermissions.put("employee", employeePermissions);
+
+        // adds the owner when an instance is created
         emailToRoleMap = new HashMap<String, String>();
         emailToRoleMap.put(ownerEmail, "owner");
-
-
     }
 
 

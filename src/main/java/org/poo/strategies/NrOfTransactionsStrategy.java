@@ -28,11 +28,14 @@ public final class NrOfTransactionsStrategy implements Strategy {
      * the cashback is received by the user
      */
     public void execute() {
+        // adds 1 to the hashMap between commerciants and the number of payments for each
         account.getDiscountInfo().getNumberOfTransactionsForEachCommerciant()
                 .put(commerciant.getCommerciant(),
                 account.getDiscountInfo().getNumberOfTransactionsForEachCommerciant()
                         .getOrDefault(commerciant.getCommerciant(), 0) + 1);
 
+        // checks if a coupon should be received and if it should
+        // gives it (the boolean)
         if (account.getDiscountInfo().getNumberOfTransactionsForEachCommerciant()
                 .get(commerciant.getCommerciant()) == FOOD_TRANSACTIONS
                 && !account.getDiscountInfo()
