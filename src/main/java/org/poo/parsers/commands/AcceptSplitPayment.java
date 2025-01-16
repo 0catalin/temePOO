@@ -13,9 +13,9 @@ import org.poo.splitPayment.SplitPaymentInfo;
  */
 public final class AcceptSplitPayment implements Command {
 
-    private String email;
-    private String splitPaymentType;
-    private int timestamp;
+    private final String email;
+    private final String splitPaymentType;
+    private final int timestamp;
 
 
     public AcceptSplitPayment(final CommandInput commandInput) {

@@ -23,7 +23,7 @@ public final class SetMinimumBalance implements Command {
 
 
     /**
-     * if the account is valid the a visitor
+     * if the account is valid a visitor
      * is created and accepted to set the min balance
      */
     @Override

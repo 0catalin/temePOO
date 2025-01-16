@@ -9,7 +9,7 @@ import org.poo.splitPayment.SplitPaymentInfoNonEqual;
  */
 public final class CustomSplitPayment implements Command {
 
-    private CommandInput input;
+    private final CommandInput input;
 
 
     public CustomSplitPayment(final CommandInput commandInput) {

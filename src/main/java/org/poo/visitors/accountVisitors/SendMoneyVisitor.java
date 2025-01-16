@@ -199,7 +199,7 @@ public final class SendMoneyVisitor implements Visitor {
         output.put("description", description);
         output.put("senderIBAN", iban);
         output.put("receiverIBAN", accountReceiver.getIban());
-        output.put("amount", +amount * Bank.getInstance().
+        output.put("amount", amount * Bank.getInstance().
                 findExchangeRate(accountSender.getCurrency(),
                         accountReceiver.getCurrency()) + " " + accountReceiver.getCurrency());
         output.put("transferType", "received");

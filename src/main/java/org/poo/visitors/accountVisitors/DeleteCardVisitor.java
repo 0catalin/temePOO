@@ -37,7 +37,7 @@ public final class DeleteCardVisitor implements Visitor {
 
 
     /**
-     * checks if the user has permissions and if he does it deletes the card
+     * checks if the user has permissions and if he does, it deletes the card
      * else error or nothing happens
      * @param account the business account
      */

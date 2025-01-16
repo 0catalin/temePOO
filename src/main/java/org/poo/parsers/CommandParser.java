@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 
 /**
- * class used to parse thorugh an array of commands
+ * class used to parse through an array of commands
  */
 public abstract class CommandParser {
     /**

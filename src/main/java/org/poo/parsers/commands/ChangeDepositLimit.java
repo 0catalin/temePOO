@@ -11,10 +11,10 @@ import org.poo.visitors.accountVisitors.ChangeDepositLimitVisitor;
  */
 public final class ChangeDepositLimit implements Command {
 
-    private int timestamp;
-    private double amount;
-    private String iban;
-    private String email;
+    private final int timestamp;
+    private final double amount;
+    private final String iban;
+    private final String email;
 
 
 

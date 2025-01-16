@@ -38,7 +38,7 @@ public final class BusinessReportTransaction implements Command {
             Visitor visitor = new BusinessReportTransactionVisitor(iban, timestamp,
                     startTimestamp, endTimestamp);
             account.accept(visitor);
-        } catch (AccountNotFoundException e) {
+        } catch (AccountNotFoundException ignored) {
 
         }
     }

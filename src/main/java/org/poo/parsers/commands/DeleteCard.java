@@ -1,6 +1,6 @@
 package org.poo.parsers.commands;
 
-import org.poo.accounts.cards.Card;
+
 import org.poo.bankPair.Bank;
 import org.poo.accounts.Account;
 import org.poo.baseinput.User;
@@ -34,7 +34,7 @@ public final class DeleteCard implements Command {
         try {
             User user = Bank.getInstance().getUserByEmail(email);
             Account account = Bank.getInstance().getAccountByCardNumber(cardNumber);
-            Card card = user.getCardByCardNumber(cardNumber);
+            user.getCardByCardNumber(cardNumber);
             if (account.getBalance() == 0) {
                 DeleteCardVisitor visitor = new DeleteCardVisitor(cardNumber, timestamp, email);
                 account.accept(visitor);

@@ -3,7 +3,6 @@ package org.poo.parsers.commands;
 
 import org.poo.bankPair.Bank;
 import org.poo.accounts.Account;
-import org.poo.baseinput.User;
 import org.poo.exceptions.AccountNotFoundException;
 import org.poo.exceptions.UserNotFoundException;
 import org.poo.parsers.fileio.CommandInput;
@@ -35,7 +34,7 @@ public final class CreateOneTimeCard implements Command {
     public void execute() {
         try {
             Account account = Bank.getInstance().getAccountByIBAN(iban);
-            User user = Bank.getInstance().getUserByEmail(email);
+            Bank.getInstance().getUserByEmail(email);
             CreateOneTimeCardVisitor visitor
                     = new CreateOneTimeCardVisitor(email, timestamp, iban);
             account.accept(visitor);

@@ -148,8 +148,7 @@ public class SplitPaymentInfo {
      */
     public ObjectNode rejectNode() {
         ObjectMapper mapper = new ObjectMapper();
-        ObjectNode node = mapper.createObjectNode();
-        return node;
+        return mapper.createObjectNode();
     }
 
 }

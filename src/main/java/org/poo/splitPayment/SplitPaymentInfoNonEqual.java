@@ -18,8 +18,8 @@ import java.util.Comparator;
 @Setter
 
 /**
- * class which is supposed to store intomation about
- * the non equal split payments
+ * class which is supposed to store information about
+ * the non-equal split payments
  */
 public final class SplitPaymentInfoNonEqual extends SplitPaymentInfo {
 

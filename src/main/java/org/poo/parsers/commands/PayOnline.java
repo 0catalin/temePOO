@@ -16,7 +16,7 @@ import org.poo.parsers.fileio.CommandInput;
 public final class PayOnline implements Command {
 
     private final String cardNumber;
-    private double amount;
+    private final double amount;
     private final int timestamp;
     private final String currency;
     private final String commerciant;

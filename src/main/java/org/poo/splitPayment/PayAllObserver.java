@@ -12,8 +12,9 @@ import java.util.List;
  * class that monitors the users' acceptance of the split payments
  */
 public final class PayAllObserver {
-
-    private HashMap<String, Boolean> acceptMap;
+    // hashmap with all the iban used for split and a boolean
+    // indicating if the accept was made or not
+    private final HashMap<String, Boolean> acceptMap;
 
 
     public PayAllObserver(final List<String> accountsForSplit) {

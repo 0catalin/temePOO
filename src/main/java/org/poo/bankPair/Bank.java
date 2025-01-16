@@ -122,7 +122,7 @@ public final class Bank {
      * @return the corresponding account or exception if not found
      */
     public Account getAccountByIBANOrAlias(final String ibanOrAlias) {
-        if (ibanOrAlias.equals("")) {
+        if (ibanOrAlias.isEmpty()) {
             throw new AccountNotFoundException("");
         }
         for (User user : users) {

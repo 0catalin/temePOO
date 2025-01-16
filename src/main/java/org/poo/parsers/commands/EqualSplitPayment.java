@@ -12,7 +12,7 @@ import org.poo.splitPayment.SplitPaymentInfo;
  */
 public final class EqualSplitPayment implements Command {
 
-    private CommandInput input;
+    private final CommandInput input;
 
 
     public EqualSplitPayment(final CommandInput commandInput) {

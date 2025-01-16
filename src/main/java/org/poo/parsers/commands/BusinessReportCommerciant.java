@@ -12,10 +12,10 @@ import org.poo.visitors.accountVisitors.Visitor;
  */
 public final class BusinessReportCommerciant implements Command {
 
-    private String iban;
-    private int startTimestamp;
-    private int endTimestamp;
-    private int timestamp;
+    private final String iban;
+    private final int startTimestamp;
+    private final int endTimestamp;
+    private final int timestamp;
 
 
 

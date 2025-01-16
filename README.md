@@ -170,7 +170,7 @@ These exceptions ensure that invalid operations are caught and handled gracefull
 ---
 ## Usage of Streams
 
-Streams are used to filter `SpendingUserInfos` for `BusinessReport` commands and, in general, to filter or sort objects (e.g., alphabetically) in an `ArrayList`.
+`Usage of Streams`: Streams are employed to efficiently filter `SpendingUserInfos` within the `BusinessReport` command visitors, as well as in `ReportVisitor` and `Report`. They simplify tasks such as filtering or sorting objects (e.g., arranging alphabetically) within an `ArrayList`.
 
 ---
 ## Conclusion

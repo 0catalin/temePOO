@@ -24,7 +24,7 @@ public final class PrintTransactions implements Command {
 
 
     /**
-     * iterates through all the transactions of an user
+     * iterates through all the transactions of a user
      * and adds them into an arrayNode added to the output
      */
     @Override

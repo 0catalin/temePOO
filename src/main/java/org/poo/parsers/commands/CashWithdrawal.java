@@ -3,7 +3,6 @@ package org.poo.parsers.commands;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.poo.accounts.Account;
-import org.poo.accounts.cards.Card;
 import org.poo.bankPair.Bank;
 import org.poo.baseinput.User;
 import org.poo.exceptions.CardNotFoundException;
@@ -31,17 +30,17 @@ public final class CashWithdrawal implements Command {
 
 
 
-    @Override
+
     /**
      * removes balance from the account if the account has enough money,
      * is valid and the card is the user's
      */
     public void execute() {
         try {
-            Card card = Bank.getInstance().getCardByCardNumber(cardNumber);
+            Bank.getInstance().getCardByCardNumber(cardNumber);
             User user = Bank.getInstance().getUserByEmail(email);
             Account account = Bank.getInstance().getAccountByCardNumber(cardNumber);
-            card = user.getCardByCardNumber(cardNumber);
+            user.getCardByCardNumber(cardNumber);
             if (amount * Bank.getInstance().findExchangeRate("RON", account.getCurrency())
                     * user.getPlanMultiplier(amount)
                     > account.getBalance() - account.getMinBalance()) {

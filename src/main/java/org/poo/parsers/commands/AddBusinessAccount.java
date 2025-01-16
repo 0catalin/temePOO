@@ -14,9 +14,9 @@ import org.poo.parsers.fileio.CommandInput;
 public final class AddBusinessAccount implements Command {
 
 
-    private String email;
-    private String currency;
-    private int timestamp;
+    private final String email;
+    private final String currency;
+    private final int timestamp;
 
 
     public AddBusinessAccount(final CommandInput commandInput) {

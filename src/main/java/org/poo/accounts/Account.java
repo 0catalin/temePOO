@@ -11,6 +11,7 @@ import java.util.ArrayList;
 
 @Getter
 @Setter
+
 /**
  * Class designed to be extended by the Classic and Savings account classes
  * represents an account

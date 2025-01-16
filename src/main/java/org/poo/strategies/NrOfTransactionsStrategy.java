@@ -35,7 +35,7 @@ public final class NrOfTransactionsStrategy implements Strategy {
                         .getOrDefault(commerciant.getCommerciant(), 0) + 1);
 
         // checks if a coupon should be received and if it should
-        // gives it (the boolean)
+        // give it (the boolean)
         if (account.getDiscountInfo().getNumberOfTransactionsForEachCommerciant()
                 .get(commerciant.getCommerciant()) == FOOD_TRANSACTIONS
                 && !account.getDiscountInfo()
