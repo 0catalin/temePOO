@@ -2,7 +2,6 @@ package org.poo.accounts.business;
 
 import lombok.Getter;
 import lombok.Setter;
-import org.poo.visitors.accountVisitors.reportVisitors.spendingInfo.SpendingUserInfo;
 import org.poo.accounts.Account;
 import org.poo.accounts.cards.Card;
 import org.poo.bankPair.Bank;

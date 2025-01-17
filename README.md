@@ -98,7 +98,7 @@ The Strategy Pattern was used to support multiple cashback strategies without af
 The Builder Pattern simplifies the creation of objects with optional or varying fields. It was particularly useful for handling `SpendingUserInfo` objects, which may not always require all fields to be initialized for every operation.
 
 #### **Location**:
-- Implemented in the `SpendingUserInfoBuilder` class to construct instances of `SpendingUserInfo`.
+- Implemented in the `SpendingUserInfo` class as a static class to construct instances of `SpendingUserInfo`.
 
 ---
 
@@ -107,7 +107,7 @@ The Builder Pattern simplifies the creation of objects with optional or varying 
 The Observer Pattern was utilized to track and manage shared payments efficiently, particularly for users with multiple accounts involved in the same transaction. This ensures updates to payment statuses are handled consistently.
 
 #### **Location**:
-- Observers are implemented in the `PayAllObserver` class, which is used by both `SplitPaymentInfo` and `SplitPaymentInfoNotEqual` classes.
+- Observers are implemented in the `PayAllObserver` class, which is used by both `SplitPaymentInfo` and `SplitPaymentInfoNotEqual` classes, which extend the `Observable` interface.
 
 ---
 
@@ -173,6 +173,19 @@ These exceptions ensure that invalid operations are caught and handled gracefull
 `Usage of Streams`: Streams are employed to efficiently filter `SpendingUserInfos` within the `BusinessReport` command visitors, as well as in `ReportVisitor` and `Report`. They simplify tasks such as filtering or sorting objects (e.g., arranging alphabetically) within an `ArrayList`.
 
 ---
+
+## Lambda Expressions
+
+Lambda expressions are used in the code to simplify operations on collections, such as filtering and transforming data. For example, in the `visit` method from the `ReportVisitor` class:
+
+```java
+.filter(node -> {
+    int timeStamp = node.get("timestamp").asInt();
+    return timeStamp >= startTimestamp && timeStamp <= endTimestamp;
+})
+```
+---
+
 ## Conclusion
 
 This system demonstrates a comprehensive and structured approach to managing a complex banking ecosystem while adhering to best practices in software design and implementation.

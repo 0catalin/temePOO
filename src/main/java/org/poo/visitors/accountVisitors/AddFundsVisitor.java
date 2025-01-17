@@ -1,7 +1,7 @@
 package org.poo.visitors.accountVisitors;
 
 
-import org.poo.visitors.accountVisitors.reportVisitors.spendingInfo.SpendingUserInfoBuilder;
+import org.poo.accounts.business.SpendingUserInfo;
 import org.poo.accounts.business.BusinessAccount;
 import org.poo.accounts.ClassicAccount;
 import org.poo.accounts.SavingsAccount;
@@ -47,7 +47,7 @@ public final class AddFundsVisitor implements Visitor {
             return;
         } else {
             account.setBalance(account.getBalance() + amount);
-            account.getSpendingUserInfos().add(new SpendingUserInfoBuilder(email, timestamp)
+            account.getSpendingUserInfos().add(new SpendingUserInfo.Builder(email, timestamp)
                     .deposited(amount).build());
         }
     }

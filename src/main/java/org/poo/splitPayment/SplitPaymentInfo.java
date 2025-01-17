@@ -26,7 +26,7 @@ import java.util.Comparator;
 /**
  * class designed to store the info of an ongoing split payment
  */
-public class SplitPaymentInfo {
+public class SplitPaymentInfo implements Observable {
     private final double amount;
     private final int timestamp;
     private final String currency;
@@ -116,7 +116,7 @@ public class SplitPaymentInfo {
                     accountList.get(i).getReportsClassic().add(node);
                 }
             }
-        } catch (AccountNotFoundException e) {
+        } catch (AccountNotFoundException ignored) {
 
         }
     }

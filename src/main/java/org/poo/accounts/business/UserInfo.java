@@ -8,6 +8,10 @@ import org.poo.baseinput.User;
 
 @Getter
 @Setter
+
+/**
+ * class designed to store a user's email and his name
+ */
 public class UserInfo {
 
     private String username;

@@ -2,7 +2,7 @@ package org.poo.visitors.accountVisitors;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.poo.visitors.accountVisitors.reportVisitors.spendingInfo.SpendingUserInfoBuilder;
+import org.poo.accounts.business.SpendingUserInfo;
 import org.poo.accounts.Account;
 import org.poo.accounts.business.BusinessAccount;
 import org.poo.accounts.ClassicAccount;
@@ -90,7 +90,7 @@ public final class SendMoneyVisitor implements Visitor {
                                     accountSender.getCurrency(), "RON"),
                             accountSender.getIban(), timestamp);
                     accountSender.getSpendingUserInfos().add(
-                            new SpendingUserInfoBuilder(email, timestamp)
+                            new SpendingUserInfo.Builder(email, timestamp)
                                     .spent(amount).build());
 
                     User userReceiver = Bank.getInstance().getUserByAccount(accountReceiver);
@@ -150,7 +150,7 @@ public final class SendMoneyVisitor implements Visitor {
                                 .findExchangeRate(accountSender.getCurrency(), "RON"),
                                 accountSender.getIban(), timestamp);
                         accountSender.getSpendingUserInfos().add(
-                                new SpendingUserInfoBuilder(email, timestamp).spent(amount)
+                                new SpendingUserInfo.Builder(email, timestamp).spent(amount)
                                         .commerciant(commerciant.getCommerciant()).build());
                         accountSender.setBalance(accountSender.getBalance() + cashback);
                     }

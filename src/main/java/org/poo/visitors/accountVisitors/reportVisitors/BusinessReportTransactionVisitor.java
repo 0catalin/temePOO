@@ -3,7 +3,7 @@ package org.poo.visitors.accountVisitors.reportVisitors;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import org.poo.visitors.accountVisitors.reportVisitors.spendingInfo.SpendingUserInfo;
+import org.poo.accounts.business.SpendingUserInfo;
 import org.poo.accounts.business.UserInfo;
 import org.poo.accounts.business.BusinessAccount;
 import org.poo.accounts.ClassicAccount;
